@@ -1,11 +1,30 @@
-packages <- c('plyr','dplyr','tidyr','ggplot2','magrittr',
-             'psych','data.table','grid','gridExtra','R.matlab','units','readr')
-have = packages %in% rownames(installed.packages())
-if ( any(!have) ) { install.packages(packages[!have]) }
-(lapply(packages, require, character.only = TRUE))
+# packages <- c('plyr','dplyr','tidyr','ggplot2','magrittr',
+#              'psych','data.table','grid','gridExtra','R.matlab','units','readr')
+# have = packages %in% rownames(installed.packages())
+# if ( any(!have) ) { install.packages(packages[!have]) }
+# (lapply(packages, require, character.only = TRUE))
 
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, data.table,readr,here, patchwork, conflicted)
+conflict_prefer_all("dplyr", quiet = TRUE)
 
-
+# Data variable order, from left to right:
+#   
+#   1. Phase type (1 = Training, 2 = Transfer)
+# 2. Block number (1-15 training, 1 transfer)
+# 3. Trial number (1-15 training, 1-63 transfer)
+# 4. Pattern type (1 = old medium, 2 = prototype, 3 = new low, 4 = new medium, 5 = new high)
+# 5. Category number (1-3)
+# 6. Pattern token* 
+#   7. Category response (1-3)
+# 8. Correct/Incorrect (0 = Incorrect, 1 = Correct)
+# 9. Reaction time (in milliseconds)
+# 10-27.Coordinates of nine dots* (-25 through 24)
+# 
+# *Pattern token: index of unique tokens for each category of each type of pattern. The numbering of old medium patterns differs for the two conditions.
+# *Coordinates of nine dots: every two columns represent the x and y coordinates of a dot on a 50 x 50 grid
+# 
+# file names starting with "polyrep" contain data from repeating condtion.
+# file names starting with "polynrep" contain data from non-repeating condtion.
 
 
 
@@ -24,7 +43,7 @@ pathString=paste(pathLoad,"/Data/",sep="")
 mFiles <- list.files(path="Exp2_Classification/Data/",pattern = loadPattern, recursive = FALSE) # should be 89 in exp 2
 nFiles=length(mFiles)
 
-dCat <- data.frame(matrix(ncol=27,nrow=0)) %>% set_colnames(col.names)
+dCat <- data.frame(matrix(ncol=27,nrow=0)) %>% purrr::set_names(col.names)
 
 for (i in 1:nFiles){
   ps=paste(pathString,mFiles[i],sep="")
@@ -97,100 +116,10 @@ sbjTrainAvg <- dCatTrainAvg %>% filter(Block>12) %>%
 sbjTrainAvg$cq=recode_factor(sbjTrainAvg$cq,`1` = 'low-Performers', `2` = 'High-Performers')
 
 
-dc <- dCatAvg2 %>% select(id,condit,Condition,Pattern.Type2,Category,propCor) %>% 
-  pivot_wider(names_from = "Pattern.Type2",values_from = "propCor") %>%
-  mutate(EndTrain.Minus.HighDistort= End.Training-New.High,
-         MedDistort.Minus.HighDistort=New.Med-New.High,
-         LowDistort.Minus.HighDistort=New.Low-New.High,
-         TrainedItem.Minus.HighDistort=Trained.Med-New.High,
-         Prototype.Minus.HighDistort=Prototype-New.High) 
-
-dc <- merge(dc,sbjTrainAvg,by=c("id","condit","Condition"))
-dc2 <- dc %>% group_by(id,condit,Condition,cq) %>% summarise(End.Training=mean(End.Training),New.High=mean(New.High)) %>% as.data.frame()
-
-
-
-distGradient <- dc %>% pivot_longer(cols=c(EndTrain.Minus.HighDistort,TrainedItem.Minus.HighDistort,
-                                           MedDistort.Minus.HighDistort,LowDistort.Minus.HighDistort,
-                                           Prototype.Minus.HighDistort),
-                                    names_to = "Distortion.Level",values_to="PropCor")
 
 
 
 
-# Performance correlation matrices
-dc %>% ungroup() %>% select(End.Training,New.Low,Prototype,New.Med,New.High) %>% cor()
-dc %>% filter(condit=="rep") %>% ungroup() %>% select(End.Training,New.Low,Prototype,New.Med,New.High) %>% cor()
-dc %>% filter(condit=="nrep") %>% ungroup() %>% select(End.Training,New.Low,Prototype,New.Med,New.High) %>% cor()
-
-
-
-
-
-
-
-# High Distortion decrement correlation matrices
-
-dc %>% filter(condit=="rep") %>% ungroup() %>% select(End.Training,Prototype.Minus.HighDistort,
-                                                      TrainedItem.Minus.HighDistort,
-                                                      LowDistort.Minus.HighDistort,
-                                                      MedDistort.Minus.HighDistort,
-                                                      EndTrain.Minus.HighDistort) %>% cor()
-dc %>% filter(condit=="nrep") %>% ungroup() %>% select(End.Training,Prototype.Minus.HighDistort,
-                            TrainedItem.Minus.HighDistort,
-                            LowDistort.Minus.HighDistort,
-                            MedDistort.Minus.HighDistort,
-                            EndTrain.Minus.HighDistort) %>% cor()
-
-
-
-dc %>% ungroup() %>% select(End.Training,Prototype.Minus.HighDistort,
-                            TrainedItem.Minus.HighDistort,
-                            LowDistort.Minus.HighDistort,
-                            MedDistort.Minus.HighDistort,
-                            EndTrain.Minus.HighDistort) %>% cor()
-
-
-
-
-aov_ez("id",data=dc,"New.High",between="condit")
-
-aov_ez("id",data=dCatAvg2,"propCor",between="condit",within = c("Pattern.Type2"))
-aov_ez("id",data=dCatAvg,"propCor",between="condit",within = c("Pattern.Type"))
-
-dcp <- merge(dCatAvg2,sbjTrainAvg,by=c("id","condit","Condition"))
-
-hd <- dcp %>% filter(Pattern.Type2=="New-High")
-hd2 <- dcp %>% filter(Pattern.Type2=="New-High") %>% group_by(id,condit,cq) %>% summarise(propCor=mean(propCor))
-aov_ez("id",data=hd2,"propCor",between=c("condit","cq"))
-aov_ez("id",data=hd,"propCor",between=c("condit","cq"),within=c("Category"))
-aov_ez("id",data=dc,"New-High",between=c("condit","cq"),within=c("Category"))
-
-lme4::lmer(New.High~condit + (1|id),data=dc) %>% anova()
-lme4::lmer(New.High~condit*cq + (1|id),data=dc) %>% anova()
-
-lme4::lmer(New.High~condit + (1|id),data=dc) %>% anova()
-lme4::lmer(New.High~End.Training + (1|id),data=dc) %>% anova()
-lme4::lmer(New.High~End.Training+condit + (1|id),data=dc) %>% anova()
-dc %>% lme4::lmer(New.High~End.Training+(condit*cq) + (1|Category)+(1|id),data=.) %>% anova()
-dc2%>% aov(New.High~End.Training+(condit*cq),data=.) %>% anova()
-
-
-
-
-dCatAvg4 <- dCatAvg2 %>% ungroup() %>% group_by(condit)%>% mutate(r=ntile(propCor,3)) %>% group_by(id,condit,Pattern.Type2,r) %>% 
-  dplyr::summarise(propCor=mean(propCor)) %>% ungroup() 
-
-
-
-
-
-
-typeCounts <- dCat %>% group_by(id,Phase2,Pattern.Type) %>% summarise(n=n())
-typeCategoryCounts <- dCat %>% group_by(id,Phase2,Category,Pattern.Type) %>% summarise(n.trials=n())
-
-typeCounts2 <- typeCounts %>% group_by(Phase2,Pattern.Type) %>% summarise(N.Trials=mean(n),TrialsPerCategory=as.integer(N.Trials/3))
-typeCategoryCounts2 <- typeCategoryCounts %>% group_by(Phase2,Category,Pattern.Type) %>% summarise(N.Trials=mean(n.trials))
 # dCatBlockAvg <- dCat %>% group_by(id,condit,Block,Pattern.Type) %>% 
 #   summarise(nCorr=sum(Corr),propCor=nCorr/15,rtMean=mean(rt),phaseAvg=mean(phaseAvg)) %>% ungroup() %>% group_by(condit) %>%
 #   mutate(grpRank=factor(rank(-phaseAvg)),id=factor(id)) %>% arrange(-phaseAvg) %>% as.data.frame()
@@ -209,7 +138,7 @@ typeCategoryCounts2 <- typeCategoryCounts %>% group_by(Phase2,Category,Pattern.T
 #   summarise(nCorr=sum(Corr),propCor=nCorr/15,rtMean=mean(rt),trainAvg=mean(trainAvg)) %>% ungroup() %>% group_by(sbjCode,id,condit) %>%
 #   mutate(sbjAvg=mean(propCor)) %>% group_by(condit) %>% mutate(grpRank=rank(sbjAvg)) %>% arrange(grpRank)
 
-dCatAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")
+# dCatAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")
 
 
 
@@ -257,25 +186,25 @@ dCatAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+stat_summary(geom="point",
 
 
 
-pathLoad="Exp1_Recognition"
-loadPattern="*.txt"
-pathString=paste(pathLoad,"/Data/",sep="")
-mFiles <- list.files(path="Exp1_Recognition/Data/",pattern = loadPattern, recursive = FALSE) # should be 198 in exp1
-nFiles=length(mFiles)
-
-dRec <- data.frame(matrix(ncol=27,nrow=0)) %>% set_colnames(col.names)
-
-for (i in 1:nFiles){
-  ps=paste(pathString,mFiles[i],sep="")
-  sbj = readr::parse_number(mFiles[i])
-  ind1=regexpr("y",mFiles[i])
-  ind2=regexpr(sbj,mFiles[i])
-  d.load=read.table(ps) %>% set_names(col.names) %>% mutate(file=mFiles[i],condit=substr(file,ind1+1,ind2-1),sbjCode=as.factor(sbj))
-  dRec=rbind(dRec,d.load)
-}
-
-dRec <- dRec %>% relocate(sbjCode,condit,file) %>% group_by(sbjCode) %>%
-  mutate(nTrain=n(),ind=1,trial=cumsum(ind),id=paste0(sbjCode,".",condit),trainAvg=sum(Corr)/nTrain) %>% relocate(trial,.after="condit") %>% arrange(condit,sbj)
+# pathLoad="Exp1_Recognition"
+# loadPattern="*.txt"
+# pathString=paste(pathLoad,"/Data/",sep="")
+# mFiles <- list.files(path="Exp1_Recognition/Data/",pattern = loadPattern, recursive = FALSE) # should be 198 in exp1
+# nFiles=length(mFiles)
+# 
+# dRec <- data.frame(matrix(ncol=27,nrow=0)) %>% purrr::set_colnames(col.names)
+# 
+# for (i in 1:nFiles){
+#   ps=paste(pathString,mFiles[i],sep="")
+#   sbj = readr::parse_number(mFiles[i])
+#   ind1=regexpr("y",mFiles[i])
+#   ind2=regexpr(sbj,mFiles[i])
+#   d.load=read.table(ps) %>% set_names(col.names) %>% mutate(file=mFiles[i],condit=substr(file,ind1+1,ind2-1),sbjCode=as.factor(sbj))
+#   dRec=rbind(dRec,d.load)
+# }
+# 
+# dRec <- dRec %>% relocate(sbjCode,condit,file) %>% group_by(sbjCode) %>%
+#   mutate(nTrain=n(),ind=1,trial=cumsum(ind),id=paste0(sbjCode,".",condit),trainAvg=sum(Corr)/nTrain) %>% relocate(trial,.after="condit") %>% arrange(condit,sbj)
 
 
 
@@ -291,17 +220,17 @@ dRec <- dRec %>% relocate(sbjCode,condit,file) %>% group_by(sbjCode) %>%
 
 #library(forcats)
 
-dRecAvg=dRec %>% filter(Phase==1) %>% group_by(sbjCode,id,condit,Block) %>% 
-  summarise(nCorr=sum(Corr),propCor=nCorr/15,rtMean=mean(rt),trainAvg=mean(trainAvg)) %>% ungroup() %>% group_by(condit) %>%
-  mutate(sbjAvg=mean(propCor)) %>% 
-  mutate(grpRank=factor(rank(-trainAvg)),id=factor(id)) %>% arrange(-trainAvg) %>% as.data.frame()
-
-dRecAvg$id <-factor(dRecAvg$id,levels=unique(dRecAvg$id))
-
-dRecAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")
-dRecAvg %>% ggplot(aes(x=Block,y=rtMean,col=condit))+stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")
-dRecAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+
-  stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")+facet_wrap(~sbjCode)
+# dRecAvg=dRec %>% filter(Phase==1) %>% group_by(sbjCode,id,condit,Block) %>% 
+#   summarise(nCorr=sum(Corr),propCor=nCorr/15,rtMean=mean(rt),trainAvg=mean(trainAvg)) %>% ungroup() %>% group_by(condit) %>%
+#   mutate(sbjAvg=mean(propCor)) %>% 
+#   mutate(grpRank=factor(rank(-trainAvg)),id=factor(id)) %>% arrange(-trainAvg) %>% as.data.frame()
+# 
+# dRecAvg$id <-factor(dRecAvg$id,levels=unique(dRecAvg$id))
+# 
+# dRecAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")
+# dRecAvg %>% ggplot(aes(x=Block,y=rtMean,col=condit))+stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")
+# dRecAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+
+#   stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")+facet_wrap(~sbjCode)
 
 
 

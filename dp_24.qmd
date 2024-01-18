@@ -15,24 +15,8 @@ pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted)
 conflict_prefer_all("dplyr", quiet = TRUE)
 source("read_24.R")
 
-
-
 ```
 
-```{r fig.height=14, fig.width=11}
-#| fig-cap: "Absolute Deviation from Band over training"
-#| fig-width: 8
-dCat |> filter(condit=="high", Phase==1) |>
-  ggplot(aes(x=Block, y=Corr)) +  
-  stat_summary(shape=0,geom="point",fun="mean")+
-  stat_summary(geom="line",fun="mean",col="red")+
-  facet_wrap(~sbjCode)+ylim(c(0,1))+
-  geom_hline(yintercept = .33,linetype="dashed")+
-  ggtitle("High Training - Learning Curves")+
-  xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,10))
-
-
-```
 
 ```{r fig.width=11, fig.height=9}
 
@@ -89,70 +73,25 @@ mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
 ```
 
 
-```{r fig.width=11, fig.height=9}
 
 
-tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
-tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
-rtfun <- "median"
-yt <- round(seq(0,1500,length.out=7), 2)
-eg <- list(scale_y_continuous(breaks=yt))
 
-
-htq <- dCat |> filter(condit=="high", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun)+
-  facet_wrap(~quartile) + eg+
-  labs(title="High Testing", y="Reaction Time") +tx2
-
-ltq <- dCat |> filter(condit=="low", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun)+
-  facet_wrap(~quartile) + eg+
-  labs(title="Low Testing", y="Reaction Time") +tx1
-
-mtq <- dCat |> filter(condit=="medium", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun)+
-  facet_wrap(~quartile) + eg+
-  labs(title="Med Testing", y="Reaction Time") +tx2
-
-
-mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun)+
-  facet_wrap(~quartile) + eg+
-  labs(title="Mixed Testing", y="Reaction Time")  + tx1
-  
-
-
-(htq+ltq)/(mtq+mxtq) + plot_annotation(
-  title = 'Testing Reaction Times by Quartile',
-  subtitle = 'Quartiles set by Final TRAINING block',
-  caption = 'bars reflect median reaction times. Quartiles are set by ACCURACY in the final training block.'
-)
-
-
-tAll <- dCat |> filter(Phase==2) |>
-  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Testing - All", y="Reaction Time") 
-
-t33 <- dCat |> filter(finalTrain>.35, Phase==2) |>
-  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Testing - Only greater than 35%", y="Reaction Time") 
-
-t66 <- dCat |> filter(finalTrain>.50, Phase==2) |>
-  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Testing - Only greater than 50%", y="Reaction Times") 
-
-t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
-  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Testing- Only greater than 70%", y="Reaction Times") 
-((tAll + t33)/(t66 + t80))
+```{r}
+#| label: tbl_counts
+#| tbl-cap: "Subject Counts for each filtering level"
+# dCat |> filter(Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
+# dCat |> filter(finalTrain>.33, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
+# dCat |> filter(finalTrain>.66, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
+# dCat |> filter(finalTrain>.70, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
+dCat |> 
+  filter(Phase == 2) |> 
+  group_by(condit) |> 
+  summarise(
+    all = n_distinct(sbjCode),
+    `>.33` = n_distinct(sbjCode[finalTrain > .33]),
+    `>.66` = n_distinct(sbjCode[finalTrain > .66]),
+    `>.70` = n_distinct(sbjCode[finalTrain > .70])
+  )
 
 ```
 
@@ -226,6 +165,132 @@ t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
 ::: 
 
 
+
+
+
+## Reaction Time
+
+```{r fig.width=11, fig.height=9}
+#| fig-cap: "Reaction Times"
+#| fig-width: 11
+#| fig-height: 13
+
+tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
+tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
+rtfun <- "median"
+yt <- round(seq(0,1500,length.out=7), 2)
+eg <- list(scale_y_continuous(breaks=yt))
+
+
+htq <- dCat |> filter(condit=="high", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun)+
+  facet_wrap(~quartile) + eg+
+  labs(title="High Testing", y="Reaction Time") +tx2
+
+ltq <- dCat |> filter(condit=="low", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun)+
+  facet_wrap(~quartile) + eg+
+  labs(title="Low Testing", y="Reaction Time") +tx1
+
+mtq <- dCat |> filter(condit=="medium", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun)+
+  facet_wrap(~quartile) + eg+
+  labs(title="Med Testing", y="Reaction Time") +tx2
+
+
+mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=rt, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun)+
+  facet_wrap(~quartile) + eg+
+  labs(title="Mixed Testing", y="Reaction Time")  + tx1
+  
+
+
+(htq+ltq)/(mtq+mxtq) + plot_annotation(
+  title = 'Testing Reaction Times by Quartile',
+  subtitle = 'Quartiles set by Final TRAINING block',
+  caption = 'bars reflect median reaction times. Quartiles are set by ACCURACY in the final training block.'
+)
+
+
+tAll <- dCat |> filter(Phase==2) |>
+  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
+  labs(title="High Testing - All", y="Reaction Time") 
+
+t33 <- dCat |> filter(finalTrain>.35, Phase==2) |>
+  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
+  labs(title="High Testing - Only greater than 35%", y="Reaction Time") 
+
+t66 <- dCat |> filter(finalTrain>.50, Phase==2) |>
+  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
+  labs(title="High Testing - Only greater than 50%", y="Reaction Times") 
+
+t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
+  ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
+  labs(title="High Testing- Only greater than 70%", y="Reaction Times") 
+((tAll + t33)/(t66 + t80))
+
+```
+
+
+
+
+## Individual Differences
+
+### Individual Learning Curves
+
+```{r fig.height=14, fig.width=11}
+#| fig-cap: "Individual Learning Curves"
+#| fig-width: 11
+#| fig-height: 15
+
+
+dCat |> filter(condit=="high", Phase==1) |>
+  ggplot(aes(x=Block, y=Corr)) +  
+  stat_summary(shape=0,geom="point",fun="mean")+
+  stat_summary(geom="line",fun="mean",col="red")+
+  facet_wrap(~sbjCode)+ylim(c(0,1))+
+  geom_hline(yintercept = .33,linetype="dashed")+
+  ggtitle("High Training - Learning Curves")+
+  xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,10))
+
+
+```
+
+
+### Individual Testing
+
+```{r fig.height=14, fig.width=11}
+#| fig-cap: "Individual Testing Performance"
+#| fig-width: 11
+#| fig-height: 15
+dCat |> filter(condit=="high", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun="mean")+
+  facet_wrap(~sbjCode)+
+  ylim(c(0,1))+
+  geom_hline(yintercept = .33,linetype="dashed")+
+  ggtitle("Hu & Nosofsky Experiment 2 - Learning. Rep Subjects - Average Accuracy Per Block.")+
+  xlab("Training Block")+ylab("Proportion Correct") #+scale_x_continuous(breaks=seq(1,10))
+
+
+```
+
+
+
+
+
+
+
+## Misc
+
 ```{r fig.height=9, fig.width=11}
 library(gghalves)
 
@@ -255,17 +320,6 @@ dCat |> filter(Phase==2) |>
   facet_wrap(~condit)
 
 
-dtest %>% group_by(sbjCode,vbLabel,condit,throwCategory) %>%
-  summarise(vxMean=mean(vxCapped),lowBound=first(bandInt),highBound=first(highBound),
-            vbLag=first(vbLag),vbLead=first(vbLead),.groups = 'keep') %>%
-  ggplot(aes(x=vbLabel,y=vxMean,fill=throwCategory))+
-  geom_half_violin(color=NA)+ # remove border color
-  geom_half_boxplot(position=position_nudge(x=-0.05),side="r",outlier.shape = NA,center=TRUE,
-                    errorbar.draw = FALSE,width=.25)+
-  geom_half_point(transformation = position_jitter(width = 0.05, height = 0.05),size=.3,aes(color=throwCategory))+
-  facet_wrap(~condit,scale="free_x")
-
-
 
 
 
@@ -278,40 +332,8 @@ dCat |> filter(finalTrain<=.70, Phase==2) |>
 
 
 
-```{r}
-
-dCat |> filter(Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
-dCat |> filter(finalTrain>.33, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
-dCat |> filter(finalTrain>.66, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
-dCat |> filter(finalTrain>.70, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
 
 
-dCat |> 
-  filter(Phase == 2) |> 
-  group_by(condit) |> 
-  summarise(
-    all = n_distinct(sbjCode),
-    `>.33` = n_distinct(sbjCode[finalTrain > .33]),
-    `>.66` = n_distinct(sbjCode[finalTrain > .66]),
-    `>.70` = n_distinct(sbjCode[finalTrain > .70])
-  )
-
-```
-
-
-
-```{r fig.height=14, fig.width=11}
-
-dCat |> filter(condit=="high", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
-  stat_summary(shape=0,geom="bar",fun="mean")+
-  facet_wrap(~sbjCode)+ylim(c(0,1))+
-  geom_hline(yintercept = .33,linetype="dashed")+
-  ggtitle("Hu & Nosofsky Experiment 2 - Learning. Rep Subjects - Average Accuracy Per Block.")+
-  xlab("Training Block")+ylab("Proportion Correct") #+scale_x_continuous(breaks=seq(1,10))
-
-
-```
 
 
 ```{r}

@@ -9,7 +9,7 @@ project:
 
 
 website:
-  title: "Thomas Gorman"
+  title: "Dot Pattern Variability"
   repo-url: https://github.com/tegorman13/dot_variability
   site-url: "https://tegorman13.github.io"
   #repo-actions: [source, edit, issue]
@@ -17,10 +17,10 @@ website:
   page-navigation: true
   navbar:
     background: primary
-    search: true
+    search: trues
     left:
       - text: "2022_Paper"
-        href: projects.qmd
+        href: dp_22.qmd
       - text: "Hu_Nosofsky24"
         href:  dp_24.qmd
 

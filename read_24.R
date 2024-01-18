@@ -91,7 +91,7 @@ dCat$condit = factor(dCat$condit,levels=c("low","medium","mixed","high") )
 
 
 dCatTrainAvg=dCat |> filter(Phase==1)  |> group_by(sbjCode,condit,Block) |> 
-  summarise(nCorr=sum(Corr),propCor=nCorr/27,rtMean=mean(rt), n=n()) |> 
+  summarise(nCorr=sum(Corr),propCor=nCorr/27,rtMean=mean(rt), n=n(),.groups = 'keep') |> 
   ungroup() |> group_by(condit) |>
   mutate(grpRank=factor(rank(-propCor)),id=factor(sbjCode)) |> 
    as.data.frame() |> arrange(sbjCode,condit,Block)
@@ -102,9 +102,9 @@ dtf <- dCatTrainAvg |> filter(Block==10) |> arrange(-propCor) |>
 
 dCatTrainAvg$id <-factor(dCatTrainAvg$id,levels=unique(dCatTrainAvg$sbjCode))
 
-dCat$sbjCode <-factor(dCat$sbjCode,levels=unique(dtf$id))
 
 dCat <- dCat |> left_join(dtf |> select(sbjCode,condit,quartile, finalTrain), by=c("sbjCode","condit"))
+dCat$sbjCode <-factor(dCat$sbjCode,levels=unique(dtf$id))
 
 
 

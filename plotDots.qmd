@@ -10,14 +10,15 @@ execute:
 ---
 
 
-
-
-
-
+```{r}
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted)
+conflict_prefer_all("dplyr", quiet = TRUE)
+source("read_22.R")
+```
 
 
 ```{r fig.width=10,fig.height=10}
-
+#| fig-width: 11
 dot <- dCat %>% ungroup() %>% filter(id=="1.nrep",(Pattern.Type=="Prototype" | Pattern.Type=="New-Low"))%>%  select(typeCount,Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
 nTrial=nrow(dot);
 dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
@@ -32,7 +33,8 @@ pg
 
 
 ```{r fig.width=5,fig.height=5}
-
+#| eval: false
+#| include: false
 
 nTrial=200;
 proto <- dCat %>% ungroup() %>% filter(id=="1.nrep",Pattern.Type=="Prototype")%>%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
@@ -64,7 +66,8 @@ pl
 
 
 ```{r}
-
+#| eval: false
+#| include: false
 
 
 dot <- dCatTrain[1,] %>% ungroup() %>%  select(x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
@@ -75,22 +78,3 @@ ggplot(dotFrame,aes(dotx,doty))+geom_point()
 
 
 ```
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
