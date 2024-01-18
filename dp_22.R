@@ -1,19 +1,3 @@
----
-title: Hu & Nosofsky 2022
-date: last-modified
-lightbox: true
-bibliography: assets/grateful-refs.bib
-toc: true
-toc-depth: 4
-code-fold: true
-code-tools: true
-execute: 
-  warning: false
-  eval: true
----
-
-
-```{r}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted, viridis, gghalves)
 conflict_prefer_all("dplyr", quiet = TRUE)
 source("read_22.R")
@@ -33,23 +17,6 @@ dc <- dCatAvg2 %>% select(id,condit,Condition,Pattern.Type2,Category,propCor) %>
 
 dc <- merge(dc,sbjTrainAvg,by=c("id","condit","Condition"))
 dc2 <- dc %>% group_by(id,condit,Condition,cq) %>% summarise(End.Training=mean(End.Training),New.High=mean(New.High)) %>% as.data.frame()
-```
-
-
-
-
-
-
-
-# Experiment 2
-
-
-
-## Testing - Splitting Peformance by End of Training
-
-```{r fig.height=10,fig.width=12}
-#| fig-width: 11
-#| fig-height: 15
 
 library(gghalves)
 
@@ -109,14 +76,6 @@ gridExtra::grid.arrange(ps,p7,p5)
 #    geom_hline(yintercept = .33,linetype="dashed")+
 #  ggtitle("")+ylab("Proportion Correct")
 
-```
-
-
-
-## Controlling for End of Training Performace
-```{r fig.height=12,fig.width=16}
-#| fig-width: 11
-#| fig-height: 15
 
 library(rstatix)
 library(ggpubr)
@@ -176,16 +135,7 @@ title = ggdraw()+draw_label(gtitle,fontface = 'bold',x=0,hjust=0)+theme(plot.mar
 plot_grid(title,NULL,gg.ac1,ep1,gg.ac2,ep2,gg.ac3,ep3,ncol=2,rel_heights=c(.1,1,1,1))
 
 
-```
 
-
-
-
-## Individual Learning Curves
-```{r fig.height=10,fig.width=16}
-#| fig-width: 11
-#| fig-height: 15
-#| 
 dCatTrainAvg %>% filter(condit=="rep") %>% ggplot(aes(x=Block,y=propCor,col=condit))+
   stat_summary(shape=0,geom="point",fun="mean")+
   stat_summary(geom="line",fun="mean",col="red")+facet_wrap(~id)+ylim(c(0,1))+
@@ -200,18 +150,7 @@ dCatTrainAvg %>% filter(condit=="nrep") %>% ggplot(aes(x=Block,y=propCor,col=con
   facet_wrap(~id)+ggtitle("Hu & Nosofsky Experiment 2 - Learning. NRep Subjects - Average Accuracy Per Block.")+
   xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,15))
 
-```
 
-
-
-
-
-
-
-
-## Experiment 2 - separate category - learning curves
-
-```{r fig.height=12,fig.width=16}
 
 dCatTrainAvg2 %>% filter(condit=="rep") %>% ggplot(aes(x=Block,y=propCor,col=Category,shape=Category))+
   stat_summary(geom="point",fun="mean")+
@@ -231,12 +170,7 @@ dCatTrainAvg2 %>% filter(condit=="nrep") %>% ggplot(aes(x=Block,y=propCor,col=Ca
 
 
 
-```
 
-
-## Experiment 2 - 3 Training Stages + Transfer Patterns
-
-```{r fig.height=10,fig.width=15}
 
 dCatAvg %>% filter(condit=="rep") %>% ggplot(aes(x=Stage,y=propCor,fill=Pattern.Type))+
   stat_summary(geom="bar",fun=mean,position=position_dodge())+
@@ -261,14 +195,7 @@ dCatAvg %>% filter(condit=="nrep") %>% ggplot(aes(x=Stage,y=propCor,fill=Pattern
 # 
 # dCatAvg %>% filter() %>% ggplot(aes(x=Pattern.Type,y=propCor,col=condit))+
 #   geom_boxplot(position=position_dodge())+facet_wrap(~Stage)
-```
 
-
-
-
-
-# Experiment 2 - Separate Categories x stage
-```{r fig.height=12,fig.width=18}
 
 dCatAvg2 %>% filter(condit=="rep") %>% ggplot(aes(x=Category,y=propCor,fill=Pattern.Type2))+
   stat_summary(geom="bar",fun=mean,position=position_dodge())+
@@ -282,12 +209,7 @@ dCatAvg2 %>% filter(condit=="nrep") %>% ggplot(aes(x=Category,y=propCor,fill=Pat
    geom_hline(yintercept = .33,linetype="dashed")+
  ggtitle("NREP - End of Training vs. Testing Performance Per Category")+ylab("Proportion Correct")
 
-```
 
-
-
-
-```{r}
 
 dc %>% ggplot(aes(x=condit,y=EndTrain.Minus.HighDistort))+stat_summary(geom="bar",fun=mean)+
   stat_summary(geom="errorbar",fun.data=mean_se)
@@ -304,22 +226,6 @@ dc %>% ggplot(aes(x=condit,y=TrainedItem.Minus.HighDistort))+stat_summary(geom="
 # dc %>% filter(condit=="rep") %>% ungroup() %>% select(End.Training,`New-High`) %>% cor
 # dc %>% filter(condit=="nrep") %>% ungroup() %>% select(End.Training,`New-High`) %>% cor()
 
-```
-
-
-
-
-
-
-
-
-
-
-
-
-```{r fig.width=12,fig.height=9}
-#| eval: false
-#| include: false
 
 # other settings for style
 nudge_vp= -1.3
@@ -383,12 +289,6 @@ pe4 <- dCatAvg %>% filter(Stage!="Test") %>% ggplot( aes(x=Bin, y= rt, color =co
   facet_wrap(~Stage)
 pe4
 
-```
-
-
-```{r fig.width=12,fig.height=9}
-#| eval: false
-#| include: false
 
 # other settings for style
 nudge_vp= -1.3
@@ -453,21 +353,7 @@ pe4 <- dCatAvg %>% filter(Stage!="Test") %>% ggplot( aes(x=Bin, y= rt, color =co
   facet_wrap(~Stage)
 pe4
 
-```
 
-
-
-
-
-
-
-
-
-
-
-```{r fig.height=10,fig.width=12}
-#| eval: false
-#| include: false
 nbins=20
 binSize=225/nbins
 
@@ -492,16 +378,7 @@ dCatTrainBin %>% filter(condit=="nrep") %>%
   stat_summary(geom="line",fun="mean",col="lightblue")+facet_wrap(~id)+ylim(c(0,1))+
   ggtitle("Hu & Nosofsky Experiment 2 - Learning. NRep Subjects.")
 
-```
 
-
-
-
-
-
-```{r fig.height=10,fig.width=12}
-#| eval: false
-#| include: false
 nbins=30
 binSize=floor(225/nbins)
 
@@ -525,11 +402,7 @@ dCatTrainBin %>% filter(condit=="nrep") %>%
   stat_summary(geom="line",fun="mean",col="lightblue")+facet_wrap(~id)+ylim(c(0,1))+
   ggtitle("Hu & Nosofsky Experiment 2 - Learning. NRep Subjects.")
 
-```
 
-
-
-```{r}
 
 
 library(afex)
@@ -575,10 +448,7 @@ typeCategoryCounts2 <- typeCategoryCounts %>% group_by(Phase2,Category,Pattern.T
 
 
 
-```
 
-
-```{r}
 
 
 
@@ -627,14 +497,7 @@ dc %>% ungroup() %>% select(End.Training,Prototype.Minus.HighDistort,
 
 
 
-```
 
-
-[Link to preprocessing code](read_22.html)
-
-```{r fig.height=10,fig.width=11}
-#| eval: false
-#| 
 # dRecAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+
 #   stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")+facet_wrap(~id)
 
@@ -649,13 +512,7 @@ dRecAvg %>% filter(condit=="nrep") %>% ggplot(aes(x=Block,y=propCor,col=condit))
   facet_wrap(~id)+ggtitle("Hu & Nosofsky Experiment 1 - Learning. NRep Subjects.")
 
 
-```
 
-
-
-# R packages used
-
-```{r}
 # grateful::cite_packages(output = "paragraph",pkgs="Session",
 #                         out.dir = "assets", cite.tidyverse=TRUE)
 pkgs <- grateful::cite_packages(output = "table",pkgs="Session",
@@ -667,4 +524,3 @@ usedthese::used_here()
 sessionInfo()
 
 
-```

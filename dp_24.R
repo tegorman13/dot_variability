@@ -1,17 +1,3 @@
----
-title: Hu & Nosofsky 2024
-date: last-modified
-toc-depth: 4
-code-fold: true
-code-tools: true
-lightbox: true
-execute: 
-  warning: false
-  eval: true
----
-
-
-```{r}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted, knitr,grateful)
 conflict_prefer_all("dplyr", quiet = TRUE)
 source("read_24.R")
@@ -47,79 +33,7 @@ theme_nice_dist <- function() {
 }
 
 theme_set(theme_nice())
-```
 
-
-
-
-
-# Paper Figures
-
-Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabilityTrainingDoes2024] Included for easy reference.
-
-Note that the quartile binning done in the paper figure is done with testing performance, whereas my figures do quartiles by performance at the end of training. 
-
-*click on image to enlarge*
-
-::: {.panel-tabset}
-
-### 2024 Paper
-::: {layout-nrow=2}
-![2024 Learning Curves](assets/2024_learning_curves.png)
-
-![2024 Test Accuracy](assets/2024_testAvg.png)
-
-![2024 Test Accuracy - Quartile](assets/2024_testQ.png)
-
-![2024 Model Predictions](assets/2024_testModel.png)
-:::
-
-
-### 2022 Paper
-
-::: {layout-nrow=2}
-![2022 Learning Curves](assets/2022_learning_curves.png)
-
-![2022 Test Accuracy](images/2022_testAvg.png)
-
-
-![2022 Model Predictions](images/2022_testModel.png)
-:::
-
-
-:::
-
-
-# Procedure
-
-- Between Groups Training Manipulation
-  - low distortion - 4 posner levels from prototype
-  - medium distortion - 6 posner levels from prototype
-  - high distortion - 7.7 posner levels from prototype
-  - mixed distortion - equal number of low,medium, high patterns. 
-  
-- 270 training trials (10 blocks of 27)
-  - training items are never repeated
-  
-- 84 Testing trials
-  - 27 old patterns (trained patterns) - at least 2 from each training block
-  - 3 from each prototype (1 per category)
-  - 9 novel low distortions
-  - 18 novel medium distortions
-  - 27 new high distortions
-  - testing items are never repeated
-
-
-
-
-# Testing 
-
-
-## Filter to only retain learners
-
-```{r}
-#| label: tbl_counts
-#| tbl-cap: "Subject Counts for each filtering level. Note that the training conditions are disproporionately impacted."
 # dCat |> filter(Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
 # dCat |> filter(finalTrain>.33, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
 # dCat |> filter(finalTrain>.66, Phase==2) |> group_by(condit) |> summarise(n=n_distinct(sbjCode))
@@ -133,13 +47,7 @@ dCat |>
     `>.66` = n_distinct(sbjCode[finalTrain > .50]),
     `>.70` = n_distinct(sbjCode[finalTrain > .70])
   ) |> kable()
-```
 
-::: {.panel-tabset}
-
-### Group by Condition
-
-```{r fig.height=9, fig.width=11}
 
 tAll <- dCat |> filter(Phase==2) |>
   ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
@@ -170,11 +78,7 @@ t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
                   caption=" % values indicate level of final training performance needed to be included. Note that the training conditions are disproporionately impacted by exclusions.")
 
 
-```
 
-### Group by Pattern
-
-```{r fig.height=9, fig.width=11}
 
 tAll <- dCat |> filter(Phase==2) |>
   ggplot(aes(x=condit, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
@@ -202,17 +106,7 @@ t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
 
 ((tAll + t33)/(t66 + t80))
 
-```
 
-
-::: 
-
-
-
-
-## Split by Quartiles (end of training performance)
-
-```{r fig.width=11, fig.height=9}
 
 
 tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
@@ -262,22 +156,6 @@ mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
   caption = 'bars reflect mean accuracy, error bars reflect standard error. Quartiles are set by ACCURACY in the final training block. Bar colors are pattern type.'
 )
 
-```
-
-
-
-
-
-
-
-## Testing Reaction Time
-
-::: {.panel-tabset}
-### Facet by Training Condition
-```{r fig.width=11, fig.height=9}
-#| fig-cap: "Reaction Times"
-#| fig-width: 11
-#| fig-height: 13
 
 tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
 tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
@@ -321,13 +199,6 @@ mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
 
 
 
-```
-
-
-### Group by Pattern
-```{r}
-#| fig-width: 11
-#| fig-height: 11
 
 tAll <- dCat |> filter(Phase==2) |>
   ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
@@ -355,19 +226,6 @@ t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
 )
 
 
-```
-:::
-
-
-# Training
-
-::: {.panel-tabset}
-
-### Training Accuracy
-```{r}
-#| fig-cap: "Learning Curves"
-#| fig-width: 12
-#| fig-height: 12
 
 
 tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
@@ -460,13 +318,6 @@ lte_l50h <- dCat |> filter(Phase==1, test_high<.50) |>
 #((lavg +lavgDist)/(lte_g50h + lte_l50h) / (lte_g50o + lte_l50o)) 
 ((lavg +lavgDist)/(lte_g50h + lte_l50h)) 
 
-```
-
-### Training Reaction Times
-```{r}
-#| fig-cap: "Training Reaction Times"
-#| fig-width: 12
-#| fig-height: 12
 
 
 yt1 <- round(seq(500,4000,length.out=7), 2)
@@ -516,29 +367,6 @@ lte_l50h <- dCat |> filter(Phase==1, test_high<.50) |>
 
 ((lavg +lavgDist)/(lte_g50h + lte_l50h)) 
 
-```
-
-::: 
-
-
-# Individual Differences
-
-
-::: {.screen-inset-right}
-
-## Individual Learning Curves
-
-- facets sorted by final training accuracy
-- click on plots to enlarge. 
-
-::: {.panel-tabset}
-
-
-#### High Distortion
-```{r fig.height=14, fig.width=11}
-#| fig-cap: "Individual Learning Curves"
-#| fig-width: 11
-#| fig-height: 15
 
 dCat |> filter(condit=="high", Phase==1) |>
   ggplot(aes(x=Block, y=Corr)) +  
@@ -549,15 +377,7 @@ dCat |> filter(condit=="high", Phase==1) |>
   ggtitle("High Training - Learning Curves")+
   xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,10))
 
-```
 
-#### Low Distortion
-```{r fig.height=14, fig.width=11}
-#| fig-cap: "Individual Learning Curves - Low"
-#| fig-width: 11
-#| fig-height: 15
-#| column: screen-inset-right
-#| 
 dCat |> filter(condit=="low", Phase==1) |>
   ggplot(aes(x=Block, y=Corr)) +  
   stat_summary(shape=0,geom="point",fun="mean")+
@@ -567,14 +387,7 @@ dCat |> filter(condit=="low", Phase==1) |>
   ggtitle("Low Training - Learning Curves")+
   xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,10))
 
-```
 
-#### Medium Distortion
-```{r fig.height=14, fig.width=11}
-#| fig-cap: "Individual Learning Curves - Low"
-#| fig-width: 11
-#| fig-height: 15
-#| column: page-inset-right
 dCat |> filter(condit=="medium", Phase==1) |>
   ggplot(aes(x=Block, y=Corr)) +  
   stat_summary(shape=0,geom="point",fun="mean")+
@@ -584,14 +397,7 @@ dCat |> filter(condit=="medium", Phase==1) |>
   ggtitle("Medium Training - Learning Curves")+
   xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,10))
 
-```
 
-#### Mixed Distortion
-```{r fig.height=14, fig.width=11}
-#| fig-cap: "Individual Learning Curves - Low"
-#| fig-width: 11
-#| fig-height: 15
-#| column: page-inset-right
 dCat |> filter(condit=="mixed", Phase==1) |>
   ggplot(aes(x=Block, y=Corr)) +  
   stat_summary(shape=0,geom="point",fun="mean")+
@@ -601,20 +407,7 @@ dCat |> filter(condit=="mixed", Phase==1) |>
   ggtitle("Mixed Training - Learning Curves")+
   xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,10))
 
-```
-:::
 
-:::
-
-## Individual Testing
-- facets sorted by final training accuracy
-- click on plots to enlarge. 
-```{r fig.height=14, fig.width=11}
-#| fig-cap: "Individual Testing Performance"
-#| fig-width: 14
-#| fig-height: 16
-#| column: screen-inset-right
-#| 
 tx <- theme(axis.text.x=element_blank() )
 
 dht <- dCat |> filter(condit=="high", Phase==2) |>
@@ -660,18 +453,7 @@ dmxt <- dCat |> filter(condit=="mixed", Phase==2) |>
 
 (dht + dlt)/(dmt+dmxt)
 
-```
 
-
-
-
-
-
-
-
-```{r fig.height=9, fig.width=11}
-#| eval: false
-#| include: false
 library(gghalves)
 
 
@@ -708,17 +490,6 @@ dCat |> filter(finalTrain<=.70, Phase==2) |>
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(title="High Testing", y="Accuracy") 
-```
-
-
-
-[Link to preprocessing code](read_24.html)
-
-
-
-```{r}
-#| eval: false
-#| include: false
 
 
 d %>% filter(Phase==2) %>% ggplot(aes(x=distortion,y=Corr,col=condit))+
@@ -731,18 +502,7 @@ d %>% filter(Phase==2) %>% ggplot(aes(x=distortion,y=Corr,col=condit))+
   scale_x_continuous(breaks=seq(1,15))
 
 
-```
 
-
-
-
-
-
-# R packages used
-
-```{r}
-#| warning: false
-#| message: false
 # pkgs <- grateful::cite_packages(output = "table", pkgs="Session",out.dir = "assets", cite.tidyverse=TRUE)
 # knitr::kable(pkgs)
 # 
@@ -770,9 +530,3 @@ pkgs <- suppressWarnings(scan_packages(pkgs="Session",cite.tidyverse = TRUE))
 knitr::kable(pkgs)
 usedthese::used_here()
 #SystemInfo()
-```
-
-# References
-
-::: {#refs}
-:::

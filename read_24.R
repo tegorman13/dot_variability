@@ -1,3 +1,10 @@
+#' ---
+#' title: Process 24 data
+#' author: Thomas Gorman
+#' date: 01/18/24
+#' format: html
+#' ---
+
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted)
 conflict_prefer_all("dplyr", quiet = TRUE)
 
@@ -103,7 +110,29 @@ dtf <- dCatTrainAvg |> filter(Block==10) |> arrange(-propCor) |>
 dCatTrainAvg$id <-factor(dCatTrainAvg$id,levels=unique(dCatTrainAvg$sbjCode))
 
 
+
+dCatTestAvg=dCat |> filter(Phase==2)  |> group_by(sbjCode,condit,Pattern_Token) |> 
+  summarise(Corr=mean(Corr),rtMean=mean(rt), n=n(),.groups = 'keep') |> 
+  ungroup() |> group_by(condit) |>
+  mutate(grpRank=factor(rank(-Corr)),id=factor(sbjCode)) |> 
+  as.data.frame() |> arrange(sbjCode,condit,Corr)
+
+dte_h <- dCatTestAvg |> filter(Pattern_Token=="new_high") |> arrange(-Corr) |>
+  group_by(condit) |> 
+  mutate(q_test_high = ntile(Corr, 4), test_high=Corr)
+
+dte_o <- dCatTestAvg |> filter(Pattern_Token=="old") |> arrange(-Corr) |>
+  group_by(condit) |> 
+  mutate(q_test_old = ntile(Corr, 4), test_old=Corr)
+
 dCat <- dCat |> left_join(dtf |> select(sbjCode,condit,quartile, finalTrain), by=c("sbjCode","condit"))
+dCat <- dCat |> left_join(dte_h |> select(sbjCode,condit,q_test_high, test_high), by=c("sbjCode","condit"))
+dCat <- dCat |> left_join(dte_o |> select(sbjCode,condit,q_test_old, test_old), by=c("sbjCode","condit"))
+
+
+
+
+# order sbjCode by end of training performance
 dCat$sbjCode <-factor(dCat$sbjCode,levels=unique(dtf$id))
 
 

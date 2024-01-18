@@ -1,3 +1,11 @@
+#' ---
+#' title: Process 2022 data
+#' author: Thomas Gorman
+#' date: 01/18/24
+#' format: html
+#' ---
+
+
 # packages <- c('plyr','dplyr','tidyr','ggplot2','magrittr',
 #              'psych','data.table','grid','gridExtra','R.matlab','units','readr')
 # have = packages %in% rownames(installed.packages())

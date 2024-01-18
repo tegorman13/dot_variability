@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.545">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Thomas Gorman">
+<meta name="dcterms.date" content="2024-01-18">
+<title>Dot Pattern Variability - Process 24 data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><style>html{ scroll-behavior: smooth; }</style>
+</head>
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Dot Pattern Variability</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="./dp_22.html"> 
+<span class="menu-text">2022_Paper</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./dp_24.html"> 
+<span class="menu-text">Hu_Nosofsky24</span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Process 24 data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thomas Gorman </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 18, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header><div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">ggplot2</span>, <span class="va">here</span>, <span class="va">patchwork</span>, <span class="va">conflicted</span><span class="op">)</span></span>
+<span><span class="fu">conflict_prefer_all</span><span class="op">(</span><span class="st">"dplyr"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># 1. Phase type (1 Training, 2 Test)</span></span>
+<span><span class="co"># 2. Block number (1-10 Training, 1 Test)</span></span>
+<span><span class="co"># 3. Trial number (1-270 Training, 271-354 Test)*</span></span>
+<span><span class="co"># 4. Pattern type (1 = old*, 2 = prototype, 3 = new low, 4 = new medium, 5 = new high)</span></span>
+<span><span class="co"># 5. Category number (1-3)</span></span>
+<span><span class="co"># 6. Pattern token* (1-90 old, 1 prototype, 1-3 new low, 1-6 new med, 1-9 new high)</span></span>
+<span><span class="co"># 7. distortion level (1 = low, 2 = med, 3 = high)</span></span>
+<span><span class="co"># 8. Category response (1-3)</span></span>
+<span><span class="co"># 9. Correct/Incorrect (0 = Incorrect, 1 = Correct)</span></span>
+<span><span class="co"># 10. Reaction time (in milliseconds)</span></span>
+<span><span class="co"># 11-28. Coordinates of nine dots* (-25 through 24)</span></span>
+<span><span class="co"># *Pattern type: All training patterns (including old patterns in the test phase) are coded as 1 regardless of the distortion levels</span></span>
+<span><span class="co"># *Pattern token: index of unique tokens for each category of each type of pattern. </span></span>
+<span><span class="co"># *Coordinates of nine dots: every two columns represent the x and y coordinates of a dot on a 50 x 50 grid</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># The conditions are indicated in the file names: </span></span>
+<span><span class="co">#   file names with "cond1", "cond2", "cond3" and "cond4" contain data from the low, medium, high and mixed-distortion training conditions respectively. </span></span>
+<span></span>
+<span></span>
+<span><span class="co">#rm(list=ls())</span></span>
+<span></span>
+<span><span class="va">col.names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Phase"</span>,<span class="st">"Block"</span>,<span class="st">"BlockTrial"</span>,<span class="st">"Pattern"</span>,<span class="st">"Category"</span>,<span class="st">"Pattern.Token"</span>,<span class="st">"distortion"</span>,<span class="st">"Response"</span>,<span class="st">"Corr"</span>,<span class="st">"rt"</span>,</span>
+<span>              <span class="st">"x1"</span>,<span class="st">"y1"</span>,<span class="st">"x2"</span>,<span class="st">"y2"</span>,<span class="st">"x3"</span>,<span class="st">"y3"</span>,<span class="st">"x4"</span>,<span class="st">"y4"</span>,<span class="st">"x5"</span>,<span class="st">"y5"</span>,<span class="st">"x6"</span>,<span class="st">"y6"</span>,<span class="st">"x7"</span>,<span class="st">"y7"</span>,<span class="st">"x8"</span>,<span class="st">"y8"</span>,<span class="st">"x9"</span>,<span class="st">"y9"</span>, <span class="st">"name"</span>, <span class="st">"condit"</span>, <span class="st">"sbjCode"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">loadPattern</span><span class="op">=</span><span class="st">"dot_*"</span></span>
+<span><span class="va">pathString</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"data/"</span>,sep<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">mFiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"data/"</span>,pattern <span class="op">=</span> <span class="va">loadPattern</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># should be 89 in exp 2</span></span>
+<span><span class="va">mFiles</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "dot_cond1_sub1.txt"   "dot_cond1_sub102.txt" "dot_cond1_sub106.txt"
+  [4] "dot_cond1_sub110.txt" "dot_cond1_sub114.txt" "dot_cond1_sub122.txt"
+  [7] "dot_cond1_sub13.txt"  "dot_cond1_sub201.txt" "dot_cond1_sub205.txt"
+ [10] "dot_cond1_sub209.txt" "dot_cond1_sub21.txt"  "dot_cond1_sub213.txt"
+ [13] "dot_cond1_sub217.txt" "dot_cond1_sub221.txt" "dot_cond1_sub225.txt"
+ [16] "dot_cond1_sub229.txt" "dot_cond1_sub233.txt" "dot_cond1_sub237.txt"
+ [19] "dot_cond1_sub245.txt" "dot_cond1_sub249.txt" "dot_cond1_sub25.txt" 
+ [22] "dot_cond1_sub253.txt" "dot_cond1_sub257.txt" "dot_cond1_sub261.txt"
+ [25] "dot_cond1_sub265.txt" "dot_cond1_sub269.txt" "dot_cond1_sub273.txt"
+ [28] "dot_cond1_sub277.txt" "dot_cond1_sub278.txt" "dot_cond1_sub282.txt"
+ [31] "dot_cond1_sub286.txt" "dot_cond1_sub29.txt"  "dot_cond1_sub290.txt"
+ [34] "dot_cond1_sub294.txt" "dot_cond1_sub298.txt" "dot_cond1_sub302.txt"
+ [37] "dot_cond1_sub306.txt" "dot_cond1_sub310.txt" "dot_cond1_sub314.txt"
+ [40] "dot_cond1_sub318.txt" "dot_cond1_sub322.txt" "dot_cond1_sub326.txt"
+ [43] "dot_cond1_sub33.txt"  "dot_cond1_sub330.txt" "dot_cond1_sub334.txt"
+ [46] "dot_cond1_sub338.txt" "dot_cond1_sub342.txt" "dot_cond1_sub346.txt"
+ [49] "dot_cond1_sub350.txt" "dot_cond1_sub354.txt" "dot_cond1_sub358.txt"
+ [52] "dot_cond1_sub362.txt" "dot_cond1_sub366.txt" "dot_cond1_sub37.txt" 
+ [55] "dot_cond1_sub370.txt" "dot_cond1_sub374.txt" "dot_cond1_sub378.txt"
+ [58] "dot_cond1_sub382.txt" "dot_cond1_sub386.txt" "dot_cond1_sub390.txt"
+ [61] "dot_cond1_sub394.txt" "dot_cond1_sub41.txt"  "dot_cond1_sub45.txt" 
+ [64] "dot_cond1_sub49.txt"  "dot_cond1_sub5.txt"   "dot_cond1_sub53.txt" 
+ [67] "dot_cond1_sub57.txt"  "dot_cond1_sub61.txt"  "dot_cond1_sub65.txt" 
+ [70] "dot_cond1_sub73.txt"  "dot_cond1_sub77.txt"  "dot_cond1_sub82.txt" 
+ [73] "dot_cond1_sub86.txt"  "dot_cond1_sub9.txt"   "dot_cond1_sub90.txt" 
+ [76] "dot_cond1_sub94.txt"  "dot_cond1_sub98.txt"  "dot_cond2_sub10.txt" 
+ [79] "dot_cond2_sub103.txt" "dot_cond2_sub107.txt" "dot_cond2_sub111.txt"
+ [82] "dot_cond2_sub115.txt" "dot_cond2_sub118.txt" "dot_cond2_sub119.txt"
+ [85] "dot_cond2_sub123.txt" "dot_cond2_sub14.txt"  "dot_cond2_sub18.txt" 
+ [88] "dot_cond2_sub2.txt"   "dot_cond2_sub202.txt" "dot_cond2_sub206.txt"
+ [91] "dot_cond2_sub214.txt" "dot_cond2_sub218.txt" "dot_cond2_sub22.txt" 
+ [94] "dot_cond2_sub222.txt" "dot_cond2_sub226.txt" "dot_cond2_sub230.txt"
+ [97] "dot_cond2_sub234.txt" "dot_cond2_sub238.txt" "dot_cond2_sub241.txt"
+[100] "dot_cond2_sub242.txt" "dot_cond2_sub246.txt" "dot_cond2_sub250.txt"
+[103] "dot_cond2_sub254.txt" "dot_cond2_sub258.txt" "dot_cond2_sub262.txt"
+[106] "dot_cond2_sub266.txt" "dot_cond2_sub270.txt" "dot_cond2_sub274.txt"
+[109] "dot_cond2_sub279.txt" "dot_cond2_sub283.txt" "dot_cond2_sub287.txt"
+[112] "dot_cond2_sub291.txt" "dot_cond2_sub295.txt" "dot_cond2_sub299.txt"
+[115] "dot_cond2_sub30.txt"  "dot_cond2_sub303.txt" "dot_cond2_sub307.txt"
+[118] "dot_cond2_sub311.txt" "dot_cond2_sub315.txt" "dot_cond2_sub319.txt"
+[121] "dot_cond2_sub323.txt" "dot_cond2_sub327.txt" "dot_cond2_sub331.txt"
+[124] "dot_cond2_sub335.txt" "dot_cond2_sub339.txt" "dot_cond2_sub34.txt" 
+[127] "dot_cond2_sub347.txt" "dot_cond2_sub351.txt" "dot_cond2_sub355.txt"
+[130] "dot_cond2_sub359.txt" "dot_cond2_sub363.txt" "dot_cond2_sub367.txt"
+[133] "dot_cond2_sub371.txt" "dot_cond2_sub375.txt" "dot_cond2_sub38.txt" 
+[136] "dot_cond2_sub383.txt" "dot_cond2_sub387.txt" "dot_cond2_sub391.txt"
+[139] "dot_cond2_sub395.txt" "dot_cond2_sub399.txt" "dot_cond2_sub42.txt" 
+[142] "dot_cond2_sub46.txt"  "dot_cond2_sub54.txt"  "dot_cond2_sub58.txt" 
+[145] "dot_cond2_sub6.txt"   "dot_cond2_sub62.txt"  "dot_cond2_sub66.txt" 
+[148] "dot_cond2_sub70.txt"  "dot_cond2_sub74.txt"  "dot_cond2_sub79.txt" 
+[151] "dot_cond2_sub83.txt"  "dot_cond2_sub87.txt"  "dot_cond2_sub91.txt" 
+[154] "dot_cond2_sub95.txt"  "dot_cond2_sub99.txt"  "dot_cond3_sub100.txt"
+[157] "dot_cond3_sub104.txt" "dot_cond3_sub108.txt" "dot_cond3_sub112.txt"
+[160] "dot_cond3_sub116.txt" "dot_cond3_sub12.txt"  "dot_cond3_sub120.txt"
+[163] "dot_cond3_sub124.txt" "dot_cond3_sub15.txt"  "dot_cond3_sub19.txt" 
+[166] "dot_cond3_sub203.txt" "dot_cond3_sub207.txt" "dot_cond3_sub211.txt"
+[169] "dot_cond3_sub215.txt" "dot_cond3_sub219.txt" "dot_cond3_sub223.txt"
+[172] "dot_cond3_sub227.txt" "dot_cond3_sub231.txt" "dot_cond3_sub235.txt"
+[175] "dot_cond3_sub239.txt" "dot_cond3_sub243.txt" "dot_cond3_sub247.txt"
+[178] "dot_cond3_sub251.txt" "dot_cond3_sub255.txt" "dot_cond3_sub259.txt"
+[181] "dot_cond3_sub263.txt" "dot_cond3_sub271.txt" "dot_cond3_sub275.txt"
+[184] "dot_cond3_sub280.txt" "dot_cond3_sub284.txt" "dot_cond3_sub288.txt"
+[187] "dot_cond3_sub292.txt" "dot_cond3_sub296.txt" "dot_cond3_sub3.txt"  
+[190] "dot_cond3_sub300.txt" "dot_cond3_sub304.txt" "dot_cond3_sub308.txt"
+[193] "dot_cond3_sub31.txt"  "dot_cond3_sub312.txt" "dot_cond3_sub316.txt"
+[196] "dot_cond3_sub320.txt" "dot_cond3_sub324.txt" "dot_cond3_sub328.txt"
+[199] "dot_cond3_sub332.txt" "dot_cond3_sub336.txt" "dot_cond3_sub340.txt"
+[202] "dot_cond3_sub344.txt" "dot_cond3_sub348.txt" "dot_cond3_sub35.txt" 
+[205] "dot_cond3_sub352.txt" "dot_cond3_sub356.txt" "dot_cond3_sub360.txt"
+[208] "dot_cond3_sub364.txt" "dot_cond3_sub368.txt" "dot_cond3_sub372.txt"
+[211] "dot_cond3_sub376.txt" "dot_cond3_sub380.txt" "dot_cond3_sub384.txt"
+[214] "dot_cond3_sub39.txt"  "dot_cond3_sub392.txt" "dot_cond3_sub396.txt"
+[217] "dot_cond3_sub400.txt" "dot_cond3_sub43.txt"  "dot_cond3_sub51.txt" 
+[220] "dot_cond3_sub55.txt"  "dot_cond3_sub59.txt"  "dot_cond3_sub63.txt" 
+[223] "dot_cond3_sub67.txt"  "dot_cond3_sub7.txt"   "dot_cond3_sub75.txt" 
+[226] "dot_cond3_sub80.txt"  "dot_cond3_sub84.txt"  "dot_cond3_sub88.txt" 
+[229] "dot_cond3_sub92.txt"  "dot_cond3_sub96.txt"  "dot_cond4_sub101.txt"
+[232] "dot_cond4_sub105.txt" "dot_cond4_sub109.txt" "dot_cond4_sub113.txt"
+[235] "dot_cond4_sub117.txt" "dot_cond4_sub12.txt"  "dot_cond4_sub121.txt"
+[238] "dot_cond4_sub16.txt"  "dot_cond4_sub20.txt"  "dot_cond4_sub204.txt"
+[241] "dot_cond4_sub208.txt" "dot_cond4_sub212.txt" "dot_cond4_sub216.txt"
+[244] "dot_cond4_sub220.txt" "dot_cond4_sub224.txt" "dot_cond4_sub228.txt"
+[247] "dot_cond4_sub232.txt" "dot_cond4_sub236.txt" "dot_cond4_sub24.txt" 
+[250] "dot_cond4_sub240.txt" "dot_cond4_sub244.txt" "dot_cond4_sub252.txt"
+[253] "dot_cond4_sub256.txt" "dot_cond4_sub260.txt" "dot_cond4_sub264.txt"
+[256] "dot_cond4_sub268.txt" "dot_cond4_sub272.txt" "dot_cond4_sub276.txt"
+[259] "dot_cond4_sub28.txt"  "dot_cond4_sub281.txt" "dot_cond4_sub285.txt"
+[262] "dot_cond4_sub289.txt" "dot_cond4_sub293.txt" "dot_cond4_sub297.txt"
+[265] "dot_cond4_sub301.txt" "dot_cond4_sub305.txt" "dot_cond4_sub309.txt"
+[268] "dot_cond4_sub313.txt" "dot_cond4_sub32.txt"  "dot_cond4_sub321.txt"
+[271] "dot_cond4_sub329.txt" "dot_cond4_sub333.txt" "dot_cond4_sub337.txt"
+[274] "dot_cond4_sub341.txt" "dot_cond4_sub345.txt" "dot_cond4_sub349.txt"
+[277] "dot_cond4_sub353.txt" "dot_cond4_sub357.txt" "dot_cond4_sub36.txt" 
+[280] "dot_cond4_sub361.txt" "dot_cond4_sub365.txt" "dot_cond4_sub369.txt"
+[283] "dot_cond4_sub373.txt" "dot_cond4_sub377.txt" "dot_cond4_sub381.txt"
+[286] "dot_cond4_sub385.txt" "dot_cond4_sub389.txt" "dot_cond4_sub393.txt"
+[289] "dot_cond4_sub397.txt" "dot_cond4_sub4.txt"   "dot_cond4_sub40.txt" 
+[292] "dot_cond4_sub44.txt"  "dot_cond4_sub52.txt"  "dot_cond4_sub56.txt" 
+[295] "dot_cond4_sub60.txt"  "dot_cond4_sub64.txt"  "dot_cond4_sub68.txt" 
+[298] "dot_cond4_sub72.txt"  "dot_cond4_sub76.txt"  "dot_cond4_sub8.txt"  
+[301] "dot_cond4_sub85.txt"  "dot_cond4_sub89.txt"  "dot_cond4_sub93.txt" 
+[304] "dot_cond4_sub97.txt" </code></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nFiles</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mFiles</span><span class="op">)</span></span>
+<span><span class="co"># read in each of the txt files in mFiles - into a single tibble</span></span>
+<span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map2_dfr</a></span><span class="op">(</span><span class="va">mFiles</span>, <span class="va">mFiles</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">pathString</span>, <span class="va">.x</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span></span>
+<span>      name <span class="op">=</span> <span class="va">.y</span>,</span>
+<span>      condit <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">"cond\\d+"</span><span class="op">)</span>,</span>
+<span>      subject_id <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">"sub\\d+"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html">set_names</a></span><span class="op">(</span><span class="va">col.names</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>, <span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>trial <span class="op">=</span> <span class="fu">row_number</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="st">"sbjCode"</span>, <span class="st">"condit"</span>, <span class="st">"trial"</span><span class="op">)</span> </span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    phase <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="va">Phase</span> <span class="op">==</span> <span class="st">"1"</span> <span class="op">~</span> <span class="st">"Training"</span>,</span>
+<span>      <span class="va">Phase</span> <span class="op">==</span> <span class="st">"2"</span> <span class="op">~</span> <span class="st">"Test"</span></span>
+<span>    <span class="op">)</span>, </span>
+<span>    Stage <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="va">trial</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">90</span> <span class="op">~</span> <span class="st">"Start"</span>,</span>
+<span>      <span class="va">trial</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">91</span><span class="op">:</span><span class="fl">180</span> <span class="op">~</span> <span class="st">"Middle"</span>,</span>
+<span>      <span class="va">trial</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">181</span><span class="op">:</span><span class="fl">270</span> <span class="op">~</span> <span class="st">"End"</span>,</span>
+<span>      <span class="va">trial</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">271</span><span class="op">:</span><span class="fl">354</span> <span class="op">~</span> <span class="st">"Test"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    pattern <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="va">Pattern</span> <span class="op">==</span> <span class="st">"1"</span> <span class="op">~</span> <span class="st">"old"</span>,</span>
+<span>      <span class="va">Pattern</span> <span class="op">==</span> <span class="st">"2"</span> <span class="op">~</span> <span class="st">"prototype"</span>,</span>
+<span>      <span class="va">Pattern</span> <span class="op">==</span> <span class="st">"3"</span> <span class="op">~</span> <span class="st">"new_low"</span>,</span>
+<span>      <span class="va">Pattern</span> <span class="op">==</span> <span class="st">"4"</span> <span class="op">~</span> <span class="st">"new_med"</span>,</span>
+<span>      <span class="va">Pattern</span> <span class="op">==</span> <span class="st">"5"</span> <span class="op">~</span> <span class="st">"new_high"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    distortion <span class="op">=</span> <span class="fu">recode</span><span class="op">(</span><span class="va">distortion</span>,</span>
+<span>                        `0` <span class="op">=</span> <span class="st">"prototype"</span>,</span>
+<span>                        `1` <span class="op">=</span> <span class="st">"low"</span>,</span>
+<span>                        `2` <span class="op">=</span> <span class="st">"med"</span>,</span>
+<span>                        `3` <span class="op">=</span> <span class="st">"high"</span><span class="op">)</span>,</span>
+<span>    Pattern_Token <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
+<span>      <span class="va">pattern</span> <span class="op">==</span> <span class="st">"old"</span> <span class="op">&amp;</span> <span class="va">Pattern.Token</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">90</span> <span class="op">~</span> <span class="st">"old"</span>,</span>
+<span>      <span class="va">pattern</span> <span class="op">==</span> <span class="st">"prototype"</span> <span class="op">&amp;</span> <span class="va">Pattern.Token</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"prototype"</span>,</span>
+<span>      <span class="va">pattern</span> <span class="op">==</span> <span class="st">"new_low"</span> <span class="op">&amp;</span> <span class="va">Pattern.Token</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span> <span class="op">~</span> <span class="st">"new_low"</span>,</span>
+<span>      <span class="va">pattern</span> <span class="op">==</span> <span class="st">"new_med"</span> <span class="op">&amp;</span> <span class="va">Pattern.Token</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span> <span class="op">~</span> <span class="st">"new_med"</span>,</span>
+<span>      <span class="va">pattern</span> <span class="op">==</span> <span class="st">"new_high"</span> <span class="op">&amp;</span> <span class="va">Pattern.Token</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">9</span> <span class="op">~</span> <span class="st">"new_high"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    condit <span class="op">=</span> <span class="fu">recode</span><span class="op">(</span><span class="va">condit</span>,</span>
+<span>                    <span class="st">"cond1"</span> <span class="op">=</span> <span class="st">"low"</span>,</span>
+<span>                    <span class="st">"cond2"</span> <span class="op">=</span> <span class="st">"medium"</span>,</span>
+<span>                    <span class="st">"cond3"</span> <span class="op">=</span> <span class="st">"high"</span>,</span>
+<span>                    <span class="st">"cond4"</span> <span class="op">=</span> <span class="st">"mixed"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">Stage</span>, .after<span class="op">=</span><span class="va">trial</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">relocate</span><span class="op">(</span><span class="va">Pattern_Token</span>, <span class="va">pattern</span>, .after<span class="op">=</span><span class="va">Pattern.Token</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dCat</span><span class="op">$</span><span class="va">Pattern_Token</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">dCat</span><span class="op">$</span><span class="va">Pattern_Token</span>,levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"old"</span>,<span class="st">"prototype"</span>,<span class="st">"new_low"</span>,<span class="st">"new_med"</span>,<span class="st">"new_high"</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">dCat</span><span class="op">$</span><span class="va">condit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">dCat</span><span class="op">$</span><span class="va">condit</span>,levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"low"</span>,<span class="st">"medium"</span>,<span class="st">"mixed"</span>,<span class="st">"high"</span><span class="op">)</span> <span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">dCatTrainAvg</span><span class="op">=</span><span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span>  <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">Block</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">summarise</span><span class="op">(</span>nCorr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Corr</span><span class="op">)</span>,propCor<span class="op">=</span><span class="va">nCorr</span><span class="op">/</span><span class="fl">27</span>,rtMean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span>, n<span class="op">=</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span>,.groups <span class="op">=</span> <span class="st">'keep'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>grpRank<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rank.html">rank</a></span><span class="op">(</span><span class="op">-</span><span class="va">propCor</span><span class="op">)</span><span class="op">)</span>,id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">sbjCode</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">arrange</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">Block</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dtf</span> <span class="op">&lt;-</span> <span class="va">dCatTrainAvg</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Block</span><span class="op">==</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">arrange</span><span class="op">(</span><span class="op">-</span><span class="va">propCor</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># bin into quartile by propCor</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>quartile <span class="op">=</span> <span class="fu">ntile</span><span class="op">(</span><span class="va">propCor</span>, <span class="fl">4</span><span class="op">)</span>, finalTrain<span class="op">=</span><span class="va">propCor</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">dCatTrainAvg</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">dCatTrainAvg</span><span class="op">$</span><span class="va">id</span>,levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">dCatTrainAvg</span><span class="op">$</span><span class="va">sbjCode</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="va">dCatTestAvg</span><span class="op">=</span><span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span>  <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">Pattern_Token</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">summarise</span><span class="op">(</span>Corr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Corr</span><span class="op">)</span>,rtMean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span>, n<span class="op">=</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span>,.groups <span class="op">=</span> <span class="st">'keep'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>grpRank<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rank.html">rank</a></span><span class="op">(</span><span class="op">-</span><span class="va">Corr</span><span class="op">)</span><span class="op">)</span>,id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">sbjCode</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">arrange</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">Corr</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dte_h</span> <span class="op">&lt;-</span> <span class="va">dCatTestAvg</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Pattern_Token</span><span class="op">==</span><span class="st">"new_high"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">arrange</span><span class="op">(</span><span class="op">-</span><span class="va">Corr</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>q_test_high <span class="op">=</span> <span class="fu">ntile</span><span class="op">(</span><span class="va">Corr</span>, <span class="fl">4</span><span class="op">)</span>, test_high<span class="op">=</span><span class="va">Corr</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dte_o</span> <span class="op">&lt;-</span> <span class="va">dCatTestAvg</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Pattern_Token</span><span class="op">==</span><span class="st">"old"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">arrange</span><span class="op">(</span><span class="op">-</span><span class="va">Corr</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>q_test_old <span class="op">=</span> <span class="fu">ntile</span><span class="op">(</span><span class="va">Corr</span>, <span class="fl">4</span><span class="op">)</span>, test_old<span class="op">=</span><span class="va">Corr</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu">left_join</span><span class="op">(</span><span class="va">dtf</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">quartile</span>, <span class="va">finalTrain</span><span class="op">)</span>, by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sbjCode"</span>,<span class="st">"condit"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu">left_join</span><span class="op">(</span><span class="va">dte_h</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">q_test_high</span>, <span class="va">test_high</span><span class="op">)</span>, by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sbjCode"</span>,<span class="st">"condit"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu">left_join</span><span class="op">(</span><span class="va">dte_o</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">q_test_old</span>, <span class="va">test_old</span><span class="op">)</span>, by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sbjCode"</span>,<span class="st">"condit"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># order sbjCode by end of training performance</span></span>
+<span><span class="va">dCat</span><span class="op">$</span><span class="va">sbjCode</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">dCat</span><span class="op">$</span><span class="va">sbjCode</span>,levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">dtf</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># d1 &lt;- dCat |&gt; filter(sbjCode=="sub1")</span></span>
+<span><span class="co"># da &lt;- d |&gt; group_by(sbjCode, condit) |&gt; summarise(n = n()) %&gt;% dplyr::arrange(n)</span></span>
+<span><span class="co"># sub12 has 708 trials - rest have 354. </span></span>
+<span><span class="co"># the two sub12 instances are in different condits</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+
+</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/read_24.R" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/read_24.R" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

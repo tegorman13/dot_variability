@@ -6,27 +6,54 @@ project:
   render:
     - "*.qmd"
     - "!_*" # ignore any file that starts with a _
+    - "read_24.R"
+    - "read_22.R"
 
 
 website:
   title: "Dot Pattern Variability"
   repo-url: https://github.com/tegorman13/dot_variability
   site-url: "https://tegorman13.github.io"
-  #repo-actions: [source, edit, issue]
-  #reader-mode: true
+  repo-actions: [source, edit, issue]
+  reader-mode: true
   page-navigation: true
   navbar:
     background: primary
-    search: trues
+    search: true
     left:
       - text: "2022_Paper"
         href: dp_22.qmd
       - text: "Hu_Nosofsky24"
         href:  dp_24.qmd
+        
+execute:
+  freeze: auto
+  
+bibliography: [assets/dot_bib.bib] #, assets/grateful-refs.bib
+csl: assets/apa7.csl
 
-    right: 
-        target: _blank
-      - text: "{{< fa brands github size=2x >}}"
-        aria-label: GitHub
-        href: https://github.com/tegorman13
-        target: _blank
+format:
+  html:
+    theme:
+      light: spacelab #[default]
+      dark: cyborg
+    #theme: Assets/Style/lux-modified.scss 
+    #css: ["Assets/Style/lux-modified.scss", "Assets/Style/calloutTG.css"]
+    page-layout: full
+    tbl-cap-location: top
+    fig-cap-location: bottom
+    toc: true
+    toc-location: right
+    toc-depth: 2
+    cold-fold: true
+    cold-tools: true
+    code-link: true
+    code-line-numbers: false
+    citations-hover: true
+    #code-overflow: wrap
+    code-copy: true
+    number-depth: 3
+    smooth-scroll: true
+    code-block-bg: "#272822"
+    highlight-style: monokai #github #a11y
+    html-math-method: mathjax
