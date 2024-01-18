@@ -1,0 +1,92 @@
+---
+title: "Untitled"
+author: "Thomas Gorman"
+date: "12/15/2021"
+output: html_document
+---
+
+
+
+
+
+
+
+
+```{r fig.width=10,fig.height=10}
+
+dot <- dCat %>% ungroup() %>% filter(id=="1.nrep",(Pattern.Type=="Prototype" | Pattern.Type=="New-Low"))%>%  select(typeCount,Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
+nTrial=nrow(dot);
+dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
+dotFrame <- data.frame(typeCount=rep(dot$typeCount,each=9),Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
+pg <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(typeCount~Category)
+
+pg
+
+```
+
+
+
+
+```{r fig.width=5,fig.height=5}
+
+
+nTrial=200;
+proto <- dCat %>% ungroup() %>% filter(id=="1.nrep",Pattern.Type=="Prototype")%>%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
+nTrial=3;
+dot=proto
+dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
+dotFrame <- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
+pg <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)
+
+
+
+nl <- dCat %>% ungroup() %>% filter(id=="1.nrep",Pattern.Type=="New-Low")%>%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
+nTrial=nrow(nl)
+dot=nl
+dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
+dotFrame <- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
+pl <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)
+
+gridExtra::grid.arrange(pg,pl)
+pg
+pl
+```
+
+
+
+
+
+
+
+
+```{r}
+
+
+
+dot <- dCatTrain[1,] %>% ungroup() %>%  select(x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
+dot %>% ggplot()+geom_point(x1,y1)+geom_point(x2,y2)+geom_point(x3,y3)
+dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
+dotFrame <- data.frame(dotx,doty)
+ggplot(dotFrame,aes(dotx,doty))+geom_point()
+
+
+```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

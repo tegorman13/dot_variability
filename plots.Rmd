@@ -1,0 +1,529 @@
+---
+title: "plots"
+author: "Thomas Gorman"
+date: "12/15/2021"
+output: html_document
+---
+
+
+
+
+#Experiment 1
+```{r fig.height=10,fig.width=11}
+
+# dRecAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+
+#   stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")+facet_wrap(~id)
+
+dRecAvg %>% filter(condit=="rep") %>% ggplot(aes(x=Block,y=propCor,col=condit))+
+  stat_summary(shape=0,geom="point",fun="mean")+
+  stat_summary(geom="line",fun="mean",col="red")+facet_wrap(~id)+ylim(c(0,1))+
+  ggtitle("Hu & Nosofsky Experiment 1 - Learning. Rep Subjects.")
+
+dRecAvg %>% filter(condit=="nrep") %>% ggplot(aes(x=Block,y=propCor,col=condit))+
+  stat_summary(shape=2, geom="point",fun="mean",col="lightblue")+
+  stat_summary(geom="line",fun="mean",col="lightblue")+facet_wrap(~id)+ylim(c(0,1))+
+  facet_wrap(~id)+ggtitle("Hu & Nosofsky Experiment 1 - Learning. NRep Subjects.")
+
+
+```
+
+
+
+
+#Experiment 2
+```{r fig.height=10,fig.width=16}
+
+dCatTrainAvg %>% filter(condit=="rep") %>% ggplot(aes(x=Block,y=propCor,col=condit))+
+  stat_summary(shape=0,geom="point",fun="mean")+
+  stat_summary(geom="line",fun="mean",col="red")+facet_wrap(~id)+ylim(c(0,1))+
+  geom_hline(yintercept = .33,linetype="dashed")+
+  ggtitle("Hu & Nosofsky Experiment 2 - Learning. Rep Subjects - Average Accuracy Per Block.")+
+  xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,15))
+
+dCatTrainAvg %>% filter(condit=="nrep") %>% ggplot(aes(x=Block,y=propCor,col=condit))+
+  stat_summary(shape=2, geom="point",fun="mean",col="lightblue")+
+  stat_summary(geom="line",fun="mean",col="lightblue")+facet_wrap(~id)+ylim(c(0,1))+
+  geom_hline(yintercept = .33,linetype="dashed")+
+  facet_wrap(~id)+ggtitle("Hu & Nosofsky Experiment 2 - Learning. NRep Subjects - Average Accuracy Per Block.")+
+  xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,15))
+
+```
+
+
+
+
+
+
+
+
+#Experiment 2 - separate category - learning curves
+```{r fig.height=12,fig.width=16}
+
+dCatTrainAvg2 %>% filter(condit=="rep") %>% ggplot(aes(x=Block,y=propCor,col=Category,shape=Category))+
+  stat_summary(geom="point",fun="mean")+
+  stat_summary(geom="line",fun="mean")+facet_wrap(~id)+ylim(c(0,1))+
+  geom_hline(yintercept = .33,linetype="dashed")+
+  ggtitle("Hu & Nosofsky Experiment 2 - Learning Curves. Rep Subjects - Separated Categories.")+
+  xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,15))
+
+
+dCatTrainAvg2 %>% filter(condit=="nrep") %>% ggplot(aes(x=Block,y=propCor,col=Category,shape=Category))+
+  stat_summary(geom="point",fun="mean")+
+  stat_summary(geom="line",fun="mean")+facet_wrap(~id)+ylim(c(0,1))+
+  geom_hline(yintercept = .33,linetype="dashed")+
+  facet_wrap(~id)+ggtitle("Hu & Nosofsky Experiment 2 - Learning Curves. NRep Subjects - Separated Categories.")+
+  xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,15))
+
+
+
+
+```
+
+
+# Experiment 2 - 3 Training Stages + Transfer Patterns
+```{r fig.height=10,fig.width=15}
+
+dCatAvg %>% filter(condit=="rep") %>% ggplot(aes(x=Stage,y=propCor,fill=Pattern.Type))+
+  stat_summary(geom="bar",fun=mean,position=position_dodge())+
+  stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~id)+
+   geom_hline(yintercept = .33,linetype="dashed")+
+ ggtitle("REP - 3 training bins (75 trials each) + Transfer Patterns")+ylab("Proportion Correct")
+
+dCatAvg %>% filter(condit=="nrep") %>% ggplot(aes(x=Stage,y=propCor,fill=Pattern.Type))+
+  stat_summary(geom="bar",fun=mean,position=position_dodge())+
+  stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~id)+
+   geom_hline(yintercept = .33,linetype="dashed")+
+ ggtitle("NREP - 3 training bins (75 trials each) + Transfer Patterns")+ylab("Proportion Correct")
+
+# 
+# dCatAvg %>% filter() %>% ggplot(aes(x=Stage,y=propCor,fill=Pattern.Type))+
+#   stat_summary(geom="bar",fun=mean,position=position_dodge())+
+#   stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~condit)+ggtitle("nrep")
+# 
+# dCatAvg %>% filter() %>% ggplot(aes(x=Pattern.Type,y=propCor,fill=condit))+
+#   stat_summary(geom="bar",fun=mean,position=position_dodge())+
+#   stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~Stage)+ggtitle("")
+# 
+# dCatAvg %>% filter() %>% ggplot(aes(x=Pattern.Type,y=propCor,col=condit))+
+#   geom_boxplot(position=position_dodge())+facet_wrap(~Stage)
+```
+
+
+
+
+
+# Experiment 2 - Separate Categories x stage
+```{r fig.height=12,fig.width=18}
+
+dCatAvg2 %>% filter(condit=="rep") %>% ggplot(aes(x=Category,y=propCor,fill=Pattern.Type2))+
+  stat_summary(geom="bar",fun=mean,position=position_dodge())+
+  stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~id)+
+   geom_hline(yintercept = .33,linetype="dashed")+
+ ggtitle("REP - End of Training vs. Testing Performance Per Category")+ylab("Proportion Correct")
+
+dCatAvg2 %>% filter(condit=="nrep") %>% ggplot(aes(x=Category,y=propCor,fill=Pattern.Type2))+
+  stat_summary(geom="bar",fun=mean,position=position_dodge())+
+  stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~id)+
+   geom_hline(yintercept = .33,linetype="dashed")+
+ ggtitle("NREP - End of Training vs. Testing Performance Per Category")+ylab("Proportion Correct")
+
+```
+
+
+
+
+```{r}
+
+dc %>% ggplot(aes(x=condit,y=EndTrain.Minus.HighDistort))+stat_summary(geom="bar",fun=mean)+
+  stat_summary(geom="errorbar",fun.data=mean_se)
+
+dc %>% ggplot(aes(x=condit,y=MedDistort.Minus.HighDistort))+stat_summary(geom="bar",fun=mean)+
+  stat_summary(geom="errorbar",fun.data=mean_se)
+
+dc %>% ggplot(aes(x=condit,y=LowDistort.Minus.HighDistort))+stat_summary(geom="bar",fun=mean)+
+  stat_summary(geom="errorbar",fun.data=mean_se)
+
+dc %>% ggplot(aes(x=condit,y=TrainedItem.Minus.HighDistort))+stat_summary(geom="bar",fun=mean)+
+  stat_summary(geom="errorbar",fun.data=mean_se)
+
+
+
+
+
+dc %>% filter(condit=="rep") %>% ungroup() %>% select(End.Training,`New-High`) %>% cor
+dc %>% filter(condit=="nrep") %>% ungroup() %>% select(End.Training,`New-High`) %>% cor()
+
+```
+
+
+
+
+
+
+
+
+```{r fig.height=12,fig.width=16}
+
+library(rstatix)
+library(ggpubr)
+library(emmeans)
+library(cowplot)
+
+
+
+# dc2 %>% filter() %>% ggplot(aes(x=End.Training,y=New.High,color=condit))+geom_point()+geom_smooth(method="lm")
+# dc2 %>% filter(End.Training>.33, New.High>.33) %>% ggplot(aes(x=End.Training,y=New.High,color=condit))+geom_point()+geom_smooth(method="lm")
+
+
+
+
+(at1 <- dc2 %>% anova_test(dv=New.High,between=Condition,covariate = End.Training,wid=id,type=3))
+(at2 <- dc2 %>% filter(End.Training>.33) %>% anova_test(dv=New.High,between=Condition,covariate = End.Training,wid=id,type=3))
+(at3 <- dc2 %>% filter(End.Training>.88) %>% anova_test(dv=New.High,between=Condition,covariate = End.Training,wid=id,type=3))
+
+#dc2 %>% anova_test(New.High ~condit*End.Training) # no sig. interaction
+pwc1 <- dc2 %>% emmeans_test(New.High ~ Condition,covariate=End.Training,p.adjust.method="bonferroni")%>% add_xy_position(x = "condit", fun = "mean_se")
+get_emmeans(pwc1)
+pwc2 <- dc2 %>% filter(End.Training>.33) %>% emmeans_test(New.High ~ Condition,covariate=End.Training,p.adjust.method="bonferroni")%>% add_xy_position(x = "condit", fun = "mean_se")
+pwc3 <- dc2 %>% filter(End.Training>.88) %>% emmeans_test(New.High ~ Condition,covariate=End.Training,p.adjust.method="bonferroni")%>% add_xy_position(x = "condit", fun = "mean_se")
+
+
+
+ep1<-ggline(get_emmeans(pwc1), x = "Condition", y = "emmean") +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) + 
+  stat_pvalue_manual(pwc1, hide.ns = TRUE, tip.length = FALSE) +
+  labs(subtitle = get_test_label(at1, detailed = TRUE),caption = get_pwc_label(pwc1),title="Estimated Marginal Means from ANCOVA - All Sbj. (n=89)" )
+
+ep2<-ggline(get_emmeans(pwc2), x = "Condition", y = "emmean") +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) + 
+  stat_pvalue_manual(pwc2, hide.ns = TRUE, tip.length = FALSE) +
+  labs(subtitle = get_test_label(at2, detailed = TRUE),caption = get_pwc_label(pwc2), title= "Estimated Marginal Means from ANCOVA - Only above chance sbj (>.33,n=87)")
+
+ep3<-ggline(get_emmeans(pwc3), x = "Condition", y = "emmean") +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) + 
+  stat_pvalue_manual(pwc3, hide.ns = TRUE, tip.length = FALSE) +
+  labs(subtitle = get_test_label(at3, detailed = TRUE),caption = get_pwc_label(pwc3), title= "Estimated Marginal Means from ANCOVA - Only strong learners (>.88; n=52)")
+
+
+
+gg.ac1 <- ggscatter(dc2,x="End.Training",y="New.High",color="Condition",add="reg.line",add.params = list(size=.3))+
+  stat_regline_equation(aes(label=paste(..eq.label.., ..rr.label..,sep="~~~~"),color=Condition))+
+  ggtitle("Including All Subjects (n=89)")+ylab("High Distortions - Proportion Correct")+xlab("End of Training - Proportion Correct")
+
+gg.ac2 <- dc2 %>% filter(End.Training>.33) %>% ggscatter(.,x="End.Training",y="New.High",color="Condition",add="reg.line",add.params = list(size=.3))+
+  stat_regline_equation(aes(label=paste(..eq.label.., ..rr.label..,sep="~~~~"),color=Condition))+
+  ggtitle("Retain Sbj's above chance (>.33) at train end (n=87). ")+ylab("High Distortions - Proportion Correct")+xlab("End of Training - Proportion Correct")
+
+gg.ac3 <- dc2 %>% filter(End.Training>.88) %>% ggscatter(.,x="End.Training",y="New.High",color="Condition",add="reg.line",add.params = list(size=.3))+
+  stat_regline_equation(aes(label=paste(..eq.label.., ..rr.label..,sep="~~~~"),color=Condition))+
+  ggtitle("Retain only stronger learners (>.88) at train end (n=52). ")+ylab("High Distortions - Proportion Correct")+xlab("End of Training - Proportion Correct")
+
+
+
+gtitle=" Hu & Nosofsky 2020 - Experiment 2. Effect of Condition on High Distortions - Controlling for End of Training Performance"
+title = ggdraw()+draw_label(gtitle,fontface = 'bold',x=0,hjust=0)+theme(plot.margin = margin(0, 0, 0, 7))
+
+plot_grid(title,NULL,gg.ac1,ep1,gg.ac2,ep2,gg.ac3,ep3,ncol=2,rel_heights=c(.1,1,1,1))
+
+
+```
+
+
+
+```{r fig.height=10,fig.width=12}
+
+
+
+
+ps <- dcp  %>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Condition))+
+  stat_summary(geom="bar",fun=mean,position=position_dodge())+
+  stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~cq)+
+   geom_hline(yintercept = .33,linetype="dashed")+
+  xlab("Pattern-Type")+ylab("Proportion Correct")+ggtitle("Low vs High Performers (median split within condition - final training block) - Performance x Pattern Type")
+
+
+
+hd<- dcp  %>% filter(Pattern.Type2=="New-High")%>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Condition))+
+  geom_boxplot(outlier.shape=NA)+geom_jitter(alpha=.5)+facet_wrap(~cq)+xlab("Pattern-Type")+
+  ggtitle("Low vs High Performers (median split within condition) - High Distortion Performance")+ylab("Proportion Correct")
+
+
+dcp  %>% filter(Pattern.Type2=="New-High")%>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Condition))+
+  geom_half_violin()+geom_jitter(alpha=.5)+facet_wrap(~cq)+ggtitle("Low vs High Performers (median split within condition) - High Distortion Performance")
+
+
+gridExtra::grid.arrange(ps,hd)
+
+
+
+p7<- dcp  %>% filter(endTrain>.75) %>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Condition))+
+  stat_summary(geom="bar",fun=mean,position=position_dodge())+
+  stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+
+   geom_hline(yintercept = .33,linetype="dashed")+
+  xlab("Pattern-Type")+ylab("Proportion Correct")+ggtitle("Performance x Pattern Type - Only retaining sbjs with >75% accuracy in final training block")
+
+p5 <-  dcp  %>% filter(endTrain>.50) %>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Condition))+
+  stat_summary(geom="bar",fun=mean,position=position_dodge())+
+  stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+
+   geom_hline(yintercept = .33,linetype="dashed")+
+  xlab("Pattern-Type")+ylab("Proportion Correct")+ggtitle("Performance x Pattern Type - Only retaining sbjs with >50% accuracy in final training block")
+
+
+gridExtra::grid.arrange(ps,p7,p5)
+
+
+
+# dCatAvg2  %>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Condition))+
+#   stat_summary(geom="bar",fun=mean,position=position_dodge())+
+#   stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~cq)+
+#   stat_summary(geom="point")
+#    geom_hline(yintercept = .33,linetype="dashed")+
+#  ggtitle("")+ylab("Proportion Correct")
+# 
+# 
+# 
+# dCatAvg2 %>% filter() %>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Pattern.Type2))+
+#   stat_summary(geom="bar",fun=mean,position=position_dodge())+
+#   stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~condit)+
+#    geom_hline(yintercept = .33,linetype="dashed")+
+#  ggtitle("")+ylab("Proportion Correct")
+# 
+# 
+# dCatAvg3 %>% filter() %>% ggplot(aes(x=Pattern.Type2,y=propCor,fill=Pattern.Type2))+
+#   stat_summary(geom="bar",fun=mean,position=position_dodge())+
+#   stat_summary(geom="errorbar",fun.data=mean_se,position=position_dodge())+facet_wrap(~condit)+
+#    geom_hline(yintercept = .33,linetype="dashed")+
+#  ggtitle("")+ylab("Proportion Correct")
+
+```
+
+
+
+
+```{r fig.width=12,fig.height=9}
+
+
+# other settings for style
+nudge_vp= -1.3
+spacing_factor=3
+dCatAvg2$Bin <- as.numeric(dCatAvg2$Pattern.Type2)*spacing_factor
+rep1=subset(dCatAvg2, dCatAvg2$Condition=="rep")
+nrep1=subset(dCatAvg2, dCatAvg2$Condition=="nrep")
+set.seed(521)
+rep1$jbin_w <- jitter(rep1$Bin, amount=.27) -0.3
+nrep1$jbin_nw <- rep1$jbin_w[1:nrow(nrep1)] + 0.6
+
+
+pe3 <- ggplot(data=dCatAvg2, aes(x=Bin, y= propCor, color =Condition, group=Condition, fill=Condition))+
+  geom_point(data= rep1, aes(x=jbin_w), size=3, alpha=0.6)+
+  geom_point(data= nrep1, aes(x=jbin_nw), size=3, alpha=0.6) +
+  
+  # add the boxplots
+  geom_half_boxplot(
+    data=rep1, aes(group=Bin),
+    position=position_nudge(x=-1.25), side="r", 
+    outlier.shape=NA, center=TRUE, errorbar.draw=FALSE, width=.5, alpha=0.6)+
+  geom_half_boxplot(
+    data=nrep1, aes(group=Bin),
+    position=position_nudge(x=-1.0), side="r", outlier.shape=NA, center=TRUE, errorbar.draw=FALSE,
+    width=.5, alpha=0.5)+
+  # Add the violin plots for the different bins
+  geom_half_violin(
+    data = rep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  geom_half_violin(
+    data = nrep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  #   # Additional seetings
+  scale_fill_viridis(discrete = TRUE,begin=0.7, end=0.3, alpha=0.8)+
+  scale_color_viridis(discrete=TRUE,begin=0.7, end=0.3,alpha=0.8)+
+  scale_x_continuous(name="Pattern Type",breaks=c(0,2,5,8,11,14),labels=c("End.Train","Train-Med","Proto", "New-Low","New-Med" ,"New-High"))+
+  facet_wrap(~cq)
+pe3
+
+
+rep1=subset(dCatAvg, dCatAvg$condit=="rep" & rt<5000)
+nrep1=subset(dCatAvg, dCatAvg$condit=="nrep" & rt<5000)
+set.seed(521)
+rep1$jbin_w <- jitter(rep1$Bin, amount=.27) -0.3
+nrep1$jbin_nw <- rep1$jbin_w[1:nrow(nrep1)] + 0.6
+
+pe4 <- dCatAvg %>% filter(Stage!="Test") %>% ggplot( aes(x=Bin, y= rt, color =condit, group=condit, fill=condit))+
+  geom_point(data= rep1, aes(x=jbin_w), size=3, alpha=0.6)+
+  geom_point(data= nrep1, aes(x=jbin_nw), size=3, alpha=0.6) +
+  # add the boxplots
+  geom_half_boxplot(data=rep1, aes(group=Bin),
+    position=position_nudge(x=-1.25), side="r", 
+    outlier.shape=NA, center=TRUE, errorbar.draw=FALSE, width=.5, alpha=0.6)+
+  geom_half_boxplot(data=nrep1, aes(group=Bin),
+    position=position_nudge(x=-1.0), side="r", outlier.shape=NA, center=TRUE, errorbar.draw=FALSE,
+    width=.5, alpha=0.5)+
+  # Add the violin plots for the different bins
+  geom_half_violin(data = rep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  geom_half_violin(data = nrep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  #   # Additional seetings
+  scale_fill_viridis(discrete = TRUE,begin=0.7, end=0.3, alpha=0.8)+
+  scale_color_viridis(discrete=TRUE,begin=0.7, end=0.3,alpha=0.8)+
+  scale_x_continuous(name="Pattern Type",breaks=c(2,6,10,14,18),labels=c("Trained-Med","Prototype", "New-Low","New-Med" ,"New-High"))+
+  facet_wrap(~Stage)
+pe4
+
+```
+
+
+```{r fig.width=12,fig.height=9}
+
+
+# other settings for style
+nudge_vp= -1.3
+spacing_factor=3
+dCatAvg$Bin <- as.numeric(dCatAvg$Pattern.Type)*spacing_factor
+rep1=subset(dCatAvg, dCatAvg$condit=="rep")
+nrep1=subset(dCatAvg, dCatAvg$condit=="nrep")
+set.seed(521)
+rep1$jbin_w <- jitter(rep1$Bin, amount=.27) -0.3
+nrep1$jbin_nw <- rep1$jbin_w[1:nrow(nrep1)] + 0.6
+
+
+pe3 <- ggplot(data=dCatAvg, aes(x=Bin, y= propCor, color =condit, group=condit, fill=condit))+
+  geom_point(data= rep1, aes(x=jbin_w), size=3, alpha=0.6)+
+  geom_point(data= nrep1, aes(x=jbin_nw), size=3, alpha=0.6) +
+  
+  # add the boxplots
+  geom_half_boxplot(
+    data=rep1, aes(group=Bin),
+    position=position_nudge(x=-1.25), side="r", 
+    outlier.shape=NA, center=TRUE, errorbar.draw=FALSE, width=.5, alpha=0.6)+
+  geom_half_boxplot(
+    data=nrep1, aes(group=Bin),
+    position=position_nudge(x=-1.0), side="r", outlier.shape=NA, center=TRUE, errorbar.draw=FALSE,
+    width=.5, alpha=0.5)+
+  # Add the violin plots for the different bins
+  geom_half_violin(
+    data = rep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  geom_half_violin(
+    data = nrep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  #   # Additional seetings
+  scale_fill_viridis(discrete = TRUE,begin=0.7, end=0.3, alpha=0.8)+
+  scale_color_viridis(discrete=TRUE,begin=0.7, end=0.3,alpha=0.8)+
+  scale_x_continuous(name="Pattern Type",breaks=c(2,5,8,11,14),labels=c("Train-Med","Proto", "New-Low","New-Med" ,"New-High"))+
+  facet_wrap(~Stage)
+pe3
+
+
+rep1=subset(dCatAvg, dCatAvg$condit=="rep" & rt<5000)
+nrep1=subset(dCatAvg, dCatAvg$condit=="nrep" & rt<5000)
+set.seed(521)
+rep1$jbin_w <- jitter(rep1$Bin, amount=.27) -0.3
+nrep1$jbin_nw <- rep1$jbin_w[1:nrow(nrep1)] + 0.6
+
+pe4 <- dCatAvg %>% filter(Stage!="Test") %>% ggplot( aes(x=Bin, y= rt, color =condit, group=condit, fill=condit))+
+  geom_point(data= rep1, aes(x=jbin_w), size=3, alpha=0.6)+
+  geom_point(data= nrep1, aes(x=jbin_nw), size=3, alpha=0.6) +
+  # add the boxplots
+  geom_half_boxplot(data=rep1, aes(group=Bin),
+    position=position_nudge(x=-1.25), side="r", 
+    outlier.shape=NA, center=TRUE, errorbar.draw=FALSE, width=.5, alpha=0.6)+
+  geom_half_boxplot(data=nrep1, aes(group=Bin),
+    position=position_nudge(x=-1.0), side="r", outlier.shape=NA, center=TRUE, errorbar.draw=FALSE,
+    width=.5, alpha=0.5)+
+  # Add the violin plots for the different bins
+  geom_half_violin(data = rep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  geom_half_violin(data = nrep1, aes(group=Bin), position=position_nudge(x = nudge_vp), side ="l") +
+  #   # Additional seetings
+  scale_fill_viridis(discrete = TRUE,begin=0.7, end=0.3, alpha=0.8)+
+  scale_color_viridis(discrete=TRUE,begin=0.7, end=0.3,alpha=0.8)+
+  scale_x_continuous(name="Pattern Type",breaks=c(2,6,10,14,18),labels=c("Trained-Med","Prototype", "New-Low","New-Med" ,"New-High"))+
+  facet_wrap(~Stage)
+pe4
+
+```
+
+
+
+
+
+
+
+
+
+
+#Experiment 2 - 25 Bins
+```{r fig.height=10,fig.width=12}
+
+nbins=20
+binSize=225/nbins
+
+dCatTrainBin <- dCatTrain %>% mutate(Trial.Bin=cut(trial,breaks=nbins,labels=FALSE))%>% group_by(id,condit,Trial.Bin) %>% 
+  summarise(nCorr=sum(Corr),propCor=nCorr/binSize,rtMean=mean(rt),trainAvg=mean(trainAvg),nTrain=max(nTrain)) %>% ungroup() %>% group_by(condit) %>%
+  mutate(sbjAvg=mean(propCor)) %>% 
+  mutate(grpRank=factor(rank(-trainAvg)),id=factor(id)) %>% arrange(-trainAvg) %>% as.data.frame() 
+dCatTrainBin$id <- factor(dCatTrainBin$id,levels=unique(dCatTrainBin$id))
+
+
+dCatTrainBin %>% filter(condit=="rep") %>%
+  ggplot(aes(x=Trial.Bin,y=propCor,col=condit))+
+  stat_summary(geom="point",shape=0,fun="mean")+
+  stat_summary(geom="line",fun="mean",col="red")+facet_wrap(~id)+ylim(c(0,1))+
+  ggtitle("Hu & Nosofsky Experiment 2 - Learning. Rep Subjects.")
+
+
+dCatTrainBin %>% filter(condit=="nrep") %>%
+  ggplot(aes(x=Trial.Bin,y=propCor,col=condit))+
+  stat_summary(geom="point",shape=2,fun="mean",col="lightblue")+
+  stat_summary(geom="line",fun="mean",col="lightblue")+facet_wrap(~id)+ylim(c(0,1))+
+  ggtitle("Hu & Nosofsky Experiment 2 - Learning. NRep Subjects.")
+
+```
+
+
+
+
+
+#Experiment 2 - 49 Bins
+```{r fig.height=10,fig.width=12}
+
+nbins=30
+binSize=floor(225/nbins)
+
+dCatTrainBin <- dCatTrain %>% mutate(Trial.Bin=cut(trial,breaks=nbins,labels=FALSE))%>% group_by(id,condit,Trial.Bin) %>% 
+  summarise(nCorr=sum(Corr),propCor=nCorr/binSize,rtMean=mean(rt),trainAvg=mean(trainAvg),nTrain=max(nTrain)) %>% ungroup() %>% group_by(condit) %>%
+  mutate(sbjAvg=mean(propCor)) %>% 
+  mutate(grpRank=factor(rank(-trainAvg)),id=factor(id)) %>% arrange(-trainAvg) %>% as.data.frame() 
+dCatTrainBin$id <- factor(dCatTrainBin$id,levels=unique(dCatTrainBin$id))
+
+
+dCatTrainBin %>% filter(condit=="rep") %>%
+  ggplot(aes(x=Trial.Bin,y=propCor,col=condit))+
+  stat_summary(geom="point",shape=0,fun="mean")+
+  stat_summary(geom="line",fun="mean",col="red")+facet_wrap(~id)+ylim(c(0,1))+
+  ggtitle("Hu & Nosofsky Experiment 2 - Learning. Rep Subjects.")
+
+
+dCatTrainBin %>% filter(condit=="nrep") %>%
+  ggplot(aes(x=Trial.Bin,y=propCor,col=condit))+
+  stat_summary(geom="point",shape=2,fun="mean",col="lightblue")+
+  stat_summary(geom="line",fun="mean",col="lightblue")+facet_wrap(~id)+ylim(c(0,1))+
+  ggtitle("Hu & Nosofsky Experiment 2 - Learning. NRep Subjects.")
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+```
+
+
+```{r}
+
+
+
+
+
+
+```
+

@@ -1,0 +1,73 @@
+# r created files
+*.rproj
+*.rproj.user
+*.rhistory
+*.ruserdata
+*.history
+*.rdata
+#*.rds
+.vdoc.r
+Model/.vdoc.r
+
+
+.lintr
+.luarc.json
+license 
+
+# image/output files unless otherwise specified
+
+*.docx
+*.doc
+*.jpg
+*.gif
+
+# folders
+.obsidian/*
+.quarto/*
+_freeze/*
+.vscode/*
+rsconnect/*
+_extensions/*
+site_libs/*
+#Misc/md_copy* 
+#Prompts/*
+#Misc/scratch/*
+data/model_cache/old/
+
+
+
+
+
+# misc knit files
+*.aux
+*.gz
+*.log
+*.rdx
+*.rdb
+*.knit.md
+#*cache
+*.results
+*open_interpreter*
+
+
+# other
+*.httr-oauth
+*.ds_store
+/.quarto/
+/.luarc.json
+.Rproj.user
+
+# specific file keep
+!readme.md
+!/original....pdf
+
+
+
+# ignore everything that is more than 1 level deep in the _working directory, dont' ignore the files in the _working directory itself
+_working/*/*
+
+
+
+# ignore items in model_cache that are larger than 15mb
+# find . -size +30M | cat
+# find Data/model_cache -size +18M | cat
