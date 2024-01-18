@@ -1,7 +1,18 @@
-
+---
+title: Hu & Nosofsky 2024
+date: last-modified
+page-layout: full
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: true
+---
 
 
 ```{r}
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted)
+conflict_prefer_all("dplyr", quiet = TRUE)
 source("read_24.R")
 
 
@@ -9,6 +20,8 @@ source("read_24.R")
 ```
 
 ```{r fig.height=14, fig.width=11}
+#| fig-cap: "Absolute Deviation from Band over training"
+#| fig-width: 8
 dCat |> filter(condit=="high", Phase==1) |>
   ggplot(aes(x=Block, y=Corr)) +  
   stat_summary(shape=0,geom="point",fun="mean")+
@@ -302,6 +315,9 @@ dCat |> filter(condit=="high", Phase==2) |>
 
 
 ```{r}
+#| eval: false
+#| include: false
+
 
 d %>% filter(Phase==2) %>% ggplot(aes(x=distortion,y=Corr,col=condit))+
   stat_summary(shape=0,geom="point",fun="mean")+

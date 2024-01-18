@@ -1,9 +1,13 @@
 ---
-title: "plots"
-author: "Thomas Gorman"
-date: "12/15/2021"
-output: html_document
+title: Hu & Nosofsky 2024
+date: last-modified
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: true
 ---
+
 
 
 

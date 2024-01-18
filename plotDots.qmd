@@ -1,8 +1,12 @@
 ---
-title: "Untitled"
-author: "Thomas Gorman"
-date: "12/15/2021"
-output: html_document
+title: Dot Pattern Plots
+date: last-modified
+page-layout: full
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: true
 ---
 
 

@@ -6,6 +6,13 @@ if ( any(!have) ) { install.packages(packages[!have]) }
 
 
 
+
+
+
+
+
+
+
 #rm(list=ls())
 
 col.names = c("Phase","Block","BlockTrial","Pattern","Category","Pattern.Token","Response","Corr","rt",

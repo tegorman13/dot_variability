@@ -1,0 +1,32 @@
+project:
+  type: website
+  output-dir: docs
+  preview:
+    port: 4203
+  render:
+    - "*.qmd"
+    - "!_*" # ignore any file that starts with a _
+
+
+website:
+  title: "Thomas Gorman"
+  repo-url: https://github.com/tegorman13/dot_variability
+  site-url: "https://tegorman13.github.io"
+  #repo-actions: [source, edit, issue]
+  #reader-mode: true
+  page-navigation: true
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "2022_Paper"
+        href: projects.qmd
+      - text: "Hu_Nosofsky24"
+        href:  dp_24.qmd
+
+    right: 
+        target: _blank
+      - text: "{{< fa brands github size=2x >}}"
+        aria-label: GitHub
+        href: https://github.com/tegorman13
+        target: _blank

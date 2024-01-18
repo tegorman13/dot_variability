@@ -1,4 +1,4 @@
-pacman::p_load(tidyverse, data.table, here, patchwork, conflicted)
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted)
 conflict_prefer_all("dplyr", quiet = TRUE)
 
 
