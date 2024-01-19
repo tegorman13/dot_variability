@@ -49,24 +49,32 @@ dCat |>
   ) |> kable()
 
 tAll <- dCat |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
   ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
 t33 <- dCat |> filter(finalTrain>.35, Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
   ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(title="Testing Performance - Only greater than 35%", y="Accuracy") 
 
 t66 <- dCat |> filter(finalTrain>.50, Phase==2) |>
+  group_by(sbjCode, condit,Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
   ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(title="Testing Performance - Only greater than 50%", y="Accuracy") 
 
 t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
+  group_by(sbjCode, condit,  Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
   ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
@@ -246,6 +254,47 @@ t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
   subtitle = 'Filtering to retain subjects who achieved different performace levels during training',
   caption = 'bars reflect median reaction times. Quartiles are set by ACCURACY in the final training block. Bar colors are pattern type.'
 )
+
+
+
+yt <- round(seq(0,1,length.out=7), 2)
+eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scale_y_continuous(breaks=yt))
+tlt <- theme(legend.position = "top")
+
+nbins=5
+
+test_learn1 <- dCat |> filter(Phase==2) |>
+  group_by(sbjCode,condit) |>
+  mutate(BlockTest=cut(trial,breaks=seq(1,max(trial), length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |>
+  # group_by(sbjCode,condit, BlockTest, Pattern_Token) |>
+  # summarise(Corr=mean(Corr)) |>
+  ggplot(aes(x=BlockTest, y=Corr, col=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="line",fun=mean, position=position_dodge()) +
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge(), width=.1) +
+  geom_smooth()+
+  facet_wrap(~condit)+
+  labs(title="Average Learning Curves", y="Accuracy") + eg + tlt
+
+# performance seems stable across testing
+test_learn2 <- dCat |> filter(Phase==2) |>
+  group_by(sbjCode,condit) |>
+  mutate(BlockTest=cut(trial,breaks=seq(1,max(trial), length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |>
+  # group_by(sbjCode,condit, BlockTest, Pattern_Token, quartile) |>
+  # summarise(Corr=mean(Corr)) |>
+  ggplot(aes(x=BlockTest, y=Corr, col=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="line",fun=mean, position=position_dodge()) +
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge(), width=.1) +
+  geom_smooth(alpha=.6)+
+  facet_wrap(quartile~condit)+
+  labs(title="Average Learning Curves", y="Accuracy") + eg + tlt
+
+test_learn1 / test_learn2 + # make upper half of plot half as wide as lower half
+  plot_layout(widths = c(1, 1), heights = c(1, 2)) +
+  plot_annotation(
+    title = 'Learning during testing',
+    subtitle = 'Average accuracy across subjects',
+    caption = 'lines reflect mean accuracy. Shaded areas reflect 95% confidence intervals. Dashed lines reflect chance performance. Colors reflect pattern type.'
+  )
 
 
 
