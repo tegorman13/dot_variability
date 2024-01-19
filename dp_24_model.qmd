@@ -53,7 +53,6 @@ categorization_probability <- function(test_pattern, training_patterns, gamma, c
       similarity(test_pattern, category_patterns[i, ], c)
     }))
   })
-  
   # Raise the summed similarities to the power of gamma
   numerator <- summed_similarities^gamma
   denominator <- sum(summed_similarities^gamma)
@@ -65,8 +64,8 @@ categorization_probability <- function(test_pattern, training_patterns, gamma, c
 
 
 # Simulation Function
-simulate <- function(num_categories, num_samples, training_distortion_level, within, c, gamma) {
-  prototypes <- generate_prototypes(num_categories, num_dimensions=6, between=2)
+simulate <- function(num_categories, num_samples, training_distortion_level, within, c, gamma, nd=6) {
+  prototypes <- generate_prototypes(num_categories, num_dimensions=nd, between=2)
   training_patterns <- array(dim = c(num_samples, ncol(prototypes), num_categories))
   
   for (cat in 1:num_categories) {
@@ -77,8 +76,8 @@ simulate <- function(num_categories, num_samples, training_distortion_level, wit
   test_performance <- list()
   categories <- seq_len(num_categories)
   types_of_patterns <- c("old", "prototype", "new_low", "new_medium", "new_high")
-  #distortion_levels_test <- c(1.20, 2.80, 4.60) # low, medium, high distortion levels
-  distortion_levels_test <- c(4, 6, 7.7)
+  distortion_levels_test <- c(1.20, 2.80, 4.60) # low, medium, high distortion levels
+  #distortion_levels_test <- c(4, 6, 7.7)
   
   for (type in types_of_patterns) {
     for (cat in categories) {
@@ -97,8 +96,10 @@ simulate <- function(num_categories, num_samples, training_distortion_level, wit
       # Calculate categorization probabilities for the test patterns
       probs <- apply(test_patterns, 1, categorization_probability, training_patterns = training_patterns, gamma = gamma, c = c)
       # Count correct classifications
-      correct_classifications <- sum(apply(probs, 2, which.max) == cat)
-      test_performance[[paste(type, "cat", cat, sep = "_")]] <- correct_classifications / nrow(test_patterns)
+      #correct_classifications <- sum(apply(probs, 2, which.max) == cat)
+      prob_cat <- probs[cat,]
+      
+      test_performance[[paste(type, "cat", cat, sep = "_")]] <- mean(prob_cat) #correct_classifications / nrow(test_patterns)
     }
   }
   
@@ -119,20 +120,22 @@ simulate <- function(num_categories, num_samples, training_distortion_level, wit
 
 
 
+
 ```{r}
 #| fig-width: 11
 #| fig-height: 6
 
 # Simulation Parameters
 num_categories <- 3
-num_dimensions <- 6
-num_samples <- 90 # number of samples per category
+num_dimensions <- 2
+num_samples <- 900 # number of samples per category
 between <- 2
 within <- 0.210
 gamma <- 5.0
 c <- 0.475
 distortion_levels <- c(4, 6, 7.7) # low, medium, high distortion levels
-nsim <- 1000
+#distortion_levels <- c(1, 5, 7.7)
+nsim <- 500
 
 
 
@@ -141,7 +144,7 @@ performance_results <- list()
 
 # Simulate for each distortion level
 for (distortion_level in distortion_levels) {
-  results <- replicate(nsim, simulate(num_categories, num_samples, distortion_level, within, c, gamma), simplify = FALSE)
+  results <- replicate(nsim, simulate(num_categories, num_samples, distortion_level, within, c, gamma, nd=num_dimensions), simplify = FALSE)
   performance_results[[as.character(distortion_level)]] <- do.call(rbind, results)
 }
 
@@ -155,13 +158,46 @@ combined_results <- bind_rows(
 
 
 
-
+yt <- round(seq(0,1,length.out=7), 2)
+eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scale_y_continuous(breaks=yt))
 # Visualizing the results
 ggplot(combined_results, aes(x = Pattern_Token, y = correct_classifications, fill = factor(distortion_level))) +
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(x = "Pattern Type", y = "Correct Classifications (%)", fill = "Training Distortion Level") +
   theme_minimal() +
-  scale_fill_brewer(palette = "Set1") +ggtitle(paste0("nsim: ",nsim,"; gamma: ",gamma,"; c: ",c,"; within: ",within,"; between: ",between,"; num_samples: ",num_samples))
+  scale_fill_brewer(palette = "Set1") +ggtitle(paste0("nsim: ",nsim,"; gamma: ",gamma,"; c: ",c,"; within: ",within,"; between: ",between,"; num_samples: ",num_samples)) +eg
 ```
 
+```{r}
+
+saveRDS(sim_nosof1000, file = "sim_nosof1000.rds")
+
+```
+
+```{r}
+```
+
+generate_distorted_patterns <- function(prototype, num_samples, distortion_level, within) {
+  num_dimensions <- length(prototype)
+  noise <- matrix(rnorm(num_samples * num_dimensions), nrow = num_samples) * within * distortion_level
+  matrix(rep(prototype, each = num_samples), nrow = num_samples, ncol = num_dimensions) + noise
+}
+
+categorization_probability <- function(test_pattern, training_patterns, gamma, c) {
+  # Compute all similarities at once using matrix operations
+  differences = array(dim = dim(training_patterns))
+  for (i in 1:dim(training_patterns)[3]) {
+      differences[,,i] = training_patterns[,,i] - test_pattern
+  }
+  distances = sqrt(rowSums(differences^2, dims = 2))
+  summed_similarities = exp(-c * distances)
+  summed_similarities = apply(summed_similarities, 2, sum)
+
+  # Calculate probabilities
+  numerator <- summed_similarities^gamma
+  denominator <- sum(numerator)
+  
+  probs <- numerator / denominator
+  return(probs)
+}
