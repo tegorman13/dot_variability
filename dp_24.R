@@ -48,7 +48,6 @@ dCat |>
     `>.70` = n_distinct(sbjCode[finalTrain > .70])
   ) |> kable()
 
-
 tAll <- dCat |> filter(Phase==2) |>
   ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
@@ -74,7 +73,7 @@ t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
   labs(title="Testing Performance - Only greater than 70%", y="Accuracy") 
 
 ((tAll + t33)/(t66 + t80)) + 
-  plot_annotation(title="Test Accuracy - Influence of only including stronger learners", 
+  plot_annotation(title="Test Accuracy - Influence of filtering out weak/non learers", 
                   caption=" % values indicate level of final training performance needed to be included. Note that the training conditions are disproporionately impacted by exclusions.")
 
 
@@ -107,7 +106,33 @@ t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
 ((tAll + t33)/(t66 + t80))
 
 
+tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
+tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
+yt <- round(seq(0,1,length.out=7), 2)
+eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scale_y_continuous(breaks=yt))
 
+
+dq1 <- dCat |> filter(Phase==2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=condit, y=Corr, fill=Pattern_Token)) +
+  stat_summary(geom="bar",fun="mean", position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge(), width=.9) +
+  eg + labs(x="Training Condition", y="Proportion Correct", title="Testing Accuracy Overall Averages") 
+  
+dq2 <-dCat |> filter(Phase == 2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x = condit, y = Corr, fill = Pattern_Token)) +
+  stat_summary(geom = "bar", fun = "mean", position = position_dodge()) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.9), width = 0.25) +
+  facet_wrap(~quartile) +
+  labs(x = "Training Condition", y = "Proportion Correct", title = "Testing Accuracy by End-Training Quartile", 
+       subtitle="Quartiles are based on the final training performance of each subject") 
+  
+dq1/dq2
+  
+  
 
 tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
 tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
@@ -115,47 +140,44 @@ yt <- round(seq(0,1,length.out=7), 2)
 eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scale_y_continuous(breaks=yt))
 
 
-htq <- dCat |> filter(condit=="high", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun="mean")+
-  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
-  eg +
-  facet_wrap(~quartile) + 
-  labs(title="High Training Sbjs.", y="Proportion Correct") +tx2
-
-ltq <- dCat |> filter(condit=="low", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun="mean")+
-  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
-  eg +
-  facet_wrap(~quartile) + 
-  labs(title="Low Training Sbjs.", y="Proportion Correct") +tx1
-
-mtq <- dCat |> filter(condit=="medium", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun="mean")+
-  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
-  eg +
-  facet_wrap(~quartile) + 
-  labs(title="Med Training Sbjs.", y="Proportion Correct") +tx2
-
-
-mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
-  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
-  stat_summary(geom="bar",fun="mean")+
-  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
-  eg +
-  facet_wrap(~quartile) + 
-  labs(title="Mixed Training Sbjs.", y="Proportion Correct")  + tx1
+dq1 <- dCat |> filter(Phase==2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit)) +
+  stat_summary(geom="bar",fun="mean", position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge(), width=.9) +
+  eg + labs(x="Training Condition", y="Proportion Correct", title="Testing Accuracy Overall Averages") 
   
+dq2 <-dCat |> filter(Phase == 2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x = Pattern_Token, y = Corr, fill = condit)) +
+  stat_summary(geom = "bar", fun = "mean", position = position_dodge()) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.9), width = 0.25) +
+  facet_wrap(~quartile) +
+  labs(x = "Training Condition", y = "Proportion Correct", title = "Testing Accuracy by End-Training Quartile", 
+       subtitle="Quartiles are based on the final training performance of each subject") 
+  
+dq1/dq2
 
 
-(htq+ltq)/(mtq+mxtq) + plot_annotation(
-  title = 'Testing Accuracy by Quartile',
-  subtitle = 'Quartiles set by Final TRAINING block',
-  caption = 'bars reflect mean accuracy, error bars reflect standard error. Quartiles are set by ACCURACY in the final training block. Bar colors are pattern type.'
-)
+dCat |> filter(Phase == 2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x = condit, y = Corr, fill = Pattern_Token)) +
+  geom_boxplot(position=position_dodge()) +
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.25, dodge.width = 0.9), alpha = .2) +
+  labs(x = "Training Condition", y = "Proportion Correct", title = "Testing Accuracy - All")
 
+
+dCat |> filter(Phase == 2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x = condit, y = Corr, fill = Pattern_Token)) +
+  geom_boxplot(position=position_dodge()) +
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.25, dodge.width = 0.9), alpha = .2) +
+  facet_wrap(~quartile)
+  labs(x = "Training Condition", y = "Proportion Correct", title = "Testing Accuracy - All")
 
 tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
 tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
@@ -501,6 +523,54 @@ d %>% filter(Phase==2) %>% ggplot(aes(x=distortion,y=Corr,col=condit))+
   xlab("Training Block")+ylab("Proportion Correct")+
   scale_x_continuous(breaks=seq(1,15))
 
+
+
+tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
+tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
+yt <- round(seq(0,1,length.out=7), 2)
+eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scale_y_continuous(breaks=yt))
+
+
+htq <- dCat |> filter(condit=="high", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun="mean")+
+  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
+  eg +
+  facet_wrap(~quartile) + 
+  labs(title="High Training Sbjs.", y="Proportion Correct") +tx2
+
+ltq <- dCat |> filter(condit=="low", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun="mean")+
+  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
+  eg +
+  facet_wrap(~quartile) + 
+  labs(title="Low Training Sbjs.", y="Proportion Correct") +tx1
+
+mtq <- dCat |> filter(condit=="medium", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun="mean")+
+  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
+  eg +
+  facet_wrap(~quartile) + 
+  labs(title="Med Training Sbjs.", y="Proportion Correct") +tx2
+
+
+mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=Pattern_Token)) +  
+  stat_summary(geom="bar",fun="mean")+
+  stat_summary(geom="errorbar", fun.data=mean_se, width=.1) +
+  eg +
+  facet_wrap(~quartile) + 
+  labs(title="Mixed Training Sbjs.", y="Proportion Correct")  + tx1
+  
+
+
+(htq+ltq)/(mtq+mxtq) + plot_annotation(
+  title = 'Testing Accuracy by Quartile',
+  subtitle = 'Quartiles set by Final TRAINING block',
+  caption = 'bars reflect mean accuracy, error bars reflect standard error. Quartiles are set by ACCURACY in the final training block. Bar colors are pattern type.'
+)
 
 
 # pkgs <- grateful::cite_packages(output = "table", pkgs="Session",out.dir = "assets", cite.tidyverse=TRUE)
