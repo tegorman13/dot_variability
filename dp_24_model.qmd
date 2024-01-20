@@ -64,8 +64,8 @@ categorization_probability <- function(test_pattern, training_patterns, gamma, c
 
 
 # Simulation Function
-simulate <- function(num_categories, num_samples, training_distortion_level, within, c, gamma, nd=6) {
-  prototypes <- generate_prototypes(num_categories, num_dimensions=nd, between=2)
+simulate <- function(num_categories, num_samples, training_distortion_level, within, between, c, gamma, nd=6) {
+  prototypes <- generate_prototypes(num_categories, num_dimensions=nd, between=between)
   training_patterns <- array(dim = c(num_samples, ncol(prototypes), num_categories))
   
   for (cat in 1:num_categories) {
@@ -82,7 +82,7 @@ simulate <- function(num_categories, num_samples, training_distortion_level, wit
   for (type in types_of_patterns) {
     for (cat in categories) {
       if (type == "old") {
-        test_patterns <- training_patterns[sample(1:num_samples, 27),,cat]
+        test_patterns <- matrix(training_patterns[sample(1:num_samples, 27),,cat])
         #colMeans(test_patterns)
       } else if (type == "prototype") {
         test_patterns <- matrix(prototypes[cat,], nrow = 1, ncol = ncol(prototypes), byrow = TRUE)
@@ -127,15 +127,15 @@ simulate <- function(num_categories, num_samples, training_distortion_level, wit
 
 # Simulation Parameters
 num_categories <- 3
-num_dimensions <- 2
-num_samples <- 900 # number of samples per category
+num_dimensions <- 8
+num_samples <- 300 # number of samples per category
 between <- 2
 within <- 0.210
 gamma <- 5.0
 c <- 0.475
 distortion_levels <- c(4, 6, 7.7) # low, medium, high distortion levels
 #distortion_levels <- c(1, 5, 7.7)
-nsim <- 500
+nsim <- 100
 
 
 
@@ -144,7 +144,7 @@ performance_results <- list()
 
 # Simulate for each distortion level
 for (distortion_level in distortion_levels) {
-  results <- replicate(nsim, simulate(num_categories, num_samples, distortion_level, within, c, gamma, nd=num_dimensions), simplify = FALSE)
+  results <- replicate(nsim, simulate(num_categories, num_samples, distortion_level, within, between, c, gamma, nd=num_dimensions), simplify = FALSE)
   performance_results[[as.character(distortion_level)]] <- do.call(rbind, results)
 }
 
@@ -166,7 +166,7 @@ ggplot(combined_results, aes(x = Pattern_Token, y = correct_classifications, fil
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(x = "Pattern Type", y = "Correct Classifications (%)", fill = "Training Distortion Level") +
   theme_minimal() +
-  scale_fill_brewer(palette = "Set1") +ggtitle(paste0("nsim: ",nsim,"; gamma: ",gamma,"; c: ",c,"; within: ",within,"; between: ",between,"; num_samples: ",num_samples)) +eg
+  scale_fill_brewer(palette = "Set1") +ggtitle(paste0("nsim: ",nsim,"; gamma: ",gamma,"; c: ",c,"; within: ",within,"; between: ",between,"; num_samples: ",num_samples, " nd: ", num_dimensions)) +eg
 ```
 
 ```{r}

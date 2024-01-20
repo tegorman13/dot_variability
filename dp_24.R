@@ -123,6 +123,35 @@ eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scal
 dq1 <- dCat |> filter(Phase==2) |> 
   group_by(sbjCode, condit, quartile, Pattern_Token) |>
   summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit)) +
+  stat_summary(geom="bar",fun="mean", position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge(), width=.9) +
+  eg + labs(x="Pattern Token", y="Proportion Correct", title="Testing Accuracy Overall Averages", 
+            fill="Training Condition") 
+  
+dq2 <-dCat |> filter(Phase == 2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x = Pattern_Token, y = Corr, fill = condit)) +
+  stat_summary(geom = "bar", fun = "mean", position = position_dodge()) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.9), width = 0.25) +
+  facet_wrap(~quartile) +
+  labs(x = "Pattern Token", y = "Proportion Correct", title = "Testing Accuracy by End-Training Quartile", 
+       subtitle="Quartiles are based on the final training performance of each subject", 
+       fill="Training Condition") 
+  
+dq1/dq2
+
+
+tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
+tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
+yt <- round(seq(0,1,length.out=7), 2)
+eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scale_y_continuous(breaks=yt))
+
+
+dq1 <- dCat |> filter(Phase==2) |> 
+  group_by(sbjCode, condit, quartile, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
   ggplot(aes(x=condit, y=Corr, fill=Pattern_Token)) +
   stat_summary(geom="bar",fun="mean", position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge(), width=.9) +
@@ -141,33 +170,6 @@ dq2 <-dCat |> filter(Phase == 2) |>
 dq1/dq2
   
   
-
-tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
-tx2 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank(),legend.position = "none" )
-yt <- round(seq(0,1,length.out=7), 2)
-eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),scale_y_continuous(breaks=yt))
-
-
-dq1 <- dCat |> filter(Phase==2) |> 
-  group_by(sbjCode, condit, quartile, Pattern_Token) |>
-  summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit)) +
-  stat_summary(geom="bar",fun="mean", position=position_dodge())+
-  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge(), width=.9) +
-  eg + labs(x="Training Condition", y="Proportion Correct", title="Testing Accuracy Overall Averages") 
-  
-dq2 <-dCat |> filter(Phase == 2) |> 
-  group_by(sbjCode, condit, quartile, Pattern_Token) |>
-  summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x = Pattern_Token, y = Corr, fill = condit)) +
-  stat_summary(geom = "bar", fun = "mean", position = position_dodge()) +
-  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.9), width = 0.25) +
-  facet_wrap(~quartile) +
-  labs(x = "Training Condition", y = "Proportion Correct", title = "Testing Accuracy by End-Training Quartile", 
-       subtitle="Quartiles are based on the final training performance of each subject") 
-  
-dq1/dq2
-
 
 dCat |> filter(Phase == 2) |> 
   group_by(sbjCode, condit, quartile, Pattern_Token) |>
@@ -233,22 +235,22 @@ mxtq <- dCat |> filter(condit=="mixed", Phase==2) |>
 tAll <- dCat |> filter(Phase==2) |>
   ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
   stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Distortion Testing - All Sbjs.", y="Reaction Time") + theme(legend.position = "top")
+  labs(title="High Distortion Testing - All Sbjs.", y="Reaction Time", x="Training Condition") + theme(legend.position = "top")
 
 t33 <- dCat |> filter(finalTrain>.35, Phase==2) |>
   ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
   stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Distortion Testing - Only greater than 35%", y="Reaction Time")  + theme(legend.position = "none")
+  labs(title="High Distortion Testing - Only greater than 35%", y="Reaction Time", x="Training Condition")  + theme(legend.position = "none")
 
 t66 <- dCat |> filter(finalTrain>.50, Phase==2) |>
   ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
   stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Distortion Testing - Only greater than 50%", y="Reaction Times") + theme(legend.position = "none")
+  labs(title="High Distortion Testing - Only greater than 50%", y="Reaction Times", x="Training Condition") + theme(legend.position = "none")
 
 t80 <- dCat |> filter(finalTrain>.70, Phase==2) |>
   ggplot(aes(x=condit, y=rt, fill=Pattern_Token, group=Pattern_Token)) +  
   stat_summary(geom="bar",fun=rtfun, position=position_dodge())+
-  labs(title="High Distortion Testing- Only greater than 70%", y="Reaction Times") + theme(legend.position = "none")
+  labs(title="High Distortion Testing- Only greater than 70%", y="Reaction Times", x="Training Condition") + theme(legend.position = "none")
 ((tAll + t33)/(t66 + t80)) + plot_annotation(
   title = 'Testing Reaction Times by Training Accuracy',
   subtitle = 'Filtering to retain subjects who achieved different performace levels during training',
