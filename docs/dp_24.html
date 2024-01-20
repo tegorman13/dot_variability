@@ -360,7 +360,7 @@ div.csl-indent {
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
 <span>    `All Sbjs.` <span class="op">=</span> <span class="fu">n_distinct</span><span class="op">(</span><span class="va">sbjCode</span><span class="op">)</span>,</span>
 <span>    `&gt;.33` <span class="op">=</span> <span class="fu">n_distinct</span><span class="op">(</span><span class="va">sbjCode</span><span class="op">[</span><span class="va">finalTrain</span> <span class="op">&gt;</span> <span class="fl">.35</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>    `&gt;.66` <span class="op">=</span> <span class="fu">n_distinct</span><span class="op">(</span><span class="va">sbjCode</span><span class="op">[</span><span class="va">finalTrain</span> <span class="op">&gt;</span> <span class="fl">.50</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>    `&gt;.50` <span class="op">=</span> <span class="fu">n_distinct</span><span class="op">(</span><span class="va">sbjCode</span><span class="op">[</span><span class="va">finalTrain</span> <span class="op">&gt;</span> <span class="fl">.50</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>    `&gt;.70` <span class="op">=</span> <span class="fu">n_distinct</span><span class="op">(</span><span class="va">sbjCode</span><span class="op">[</span><span class="va">finalTrain</span> <span class="op">&gt;</span> <span class="fl">.70</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
@@ -370,7 +370,7 @@ div.csl-indent {
 <th style="text-align: left;">condit</th>
 <th style="text-align: right;">All Sbjs.</th>
 <th style="text-align: right;">&gt;.33</th>
-<th style="text-align: right;">&gt;.66</th>
+<th style="text-align: right;">&gt;.50</th>
 <th style="text-align: right;">&gt;.70</th>
 </tr></thead>
 <tbody>
@@ -1903,7 +1903,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-134"><a href="#cb23-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb23-135"><a href="#cb23-135" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">All Sbjs.</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n_distinct</span>(sbjCode),</span>
 <span id="cb23-136"><a href="#cb23-136" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">&gt;.33</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n_distinct</span>(sbjCode[finalTrain <span class="sc">&gt;</span> .<span class="dv">35</span>]),</span>
-<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">&gt;.66</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n_distinct</span>(sbjCode[finalTrain <span class="sc">&gt;</span> .<span class="dv">50</span>]),</span>
+<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">&gt;.50</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n_distinct</span>(sbjCode[finalTrain <span class="sc">&gt;</span> .<span class="dv">50</span>]),</span>
 <span id="cb23-138"><a href="#cb23-138" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">&gt;.70</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n_distinct</span>(sbjCode[finalTrain <span class="sc">&gt;</span> .<span class="dv">70</span>])</span>
 <span id="cb23-139"><a href="#cb23-139" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">kable</span>()</span>
 <span id="cb23-140"><a href="#cb23-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -2726,7 +2726,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/dp_24.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/dp_24.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","selector":".lightbox","loop":false,"openEffect":"zoom"});
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/dp_24.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/dp_24.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","closeEffect":"zoom","loop":false,"openEffect":"zoom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

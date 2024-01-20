@@ -44,7 +44,7 @@ dCat |>
   summarise(
     `All Sbjs.` = n_distinct(sbjCode),
     `>.33` = n_distinct(sbjCode[finalTrain > .35]),
-    `>.66` = n_distinct(sbjCode[finalTrain > .50]),
+    `>.50` = n_distinct(sbjCode[finalTrain > .50]),
     `>.70` = n_distinct(sbjCode[finalTrain > .70])
   ) |> kable()
 
