@@ -48,6 +48,55 @@ dCat |>
     `>.70` = n_distinct(sbjCode[finalTrain > .70])
   ) |> kable()
 
+trainRanks <- dCat |> group_by(sbjCode,condit) |> 
+  select(finalTrain) |> slice(1) |> arrange(-finalTrain)
+
+top17 <- trainRanks |> group_by(condit) |> slice(1:17)
+top35 <- trainRanks |> group_by(condit) |> slice(1:35)
+top56 <- trainRanks |> group_by(condit) |> slice(1:56)
+low <- trainRanks |> filter(!(sbjCode %in% top56$sbjCode)) 
+
+
+#top17 |> gt::gt()
+
+t17 <- dCat |> filter(sbjCode %in% top17$sbjCode) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  labs(title="Testing - top 17 Sbjs.", y="Accuracy") 
+
+
+t35 <- dCat |> filter(sbjCode %in% top35$sbjCode) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  labs(title="Testing - top 35 Sbjs.", y="Accuracy") 
+
+t56 <- dCat |> filter(sbjCode %in% top56$sbjCode) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  labs(title="Testing - top 56 Sbjs.", y="Accuracy") 
+
+tLow <- dCat |> filter(sbjCode %in% low$sbjCode) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) + 
+  labs(title="Testing - lowest Sbjs (all sbj. not in top 56)", y="Accuracy")
+
+(t17+t35) /(t56+tLow) + 
+  plot_annotation(title="Test Accuracy - matching # of subjects", 
+                  caption=" Only the top 17; top 35; top 56; or lowest performing subjects included. Rankings based on final training accuracy")
+
+
 tAll <- dCat |> filter(Phase==2) |>
   group_by(sbjCode, condit, Pattern_Token) |>
   summarize(Corr=mean(Corr)) |>
