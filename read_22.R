@@ -5,19 +5,16 @@
 #' format: html
 #' ---
 
-
 # packages <- c('plyr','dplyr','tidyr','ggplot2','magrittr',
 #              'psych','data.table','grid','gridExtra','R.matlab','units','readr')
 # have = packages %in% rownames(installed.packages())
 # if ( any(!have) ) { install.packages(packages[!have]) }
 # (lapply(packages, require, character.only = TRUE))
 
-pacman::p_load(dplyr,purrr,tidyr,ggplot2, data.table,readr,here, patchwork, conflicted)
-conflict_prefer_all("dplyr", quiet = TRUE)
 
 # Data variable order, from left to right:
 #   
-#   1. Phase type (1 = Training, 2 = Transfer)
+# 1. Phase type (1 = Training, 2 = Transfer)
 # 2. Block number (1-15 training, 1 transfer)
 # 3. Trial number (1-15 training, 1-63 transfer)
 # 4. Pattern type (1 = old medium, 2 = prototype, 3 = new low, 4 = new medium, 5 = new high)
@@ -35,20 +32,18 @@ conflict_prefer_all("dplyr", quiet = TRUE)
 # file names starting with "polynrep" contain data from non-repeating condtion.
 
 
-
-
-
-
-
 #rm(list=ls())
+
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, data.table,readr,here, patchwork, conflicted)
+conflict_prefer_all("dplyr", quiet = TRUE)
 
 col.names = c("Phase","Block","BlockTrial","Pattern","Category","Pattern.Token","Response","Corr","rt",
               "x1","y1","x2","y2","x3","y3","x4","y4","x5","y5","x6","y6","x7","y7","x8","y8","x9","y9")
 
-pathLoad="Exp2_Classification"
+pathLoad="data/lmc_2022/Exp2_Classification"
 loadPattern="*.txt"
 pathString=paste(pathLoad,"/Data/",sep="")
-mFiles <- list.files(path="Exp2_Classification/Data/",pattern = loadPattern, recursive = FALSE) # should be 89 in exp 2
+mFiles <- list.files(path=pathString,pattern = loadPattern, recursive = FALSE) # should be 89 in exp 2
 nFiles=length(mFiles)
 
 dCat <- data.frame(matrix(ncol=27,nrow=0)) %>% purrr::set_names(col.names)
@@ -69,11 +64,16 @@ dCat <- dCat %>% group_by(sbjCode,condit,file) %>% mutate(ind=1,trial=cumsum(ind
          Pattern.Type=recode_factor(Pattern,`1` = 'Trained.Med', `2` = 'Prototype',  `3` = 'New.Low', `4` = 'New.Med',`5` = 'New.High'),
          Stage=car::recode(trial, "1:75='Start'; 76:150='Med'; 151:225='End';226:288='Test';else='Junk'"),
          Phase2=car::recode(trial, "1:225='Training'; 226:288='Transfer';else='Junk'"),
-         id=as.factor(id),condit=as.factor(condit)) %>% relocate(id,condit,.before=Phase)%>%
-  relocate(id,trial,Phase,Phase2,Stage,Block,BlockTrial,Pattern.Type,Category,Corr,rt,phaseAvg,Pattern,Pattern.Token,Response,.after="condit") %>% arrange(condit,sbj) %>% as.data.frame()
+         id=as.factor(id),condit=as.factor(condit)) %>% 
+  relocate(id,condit,.before=Phase) %>%
+  relocate(id,trial,Phase,Phase2,Stage,Block,BlockTrial,Pattern.Type,Category,Corr,rt,phaseAvg,Pattern,Pattern.Token,Response,.after="condit") %>%
+  arrange(condit,sbj) %>% 
+  as.data.frame()
 
-dCat <- dCat %>% group_by(sbjCode,Pattern.Type) %>% mutate(patN=cumsum(ind)) %>%
-  group_by(sbjCode,Pattern.Type,Category) %>% mutate(patCatN=cumsum(ind),typeCount=paste0(Pattern.Type,".",patCatN)) %>% 
+dCat <- dCat %>% group_by(sbjCode,Pattern.Type) %>% 
+  mutate(patN=cumsum(ind)) %>%
+  group_by(sbjCode,Pattern.Type,Category) %>% 
+  mutate(patCatN=cumsum(ind),typeCount=paste0(Pattern.Type,".",patCatN)) %>% 
   relocate(typeCount,.after="Pattern.Type") 
 
 dCat$Block = ifelse(dCat$Phase==2,16,dCat$Block)
@@ -125,14 +125,18 @@ sbjTrainAvg$cq=recode_factor(sbjTrainAvg$cq,`1` = 'low-Performers', `2` = 'High-
 
 
 
+dCat <- dCat |> mutate(exp="lmc22") |> 
+  relocate(id,sbjCode,exp,condit,Phase,Phase2,Stage,
+           trial,Block,BlockTrial,Pattern.Type,Pattern,Pattern.Token,
+           Category,Response,Corr,rt)
 
-
+#write out aggregated trial level data
+#write_rds(dCat, "data/lmc22.rds")
 
 # dCatBlockAvg <- dCat %>% group_by(id,condit,Block,Pattern.Type) %>% 
 #   summarise(nCorr=sum(Corr),propCor=nCorr/15,rtMean=mean(rt),phaseAvg=mean(phaseAvg)) %>% ungroup() %>% group_by(condit) %>%
 #   mutate(grpRank=factor(rank(-phaseAvg)),id=factor(id)) %>% arrange(-phaseAvg) %>% as.data.frame()
 # dCatAvg$id <-factor(dCatAvg$id,levels=unique(dCatAvg$id))
-
 
 
 # dCatAvg=dCatTrain  %>% group_by(condit,Block) %>%
@@ -150,14 +154,6 @@ sbjTrainAvg$cq=recode_factor(sbjTrainAvg$cq,`1` = 'low-Performers', `2` = 'High-
 
 
 
-
-
-
-
-
-
-
-
 # We started by conducting preliminary analyses to remove severe outlier subjects. 
 # For the learning phase, the performance measure used for identifying outliers was the 
 # same as in Experi- ment 1. For the classification-transfer phase, we measured average
@@ -165,13 +161,6 @@ sbjTrainAvg$cq=recode_factor(sbjTrainAvg$cq,`1` = 'low-Performers', `2` = 'High-
 # subject who performed more than 2.5 standard deviations below the mean in each condition 
 # on either measure. We removed four subjects from the REP condition (leaving 39 valid subjects)
 # and two subjects from the NREP condition (leaving 44 valid subjects).
-
-
-
-
-
-
-
 # 
 # Data variable order, from left to right:
 #   
@@ -190,8 +179,6 @@ sbjTrainAvg$cq=recode_factor(sbjTrainAvg$cq,`1` = 'low-Performers', `2` = 'High-
 
 # file names starting with "polyrep" contain data from repeating condtion.
 # file names starting with "polynrep" contain data from non-repeating condtion.
-
-
 
 
 # pathLoad="Exp1_Recognition"
@@ -213,9 +200,6 @@ sbjTrainAvg$cq=recode_factor(sbjTrainAvg$cq,`1` = 'low-Performers', `2` = 'High-
 # 
 # dRec <- dRec %>% relocate(sbjCode,condit,file) %>% group_by(sbjCode) %>%
 #   mutate(nTrain=n(),ind=1,trial=cumsum(ind),id=paste0(sbjCode,".",condit),trainAvg=sum(Corr)/nTrain) %>% relocate(trial,.after="condit") %>% arrange(condit,sbj)
-
-
-
 
 # we conducted preliminary analyses to identify severe outlier sub- jects within each condition. 
 # In the learning phase, we computed mean proportion correct for each subject during 
@@ -239,8 +223,3 @@ sbjTrainAvg$cq=recode_factor(sbjTrainAvg$cq,`1` = 'low-Performers', `2` = 'High-
 # dRecAvg %>% ggplot(aes(x=Block,y=rtMean,col=condit))+stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")
 # dRecAvg %>% ggplot(aes(x=Block,y=propCor,col=condit))+
 #   stat_summary(geom="point",fun="mean")+stat_summary(geom="line",fun="mean")+facet_wrap(~sbjCode)
-
-
-
-
-

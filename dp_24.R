@@ -84,17 +84,42 @@ t56 <- dCat |> filter(sbjCode %in% top56$sbjCode) |>
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(title="Testing - top 56 Sbjs.", y="Accuracy") 
 
-tLow <- dCat |> filter(sbjCode %in% low$sbjCode) |>
+tLow56 <- dCat |> filter(sbjCode %in% low$sbjCode) |>
   group_by(sbjCode, condit, Pattern_Token) |>
   summarize(Corr=mean(Corr)) |>
   ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) + 
-  labs(title="Testing - lowest Sbjs (all sbj. not in top 56)", y="Accuracy")
+  labs(title="Testing - lowest Sbjs (all sbj. NOT in top 56)", y="Accuracy")
 
-(t17+t35) /(t56+tLow) + 
+
+tLow35 <- dCat |> filter(!(sbjCode %in% (trainRanks |> group_by(condit) |> slice(1:35))$sbjCode)) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) + 
+  labs(title="Testing - subjects NOT in top 35", y="Accuracy")
+
+tLow17 <- dCat |> filter(!(sbjCode %in% (trainRanks |> group_by(condit) |> slice(1:17))$sbjCode)) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) + 
+  labs(title="Testing - subjects NOT in top 17", y="Accuracy")
+
+
+
+(t17+tLow17) /(t35+tLow35)/(t56+tLow56) + 
   plot_annotation(title="Test Accuracy - matching # of subjects", 
                   caption=" Only the top 17; top 35; top 56; or lowest performing subjects included. Rankings based on final training accuracy")
+
+
+
+# (t17+t35) /(t56+tLow) + 
+#   plot_annotation(title="Test Accuracy - matching # of subjects", 
+#                   caption=" Only the top 17; top 35; top 56; or lowest performing subjects included. Rankings based on final training accuracy")
 
 
 tAll <- dCat |> filter(Phase==2) |>
