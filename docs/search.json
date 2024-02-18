@@ -131,5 +131,19 @@
     "title": "Dot Pattern Plots",
     "section": "Task",
     "text": "Task\n\n\ndot_task\n\n\nCode# dot &lt;- dCat %&gt;% ungroup() %&gt;% filter(id==\"1.nrep\",(Pattern.Type==\"Prototype\" | Pattern.Type==\"New-Low\"))%&gt;%  select(typeCount,Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) \n# nTrial=nrow(dot);\n# dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)\n# dotFrame &lt;- data.frame(typeCount=rep(dot$typeCount,each=9),Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)\n# pg &lt;- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(typeCount~Category)\n\n# pg"
+  },
+  {
+    "objectID": "Task/Task.html",
+    "href": "Task/Task.html",
+    "title": "Task",
+    "section": "",
+    "text": "dot_task"
+  },
+  {
+    "objectID": "Task/Task.html#pattern-judgement-task",
+    "href": "Task/Task.html#pattern-judgement-task",
+    "title": "Task",
+    "section": "",
+    "text": "dot_task"
   }
 ]

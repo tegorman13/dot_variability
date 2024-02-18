@@ -1,0 +1,18 @@
+---
+title: Task
+date: last-modified
+page-layout: full
+code-fold: true
+code-tools: true
+---
+
+
+## Pattern Judgement Task
+
+::: column-screen
+
+
+
+![dot_task](/Task/index.html){width="1050" height="900"}
+
+::: 

@@ -36,7 +36,8 @@ website:
       - text: "Dot Patterns"
         href:  Stimulii/plotDots.qmd
       - text: "Task"
-        href:  Task/index.html
+        href:  Task/Task.qmd
+        #href:  Task/index.html
         
 execute:
   freeze: auto
