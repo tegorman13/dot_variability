@@ -44,12 +44,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Scale and translate the dot coordinates
             const x = (dot.x + gridUnit / 2) * scale + xOffset + centerX - scale * gridUnit / 2;
             const y = (dot.y + gridUnit / 2) * scale + centerY - scale * gridUnit / 2;
-            context.arc(x, y, scale * 1.2, 0, 2 * Math.PI); // Scale the dot size as well
+            context.arc(x, y, scale * 1.5, 0, 2 * Math.PI); // Scale the dot size as well
             context.fill();
         });
     }
 
     const DEBUG_MODE = true;
+
 
     function loadAndStartExperiment() {
         var xhr = new XMLHttpRequest();

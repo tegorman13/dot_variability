@@ -37,14 +37,14 @@ lmc22_prototypes <- lmc22_patterns |>
   filter(Pattern.Type=="prototype") |>
   select(sbjCode,condit,exp,file,Category,x1:y9)
 
-write.csv(mc24_prototypes,here("Stimulii","mc24_prototypes.csv"), row.names = FALSE)
-write.csv(lmc22_prototypes,here("Stimulii","lmc22_prototypes.csv"), row.names = FALSE)
+#write.csv(mc24_prototypes,here("Stimulii","mc24_prototypes.csv"), row.names = FALSE)
+#write.csv(lmc22_prototypes,here("Stimulii","lmc22_prototypes.csv"), row.names = FALSE)
 
 
 
 # head(mc24_prototypes)
 # # A tibble: 6 × 23
-# id      condit exp   file  Category    x1    y1    x2    y2    x3    y3    x4    y4    x5    y5    x6    y6    x7    y7    x8    y8    x9    y9
+# sbjCode      condit exp   file  Category    x1    y1    x2    y2    x3    y3    x4    y4    x5    y5    x6    y6    x7    y7    x8    y8    x9    y9
 # <chr>   <fct>  <chr> <chr>    <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int>
 #   1 1.low   low    mc24  dot_…        1    14    12     1    13    12    11     6    -3     4    -4    -3    -5     6   -13    -3    -2    10    -3
 # 2 1.low   low    mc24  dot_…        2     0     1     8    11     9    15    -1    12     4    -8    -9    15     7    -9     1     7     3    14

@@ -6,14 +6,6 @@
     <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
     <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"></link>
-
-    <style>
-        .debug-info p {
-          margin: 0;
-          font-size: 0.8em;
-          color: #333;
-        }
-      </style>
 </head>
 <body></body>
 
@@ -44,12 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Scale and translate the dot coordinates
             const x = (dot.x + gridUnit / 2) * scale + xOffset + centerX - scale * gridUnit / 2;
             const y = (dot.y + gridUnit / 2) * scale + centerY - scale * gridUnit / 2;
-            context.arc(x, y, scale * 1.2, 0, 2 * Math.PI); // Scale the dot size as well
+            context.arc(x, y, scale * 1.5, 0, 2 * Math.PI); // Scale the dot size as well
             context.fill();
         });
     }
-
-    const DEBUG_MODE = true;
 
     function loadAndStartExperiment() {
         var xhr = new XMLHttpRequest();
@@ -72,25 +62,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         trials.push({
                             type: jsPsychHtmlSliderResponse,
                             stimulus: function() {
-                                const current_trial_data = json[i];
-                                var debugInfoHtml = '';
-                                if (DEBUG_MODE) {
-                                const currentTrialNumber = jsPsych.getProgress().current_trial_global + 1;
-                                const totalTrials = jsPsych.getProgress().total_trials;
-                                debugInfoHtml = `
-                                    <div class="debug-info" style="position: absolute; top: 0; left: 0; text-align: left; background: rgba(255,255,255,0.7); padding: 10px; z-index: 100;">
-                                        <p>Debug Mode On</p>
-                                        <p>Trial: ${currentTrialNumber} / ${totalTrials}</p>
-                                        <p>Filename: ${current_trial_data.file}</p>
-                                        <p>Subject Code: ${current_trial_data.sbjCode}</p>
-                                    </div>
-                                `;
-                            }
-                            var canvasHtml = '<canvas id="dot-pattern-canvas" width="900" height="300"></canvas>';
-                            return debugInfoHtml + canvasHtml;
-                        },
-                        labels: ['Not Similar', 'Very Similar'],
-                        slider_start: 50,
+                                var html = '<canvas id="dot-pattern-canvas" width="900" height="300"></canvas>';
+                                return html;
+                            },
+                            labels: ['Not Similar', 'Very Similar'],
+                            slider_start: 50,
                             on_load: function() {
                                 const canvas = document.getElementById('dot-pattern-canvas');
                                 const context = canvas.getContext('2d');
