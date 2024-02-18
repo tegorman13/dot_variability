@@ -277,7 +277,7 @@ pat_long_train <- mc24_patterns |>
 
 ## Task Demo
 
-![dot_task](/Task/index.html){width="1050" height="900"}
+![dot_task](/Task/index.html){width="1020" height="700"}
 
 
 :::
