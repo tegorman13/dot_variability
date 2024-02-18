@@ -27,7 +27,7 @@ website:
     collapse-below: sm
     tools:
       - icon: github
-      - href: https://github.com/tegorman13/dot_variability
+        href: https://github.com/tegorman13/dot_variability
     left:
       - text: "2022_Paper"
         href: dp_22.qmd
