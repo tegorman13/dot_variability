@@ -198,7 +198,7 @@ pat_themes <- list(theme_minimal(),xlim(-25, 25),ylim(-25, 25),
 
 
 
-
+::: column-page-inset-right
 
 ## Task
 
@@ -219,7 +219,7 @@ pat_themes <- list(theme_minimal(),xlim(-25, 25),ylim(-25, 25),
 ```
 
 
-
+::: 
 
 ```{r fig.width=5,fig.height=5}
 #| eval: false
