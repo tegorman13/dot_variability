@@ -13,6 +13,6 @@ code-tools: true
 
 
 
-![dot_task](/Task/index.html){width="1050" height="900"}
+![dot_task](/Task/index.html){width="900" height="800"}
 
 ::: 
