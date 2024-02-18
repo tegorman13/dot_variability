@@ -64,7 +64,25 @@
         var patternScale = 5;
         var patternSpacing = 1;
         
-
+        // function drawPattern(context, pattern, xOffset) {
+            
+            
+            //     // Assume the grid is 50x50 units with origin (0,0) at center
+            //     const gridUnit = 50;
+            //     const scale = context.canvas.width / (gridUnit * 5); // Scale based on canvas size and 3 patterns
+            //     const centerX = context.canvas.width / 6; // Center for a single pattern part of the canvas
+            //     const centerY = context.canvas.height / 2;
+            
+            //     pattern.forEach(dot => {
+                //         context.beginPath();
+                //         // Scale and translate the dot coordinates
+                //         const x = (dot.x + gridUnit / 2) * scale + xOffset + centerX - scale * gridUnit / 2;
+                //         const y = (dot.y + gridUnit / 2) * scale + centerY - scale * gridUnit / 2;
+                //         context.arc(x, y, scale * 1.2, 0, 2 * Math.PI); // Scale the dot size as well
+                //         context.fill();
+                //     });
+                // }
+                
                 function drawPattern(context, pattern, xOffset) {
                     // Get slider values if in debug mode
                     if (DEBUG_MODE) {

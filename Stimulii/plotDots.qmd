@@ -11,21 +11,210 @@ execute:
 
 
 ```{r}
-pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted)
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, data.table,readr,here, patchwork, conflicted)
 conflict_prefer_all("dplyr", quiet = TRUE)
-source("read_22.R")
+
+lmc22 <- readRDS(here("data","lmc22.rds"))
+mc24 <- readRDS(here("data","mc24.rds"))
+
+
+mc24_patterns <- mc24 |> 
+  ungroup() |>
+  rename(Pattern.Type="Pattern_Token") |>
+  mutate(Pattern.Type=forcats::fct_relevel(Pattern.Type,"prototype","old","new_low","new_med","new_high")) |>
+  select(id,sbjCode,condit,exp,file,Phase,trial,Block,Pattern.Type,Category,Response,Corr,x1:y9) |>
+  arrange(sbjCode,condit,Category)
+  
+
+lmc22_patterns <- lmc22 |> 
+  ungroup() |> 
+  mutate(Pattern.Type = as.character(Pattern.Type)) |> # Convert to character first
+  mutate(Pattern.Type = factor(case_match(Pattern.Type,
+                                          "Trained.Med" ~ "old",
+                                          "Prototype" ~ "prototype",
+                                          "New.Low" ~ "new_low",
+                                          "New.Med" ~ "new_med",
+                                          "New.High" ~ "new_high",
+                                          .default = Pattern.Type), # Include a default case
+                               levels = c("prototype", "old", "new_low", "new_med", "new_high"))) |>
+  select(id,sbjCode,condit,exp,file,Phase,trial,Block,Pattern.Type,Category,Response,Corr,x1:y9) |>
+  arrange(sbjCode,condit,Category)
+
+
+  
+mc24_prototypes <- mc24_patterns |> 
+  filter(Pattern.Type=="prototype") |>
+  select(sbjCode,condit,exp,file,Category,x1:y9)
+
+lmc22_prototypes <- lmc22_patterns |>
+  filter(Pattern.Type=="prototype") |>
+  select(sbjCode,condit,exp,file,Category,x1:y9)
+
+pat_themes <- list(theme_minimal(),xlim(-25, 25),ylim(-25, 25),
+                   labs(title = "Dot Patterns for Each Participant and Category",
+                        x = "X Coordinate", y = "Y Coordinate"),
+                   coord_fixed(),guides(alpha = FALSE))
 ```
+
+
+## Pattern Visuals
+
+```{r}
+# mc24_prototypes_long <- mc24_patterns |> 
+#   filter(Pattern.Type=="prototype") |>
+#   gather(key = "coordinate", value = "value", -id, -condit, -exp, -file, -Category) %>%
+#   separate(coordinate, into = c("axis", "number"), sep = 1) %>%
+#   spread(key = axis, value = value) %>%
+#   mutate(number = as.integer(number))
+
+
+# mc24_prototypes_long |>
+#   filter(id %in% c("1.low","10.medium","112.high")) |>
+#   ggplot(aes(x = x, y = y)) +
+#   geom_point() + # Add dots
+#   facet_grid(id ~ Category) + # Create a grid of plots, with subjects by rows and categories by columns
+#   pat_themes
+
+```
+
+```{r}
+
+ pat_long <- mc24_patterns |> 
+   filter(Phase==2) |> 
+   select(id, condit, Category, Pattern.Type, x1:y9) |>
+   group_by(id, condit, Category, Pattern.Type) |> 
+   slice_head(n=1) |> 
+   gather(key = "coordinate", value = "value", -id, -condit, -Category,-Pattern.Type) %>%
+   separate(coordinate, into = c("axis", "number"), sep = 1) %>%
+   spread(key = axis, value = value) %>%
+   mutate(number = as.integer(number))
+ 
+ pat_long |> 
+   filter(Category==1, id %in%  c("1.low","10.medium","112.high"),
+          Pattern.Type!="old") |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point() + # Add dots
+   facet_grid(id ~ Pattern.Type) + # Create a grid of plots, with subjects by rows and categories by columns
+   pat_themes
+   
+ pat_long |> 
+   filter(id %in%  c("1.low","10.medium"),
+          Pattern.Type!="old") |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point() + # Add dots
+   #ggh4x::facet_nested_wrap(id~Category~Pattern.Type) + 
+   ggh4x::facet_grid2(id ~ Category ~ Pattern.Type) +
+   pat_themes
+ 
+ 
+
+```
+
+
+
+```{r}
+
+
+
+ pat_long |> 
+   filter(id %in%  c("1.low","10.medium","112.high"),
+          Pattern.Type!="old") |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(aes(color = Pattern.Type, alpha = Pattern.Type)) + 
+   scale_color_manual(values = c("prototype" = "black",  # Black for prototype
+                                 "old" = "#E69F00",      # Orange for old
+                                 "new_low" = "#56B4E9",  # Blue for new_low
+                                 "new_med" = "#009E73",  # Green for new_med
+                                 "new_high" = "red")) +# Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +
+   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.2, "new_low" = 0.2, "new_med" = 0.2, "new_high" = 0.2)) +
+    facet_grid(id ~ Category) + pat_themes
+
+ 
+ 
+ pat_long <- mc24_patterns |> 
+   filter(id %in%  c("1.low","10.medium","112.high")) |>
+   filter(Phase==2) |> 
+   select(id, condit,trial, Category, Pattern.Type, x1:y9) |>
+   group_by(id, condit, Category, Pattern.Type) |> 
+   slice_head(n=10) |> 
+   gather(key = "coordinate", value = "value", -id, -condit,-trial, -Category,-Pattern.Type) %>%
+   separate(coordinate, into = c("axis", "number"), sep = 1) %>%
+   spread(key = axis, value = value) %>%
+   mutate(number = as.integer(number))
+ 
+```
+
+
+
+
+```{r}
+
+ pat_long |> 
+   filter(id %in%  c("1.low","10.medium","112.high"),Pattern.Type!="old") |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(aes(color = Pattern.Type, alpha = Pattern.Type)) + 
+   scale_color_manual(values = c("prototype" = "black",  # Black for prototype
+                                 "old" = "#E69F00",      # Orange for old
+                                 "new_low" = "#56B4E9",  # Blue for new_low
+                                 "new_med" = "#009E73",  # Green for new_med
+                                 "new_high" = "red")) +# Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +
+   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.2, "new_low" = 0.4, "new_med" = 0.3, "new_high" = 0.2)) +
+   facet_grid(id ~ Category) + pat_themes
+ 
+ 
+ pat_long |> 
+   filter(id %in%  c("1.low","10.medium","112.high"),Pattern.Type!="old") |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(aes(color = as.factor(Category)),alpha=.9) + 
+   facet_grid(id ~ Pattern.Type) + pat_themes
+ 
+```
+
+
+
+
+```{r}
+
+ 
+ pat_long_train <- mc24_patterns |> 
+   ungroup() |>
+   group_by(condit,Category) |> slice_head(n=4) |>
+   filter(Phase==1) |> 
+   select(id, condit,trial, Category, Pattern.Type, x1:y9) |>
+   group_by(id, condit, Category, Pattern.Type) |> 
+   gather(key = "coordinate", value = "value", -id, -condit,-trial, -Category,-Pattern.Type) %>%
+   separate(coordinate, into = c("axis", "number"), sep = 1) %>%
+   spread(key = axis, value = value) %>%
+   mutate(number = as.integer(number))
+ 
+ pat_long_train |> 
+   ggplot(aes(x = x, y = y)) +
+   geom_point(aes(color = as.factor(Category)),alpha=.9) + 
+   facet_wrap(~id) + pat_themes
+ 
+ 
+```
+
+
+
+
+
+
+## Task
+
+![dot_task](/Task/index.html){width="900" height="900"}
+
 
 
 ```{r fig.width=10,fig.height=10}
 #| fig-width: 11
-dot <- dCat %>% ungroup() %>% filter(id=="1.nrep",(Pattern.Type=="Prototype" | Pattern.Type=="New-Low"))%>%  select(typeCount,Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
-nTrial=nrow(dot);
-dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
-dotFrame <- data.frame(typeCount=rep(dot$typeCount,each=9),Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
-pg <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(typeCount~Category)
+# dot <- dCat %>% ungroup() %>% filter(id=="1.nrep",(Pattern.Type=="Prototype" | Pattern.Type=="New-Low"))%>%  select(typeCount,Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
+# nTrial=nrow(dot);
+# dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
+# dotFrame <- data.frame(typeCount=rep(dot$typeCount,each=9),Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
+# pg <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(typeCount~Category)
 
-pg
+# pg
 
 ```
 
@@ -36,26 +225,26 @@ pg
 #| eval: false
 #| include: false
 
-nTrial=200;
-proto <- dCat %>% ungroup() %>% filter(id=="1.nrep",Pattern.Type=="Prototype")%>%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
-nTrial=3;
-dot=proto
-dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
-dotFrame <- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
-pg <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)
+# nTrial=200;
+# proto <- dCat %>% ungroup() %>% filter(id=="1.nrep",Pattern.Type=="Prototype")%>%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
+# nTrial=3;
+# dot=proto
+# dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
+# dotFrame <- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
+# pg <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)
 
 
 
-nl <- dCat %>% ungroup() %>% filter(id=="1.nrep",Pattern.Type=="New-Low")%>%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
-nTrial=nrow(nl)
-dot=nl
-dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
-dotFrame <- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
-pl <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)
+# nl <- dCat %>% ungroup() %>% filter(id=="1.nrep",Pattern.Type=="New-Low")%>%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) 
+# nTrial=nrow(nl)
+# dot=nl
+# dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)
+# dotFrame <- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)
+# pl <- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)
 
-gridExtra::grid.arrange(pg,pl)
-pg
-pl
+# gridExtra::grid.arrange(pg,pl)
+# pg
+# pl
 ```
 
 

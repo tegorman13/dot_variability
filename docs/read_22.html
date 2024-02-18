@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.545">
+<meta name="generator" content="quarto-1.4.550">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Thomas Gorman">
 <meta name="dcterms.date" content="2024-01-18">
@@ -123,6 +123,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./dp_24.html"> 
 <span class="menu-text">Hu_Nosofsky24</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Stimulii/plotDots.html"> 
+<span class="menu-text">Dot Patterns</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Task/index.html"> 
+<span class="menu-text">Task</span></a>
+  </li>  
 </ul>
 </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -175,12 +183,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co"># if ( any(!have) ) { install.packages(packages[!have]) }</span></span>
 <span><span class="co"># (lapply(packages, require, character.only = TRUE))</span></span>
 <span></span>
-<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">ggplot2</span>, <span class="va">data.table</span>,<span class="va">readr</span>,<span class="va">here</span>, <span class="va">patchwork</span>, <span class="va">conflicted</span><span class="op">)</span></span>
-<span><span class="fu">conflict_prefer_all</span><span class="op">(</span><span class="st">"dplyr"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Data variable order, from left to right:</span></span>
 <span><span class="co">#   </span></span>
-<span><span class="co">#   1. Phase type (1 = Training, 2 = Transfer)</span></span>
+<span><span class="co"># 1. Phase type (1 = Training, 2 = Transfer)</span></span>
 <span><span class="co"># 2. Block number (1-15 training, 1 transfer)</span></span>
 <span><span class="co"># 3. Trial number (1-15 training, 1-63 transfer)</span></span>
 <span><span class="co"># 4. Pattern type (1 = old medium, 2 = prototype, 3 = new low, 4 = new medium, 5 = new high)</span></span>
@@ -198,20 +204,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co"># file names starting with "polynrep" contain data from non-repeating condtion.</span></span>
 <span></span>
 <span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
 <span><span class="co">#rm(list=ls())</span></span>
+<span></span>
+<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">ggplot2</span>, <span class="va">data.table</span>,<span class="va">readr</span>,<span class="va">here</span>, <span class="va">patchwork</span>, <span class="va">conflicted</span><span class="op">)</span></span>
+<span><span class="fu">conflict_prefer_all</span><span class="op">(</span><span class="st">"dplyr"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">col.names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Phase"</span>,<span class="st">"Block"</span>,<span class="st">"BlockTrial"</span>,<span class="st">"Pattern"</span>,<span class="st">"Category"</span>,<span class="st">"Pattern.Token"</span>,<span class="st">"Response"</span>,<span class="st">"Corr"</span>,<span class="st">"rt"</span>,</span>
 <span>              <span class="st">"x1"</span>,<span class="st">"y1"</span>,<span class="st">"x2"</span>,<span class="st">"y2"</span>,<span class="st">"x3"</span>,<span class="st">"y3"</span>,<span class="st">"x4"</span>,<span class="st">"y4"</span>,<span class="st">"x5"</span>,<span class="st">"y5"</span>,<span class="st">"x6"</span>,<span class="st">"y6"</span>,<span class="st">"x7"</span>,<span class="st">"y7"</span>,<span class="st">"x8"</span>,<span class="st">"y8"</span>,<span class="st">"x9"</span>,<span class="st">"y9"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pathLoad</span><span class="op">=</span><span class="st">"Exp2_Classification"</span></span>
+<span><span class="va">pathLoad</span><span class="op">=</span><span class="st">"data/lmc_2022/Exp2_Classification"</span></span>
 <span><span class="va">loadPattern</span><span class="op">=</span><span class="st">"*.txt"</span></span>
 <span><span class="va">pathString</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">pathLoad</span>,<span class="st">"/Data/"</span>,sep<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
-<span><span class="va">mFiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"Exp2_Classification/Data/"</span>,pattern <span class="op">=</span> <span class="va">loadPattern</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># should be 89 in exp 2</span></span>
+<span><span class="va">mFiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span>path<span class="op">=</span><span class="va">pathString</span>,pattern <span class="op">=</span> <span class="va">loadPattern</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># should be 89 in exp 2</span></span>
 <span><span class="va">nFiles</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mFiles</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fl">27</span>,nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html">set_names</a></span><span class="op">(</span><span class="va">col.names</span><span class="op">)</span></span>
@@ -232,8 +236,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>         Pattern.Type<span class="op">=</span><span class="fu">recode_factor</span><span class="op">(</span><span class="va">Pattern</span>,`1` <span class="op">=</span> <span class="st">'Trained.Med'</span>, `2` <span class="op">=</span> <span class="st">'Prototype'</span>,  `3` <span class="op">=</span> <span class="st">'New.Low'</span>, `4` <span class="op">=</span> <span class="st">'New.Med'</span>,`5` <span class="op">=</span> <span class="st">'New.High'</span><span class="op">)</span>,</span>
 <span>         Stage<span class="op">=</span><span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/recode.html">recode</a></span><span class="op">(</span><span class="va">trial</span>, <span class="st">"1:75='Start'; 76:150='Med'; 151:225='End';226:288='Test';else='Junk'"</span><span class="op">)</span>,</span>
 <span>         Phase2<span class="op">=</span><span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/recode.html">recode</a></span><span class="op">(</span><span class="va">trial</span>, <span class="st">"1:225='Training'; 226:288='Transfer';else='Junk'"</span><span class="op">)</span>,</span>
-<span>         id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,condit<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">condit</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span>,<span class="va">condit</span>,.before<span class="op">=</span><span class="va">Phase</span><span class="op">)</span><span class="op">%&gt;%</span></span>
-<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span>,<span class="va">trial</span>,<span class="va">Phase</span>,<span class="va">Phase2</span>,<span class="va">Stage</span>,<span class="va">Block</span>,<span class="va">BlockTrial</span>,<span class="va">Pattern.Type</span>,<span class="va">Category</span>,<span class="va">Corr</span>,<span class="va">rt</span>,<span class="va">phaseAvg</span>,<span class="va">Pattern</span>,<span class="va">Pattern.Token</span>,<span class="va">Response</span>,.after<span class="op">=</span><span class="st">"condit"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">arrange</span><span class="op">(</span><span class="va">condit</span>,<span class="va">sbj</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>         id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,condit<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">condit</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span>,<span class="va">condit</span>,.before<span class="op">=</span><span class="va">Phase</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span>,<span class="va">trial</span>,<span class="va">Phase</span>,<span class="va">Phase2</span>,<span class="va">Stage</span>,<span class="va">Block</span>,<span class="va">BlockTrial</span>,<span class="va">Pattern.Type</span>,<span class="va">Category</span>,<span class="va">Corr</span>,<span class="va">rt</span>,<span class="va">phaseAvg</span>,<span class="va">Pattern</span>,<span class="va">Pattern.Token</span>,<span class="va">Response</span>,.after<span class="op">=</span><span class="st">"condit"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">condit</span>,<span class="va">sbj</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: There were 356 warnings in `mutate()`.
 The first warning was:
@@ -244,8 +251,10 @@ Caused by warning in `car::recode()`:
 ! NAs introduced by coercion
 ℹ Run `dplyr::last_dplyr_warnings()` to see the 355 remaining warnings.</code></pre>
 </div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">%&gt;%</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>patN<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">Pattern.Type</span>,<span class="va">Category</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>patCatN<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span>,typeCount<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">Pattern.Type</span>,<span class="st">"."</span>,<span class="va">patCatN</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">%&gt;%</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>patN<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">Pattern.Type</span>,<span class="va">Category</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>patCatN<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span>,typeCount<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">Pattern.Type</span>,<span class="st">"."</span>,<span class="va">patCatN</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">typeCount</span>,.after<span class="op">=</span><span class="st">"Pattern.Type"</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">dCat</span><span class="op">$</span><span class="va">Block</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">dCat</span><span class="op">$</span><span class="va">Phase</span><span class="op">==</span><span class="fl">2</span>,<span class="fl">16</span>,<span class="va">dCat</span><span class="op">$</span><span class="va">Block</span><span class="op">)</span></span>
@@ -319,14 +328,18 @@ can override using the `.groups` argument.</code></pre>
 <span></span>
 <span></span>
 <span></span>
+<span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu">mutate</span><span class="op">(</span>exp<span class="op">=</span><span class="st">"lmc22"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span>,<span class="va">sbjCode</span>,<span class="va">exp</span>,<span class="va">condit</span>,<span class="va">Phase</span>,<span class="va">Phase2</span>,<span class="va">Stage</span>,</span>
+<span>           <span class="va">trial</span>,<span class="va">Block</span>,<span class="va">BlockTrial</span>,<span class="va">Pattern.Type</span>,<span class="va">Pattern</span>,<span class="va">Pattern.Token</span>,</span>
+<span>           <span class="va">Category</span>,<span class="va">Response</span>,<span class="va">Corr</span>,<span class="va">rt</span><span class="op">)</span></span>
 <span></span>
-<span></span>
+<span><span class="co">#write out aggregated trial level data</span></span>
+<span><span class="co">#write_rds(dCat, "data/lmc22.rds")</span></span>
 <span></span>
 <span><span class="co"># dCatBlockAvg &lt;- dCat %&gt;% group_by(id,condit,Block,Pattern.Type) %&gt;% </span></span>
 <span><span class="co">#   summarise(nCorr=sum(Corr),propCor=nCorr/15,rtMean=mean(rt),phaseAvg=mean(phaseAvg)) %&gt;% ungroup() %&gt;% group_by(condit) %&gt;%</span></span>
 <span><span class="co">#   mutate(grpRank=factor(rank(-phaseAvg)),id=factor(id)) %&gt;% arrange(-phaseAvg) %&gt;% as.data.frame()</span></span>
 <span><span class="co"># dCatAvg$id &lt;-factor(dCatAvg$id,levels=unique(dCatAvg$id))</span></span>
-<span></span>
 <span></span>
 <span></span>
 <span><span class="co"># dCatAvg=dCatTrain  %&gt;% group_by(condit,Block) %&gt;%</span></span>
@@ -344,14 +357,6 @@ can override using the `.groups` argument.</code></pre>
 <span></span>
 <span></span>
 <span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
 <span><span class="co"># We started by conducting preliminary analyses to remove severe outlier subjects. </span></span>
 <span><span class="co"># For the learning phase, the performance measure used for identifying outliers was the </span></span>
 <span><span class="co"># same as in Experi- ment 1. For the classification-transfer phase, we measured average</span></span>
@@ -359,13 +364,6 @@ can override using the `.groups` argument.</code></pre>
 <span><span class="co"># subject who performed more than 2.5 standard deviations below the mean in each condition </span></span>
 <span><span class="co"># on either measure. We removed four subjects from the REP condition (leaving 39 valid subjects)</span></span>
 <span><span class="co"># and two subjects from the NREP condition (leaving 44 valid subjects).</span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># Data variable order, from left to right:</span></span>
 <span><span class="co">#   </span></span>
@@ -384,8 +382,6 @@ can override using the `.groups` argument.</code></pre>
 <span></span>
 <span><span class="co"># file names starting with "polyrep" contain data from repeating condtion.</span></span>
 <span><span class="co"># file names starting with "polynrep" contain data from non-repeating condtion.</span></span>
-<span></span>
-<span></span>
 <span></span>
 <span></span>
 <span><span class="co"># pathLoad="Exp1_Recognition"</span></span>
@@ -407,9 +403,6 @@ can override using the `.groups` argument.</code></pre>
 <span><span class="co"># </span></span>
 <span><span class="co"># dRec &lt;- dRec %&gt;% relocate(sbjCode,condit,file) %&gt;% group_by(sbjCode) %&gt;%</span></span>
 <span><span class="co">#   mutate(nTrain=n(),ind=1,trial=cumsum(ind),id=paste0(sbjCode,".",condit),trainAvg=sum(Corr)/nTrain) %&gt;% relocate(trial,.after="condit") %&gt;% arrange(condit,sbj)</span></span>
-<span></span>
-<span></span>
-<span></span>
 <span></span>
 <span><span class="co"># we conducted preliminary analyses to identify severe outlier sub- jects within each condition. </span></span>
 <span><span class="co"># In the learning phase, we computed mean proportion correct for each subject during </span></span>

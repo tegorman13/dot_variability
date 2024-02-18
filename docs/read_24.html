@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.545">
+<meta name="generator" content="quarto-1.4.550">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Thomas Gorman">
 <meta name="dcterms.date" content="2024-01-18">
@@ -123,6 +123,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./dp_24.html"> 
 <span class="menu-text">Hu_Nosofsky24</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Stimulii/plotDots.html"> 
+<span class="menu-text">Dot Patterns</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Task/index.html"> 
+<span class="menu-text">Task</span></a>
+  </li>  
 </ul>
 </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -169,12 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">ggplot2</span>, <span class="va">here</span>, <span class="va">patchwork</span>, <span class="va">conflicted</span><span class="op">)</span></span>
-<span><span class="fu">conflict_prefer_all</span><span class="op">(</span><span class="st">"dplyr"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span></span>
-<span><span class="co"># 1. Phase type (1 Training, 2 Test)</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 1. Phase type (1 Training, 2 Test)</span></span>
 <span><span class="co"># 2. Block number (1-10 Training, 1 Test)</span></span>
 <span><span class="co"># 3. Trial number (1-270 Training, 271-354 Test)*</span></span>
 <span><span class="co"># 4. Pattern type (1 = old*, 2 = prototype, 3 = new low, 4 = new medium, 5 = new high)</span></span>
@@ -195,125 +198,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span></span>
 <span><span class="co">#rm(list=ls())</span></span>
 <span></span>
+<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">ggplot2</span>, <span class="va">here</span>, <span class="va">patchwork</span>, <span class="va">conflicted</span><span class="op">)</span></span>
+<span><span class="fu">conflict_prefer_all</span><span class="op">(</span><span class="st">"dplyr"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span></span>
 <span><span class="va">col.names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Phase"</span>,<span class="st">"Block"</span>,<span class="st">"BlockTrial"</span>,<span class="st">"Pattern"</span>,<span class="st">"Category"</span>,<span class="st">"Pattern.Token"</span>,<span class="st">"distortion"</span>,<span class="st">"Response"</span>,<span class="st">"Corr"</span>,<span class="st">"rt"</span>,</span>
-<span>              <span class="st">"x1"</span>,<span class="st">"y1"</span>,<span class="st">"x2"</span>,<span class="st">"y2"</span>,<span class="st">"x3"</span>,<span class="st">"y3"</span>,<span class="st">"x4"</span>,<span class="st">"y4"</span>,<span class="st">"x5"</span>,<span class="st">"y5"</span>,<span class="st">"x6"</span>,<span class="st">"y6"</span>,<span class="st">"x7"</span>,<span class="st">"y7"</span>,<span class="st">"x8"</span>,<span class="st">"y8"</span>,<span class="st">"x9"</span>,<span class="st">"y9"</span>, <span class="st">"name"</span>, <span class="st">"condit"</span>, <span class="st">"sbjCode"</span><span class="op">)</span></span>
+<span>              <span class="st">"x1"</span>,<span class="st">"y1"</span>,<span class="st">"x2"</span>,<span class="st">"y2"</span>,<span class="st">"x3"</span>,<span class="st">"y3"</span>,<span class="st">"x4"</span>,<span class="st">"y4"</span>,<span class="st">"x5"</span>,<span class="st">"y5"</span>,<span class="st">"x6"</span>,<span class="st">"y6"</span>,<span class="st">"x7"</span>,<span class="st">"y7"</span>,<span class="st">"x8"</span>,<span class="st">"y8"</span>,<span class="st">"x9"</span>,<span class="st">"y9"</span>, <span class="st">"file"</span>, <span class="st">"condit"</span>, <span class="st">"sbjCode"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">loadPattern</span><span class="op">=</span><span class="st">"dot_*"</span></span>
-<span><span class="va">pathString</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"data/"</span>,sep<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
-<span><span class="va">mFiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"data/"</span>,pattern <span class="op">=</span> <span class="va">loadPattern</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># should be 89 in exp 2</span></span>
-<span><span class="va">mFiles</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1] "dot_cond1_sub1.txt"   "dot_cond1_sub102.txt" "dot_cond1_sub106.txt"
-  [4] "dot_cond1_sub110.txt" "dot_cond1_sub114.txt" "dot_cond1_sub122.txt"
-  [7] "dot_cond1_sub13.txt"  "dot_cond1_sub201.txt" "dot_cond1_sub205.txt"
- [10] "dot_cond1_sub209.txt" "dot_cond1_sub21.txt"  "dot_cond1_sub213.txt"
- [13] "dot_cond1_sub217.txt" "dot_cond1_sub221.txt" "dot_cond1_sub225.txt"
- [16] "dot_cond1_sub229.txt" "dot_cond1_sub233.txt" "dot_cond1_sub237.txt"
- [19] "dot_cond1_sub245.txt" "dot_cond1_sub249.txt" "dot_cond1_sub25.txt" 
- [22] "dot_cond1_sub253.txt" "dot_cond1_sub257.txt" "dot_cond1_sub261.txt"
- [25] "dot_cond1_sub265.txt" "dot_cond1_sub269.txt" "dot_cond1_sub273.txt"
- [28] "dot_cond1_sub277.txt" "dot_cond1_sub278.txt" "dot_cond1_sub282.txt"
- [31] "dot_cond1_sub286.txt" "dot_cond1_sub29.txt"  "dot_cond1_sub290.txt"
- [34] "dot_cond1_sub294.txt" "dot_cond1_sub298.txt" "dot_cond1_sub302.txt"
- [37] "dot_cond1_sub306.txt" "dot_cond1_sub310.txt" "dot_cond1_sub314.txt"
- [40] "dot_cond1_sub318.txt" "dot_cond1_sub322.txt" "dot_cond1_sub326.txt"
- [43] "dot_cond1_sub33.txt"  "dot_cond1_sub330.txt" "dot_cond1_sub334.txt"
- [46] "dot_cond1_sub338.txt" "dot_cond1_sub342.txt" "dot_cond1_sub346.txt"
- [49] "dot_cond1_sub350.txt" "dot_cond1_sub354.txt" "dot_cond1_sub358.txt"
- [52] "dot_cond1_sub362.txt" "dot_cond1_sub366.txt" "dot_cond1_sub37.txt" 
- [55] "dot_cond1_sub370.txt" "dot_cond1_sub374.txt" "dot_cond1_sub378.txt"
- [58] "dot_cond1_sub382.txt" "dot_cond1_sub386.txt" "dot_cond1_sub390.txt"
- [61] "dot_cond1_sub394.txt" "dot_cond1_sub41.txt"  "dot_cond1_sub45.txt" 
- [64] "dot_cond1_sub49.txt"  "dot_cond1_sub5.txt"   "dot_cond1_sub53.txt" 
- [67] "dot_cond1_sub57.txt"  "dot_cond1_sub61.txt"  "dot_cond1_sub65.txt" 
- [70] "dot_cond1_sub73.txt"  "dot_cond1_sub77.txt"  "dot_cond1_sub82.txt" 
- [73] "dot_cond1_sub86.txt"  "dot_cond1_sub9.txt"   "dot_cond1_sub90.txt" 
- [76] "dot_cond1_sub94.txt"  "dot_cond1_sub98.txt"  "dot_cond2_sub10.txt" 
- [79] "dot_cond2_sub103.txt" "dot_cond2_sub107.txt" "dot_cond2_sub111.txt"
- [82] "dot_cond2_sub115.txt" "dot_cond2_sub118.txt" "dot_cond2_sub119.txt"
- [85] "dot_cond2_sub123.txt" "dot_cond2_sub14.txt"  "dot_cond2_sub18.txt" 
- [88] "dot_cond2_sub2.txt"   "dot_cond2_sub202.txt" "dot_cond2_sub206.txt"
- [91] "dot_cond2_sub214.txt" "dot_cond2_sub218.txt" "dot_cond2_sub22.txt" 
- [94] "dot_cond2_sub222.txt" "dot_cond2_sub226.txt" "dot_cond2_sub230.txt"
- [97] "dot_cond2_sub234.txt" "dot_cond2_sub238.txt" "dot_cond2_sub241.txt"
-[100] "dot_cond2_sub242.txt" "dot_cond2_sub246.txt" "dot_cond2_sub250.txt"
-[103] "dot_cond2_sub254.txt" "dot_cond2_sub258.txt" "dot_cond2_sub262.txt"
-[106] "dot_cond2_sub266.txt" "dot_cond2_sub270.txt" "dot_cond2_sub274.txt"
-[109] "dot_cond2_sub279.txt" "dot_cond2_sub283.txt" "dot_cond2_sub287.txt"
-[112] "dot_cond2_sub291.txt" "dot_cond2_sub295.txt" "dot_cond2_sub299.txt"
-[115] "dot_cond2_sub30.txt"  "dot_cond2_sub303.txt" "dot_cond2_sub307.txt"
-[118] "dot_cond2_sub311.txt" "dot_cond2_sub315.txt" "dot_cond2_sub319.txt"
-[121] "dot_cond2_sub323.txt" "dot_cond2_sub327.txt" "dot_cond2_sub331.txt"
-[124] "dot_cond2_sub335.txt" "dot_cond2_sub339.txt" "dot_cond2_sub34.txt" 
-[127] "dot_cond2_sub347.txt" "dot_cond2_sub351.txt" "dot_cond2_sub355.txt"
-[130] "dot_cond2_sub359.txt" "dot_cond2_sub363.txt" "dot_cond2_sub367.txt"
-[133] "dot_cond2_sub371.txt" "dot_cond2_sub375.txt" "dot_cond2_sub38.txt" 
-[136] "dot_cond2_sub383.txt" "dot_cond2_sub387.txt" "dot_cond2_sub391.txt"
-[139] "dot_cond2_sub395.txt" "dot_cond2_sub399.txt" "dot_cond2_sub42.txt" 
-[142] "dot_cond2_sub46.txt"  "dot_cond2_sub54.txt"  "dot_cond2_sub58.txt" 
-[145] "dot_cond2_sub6.txt"   "dot_cond2_sub62.txt"  "dot_cond2_sub66.txt" 
-[148] "dot_cond2_sub70.txt"  "dot_cond2_sub74.txt"  "dot_cond2_sub79.txt" 
-[151] "dot_cond2_sub83.txt"  "dot_cond2_sub87.txt"  "dot_cond2_sub91.txt" 
-[154] "dot_cond2_sub95.txt"  "dot_cond2_sub99.txt"  "dot_cond3_sub100.txt"
-[157] "dot_cond3_sub104.txt" "dot_cond3_sub108.txt" "dot_cond3_sub112.txt"
-[160] "dot_cond3_sub116.txt" "dot_cond3_sub12.txt"  "dot_cond3_sub120.txt"
-[163] "dot_cond3_sub124.txt" "dot_cond3_sub15.txt"  "dot_cond3_sub19.txt" 
-[166] "dot_cond3_sub203.txt" "dot_cond3_sub207.txt" "dot_cond3_sub211.txt"
-[169] "dot_cond3_sub215.txt" "dot_cond3_sub219.txt" "dot_cond3_sub223.txt"
-[172] "dot_cond3_sub227.txt" "dot_cond3_sub231.txt" "dot_cond3_sub235.txt"
-[175] "dot_cond3_sub239.txt" "dot_cond3_sub243.txt" "dot_cond3_sub247.txt"
-[178] "dot_cond3_sub251.txt" "dot_cond3_sub255.txt" "dot_cond3_sub259.txt"
-[181] "dot_cond3_sub263.txt" "dot_cond3_sub271.txt" "dot_cond3_sub275.txt"
-[184] "dot_cond3_sub280.txt" "dot_cond3_sub284.txt" "dot_cond3_sub288.txt"
-[187] "dot_cond3_sub292.txt" "dot_cond3_sub296.txt" "dot_cond3_sub3.txt"  
-[190] "dot_cond3_sub300.txt" "dot_cond3_sub304.txt" "dot_cond3_sub308.txt"
-[193] "dot_cond3_sub31.txt"  "dot_cond3_sub312.txt" "dot_cond3_sub316.txt"
-[196] "dot_cond3_sub320.txt" "dot_cond3_sub324.txt" "dot_cond3_sub328.txt"
-[199] "dot_cond3_sub332.txt" "dot_cond3_sub336.txt" "dot_cond3_sub340.txt"
-[202] "dot_cond3_sub344.txt" "dot_cond3_sub348.txt" "dot_cond3_sub35.txt" 
-[205] "dot_cond3_sub352.txt" "dot_cond3_sub356.txt" "dot_cond3_sub360.txt"
-[208] "dot_cond3_sub364.txt" "dot_cond3_sub368.txt" "dot_cond3_sub372.txt"
-[211] "dot_cond3_sub376.txt" "dot_cond3_sub380.txt" "dot_cond3_sub384.txt"
-[214] "dot_cond3_sub39.txt"  "dot_cond3_sub392.txt" "dot_cond3_sub396.txt"
-[217] "dot_cond3_sub400.txt" "dot_cond3_sub43.txt"  "dot_cond3_sub51.txt" 
-[220] "dot_cond3_sub55.txt"  "dot_cond3_sub59.txt"  "dot_cond3_sub63.txt" 
-[223] "dot_cond3_sub67.txt"  "dot_cond3_sub7.txt"   "dot_cond3_sub75.txt" 
-[226] "dot_cond3_sub80.txt"  "dot_cond3_sub84.txt"  "dot_cond3_sub88.txt" 
-[229] "dot_cond3_sub92.txt"  "dot_cond3_sub96.txt"  "dot_cond4_sub101.txt"
-[232] "dot_cond4_sub105.txt" "dot_cond4_sub109.txt" "dot_cond4_sub113.txt"
-[235] "dot_cond4_sub117.txt" "dot_cond4_sub12.txt"  "dot_cond4_sub121.txt"
-[238] "dot_cond4_sub16.txt"  "dot_cond4_sub20.txt"  "dot_cond4_sub204.txt"
-[241] "dot_cond4_sub208.txt" "dot_cond4_sub212.txt" "dot_cond4_sub216.txt"
-[244] "dot_cond4_sub220.txt" "dot_cond4_sub224.txt" "dot_cond4_sub228.txt"
-[247] "dot_cond4_sub232.txt" "dot_cond4_sub236.txt" "dot_cond4_sub24.txt" 
-[250] "dot_cond4_sub240.txt" "dot_cond4_sub244.txt" "dot_cond4_sub252.txt"
-[253] "dot_cond4_sub256.txt" "dot_cond4_sub260.txt" "dot_cond4_sub264.txt"
-[256] "dot_cond4_sub268.txt" "dot_cond4_sub272.txt" "dot_cond4_sub276.txt"
-[259] "dot_cond4_sub28.txt"  "dot_cond4_sub281.txt" "dot_cond4_sub285.txt"
-[262] "dot_cond4_sub289.txt" "dot_cond4_sub293.txt" "dot_cond4_sub297.txt"
-[265] "dot_cond4_sub301.txt" "dot_cond4_sub305.txt" "dot_cond4_sub309.txt"
-[268] "dot_cond4_sub313.txt" "dot_cond4_sub32.txt"  "dot_cond4_sub321.txt"
-[271] "dot_cond4_sub329.txt" "dot_cond4_sub333.txt" "dot_cond4_sub337.txt"
-[274] "dot_cond4_sub341.txt" "dot_cond4_sub345.txt" "dot_cond4_sub349.txt"
-[277] "dot_cond4_sub353.txt" "dot_cond4_sub357.txt" "dot_cond4_sub36.txt" 
-[280] "dot_cond4_sub361.txt" "dot_cond4_sub365.txt" "dot_cond4_sub369.txt"
-[283] "dot_cond4_sub373.txt" "dot_cond4_sub377.txt" "dot_cond4_sub381.txt"
-[286] "dot_cond4_sub385.txt" "dot_cond4_sub389.txt" "dot_cond4_sub393.txt"
-[289] "dot_cond4_sub397.txt" "dot_cond4_sub4.txt"   "dot_cond4_sub40.txt" 
-[292] "dot_cond4_sub44.txt"  "dot_cond4_sub52.txt"  "dot_cond4_sub56.txt" 
-[295] "dot_cond4_sub60.txt"  "dot_cond4_sub64.txt"  "dot_cond4_sub68.txt" 
-[298] "dot_cond4_sub72.txt"  "dot_cond4_sub76.txt"  "dot_cond4_sub8.txt"  
-[301] "dot_cond4_sub85.txt"  "dot_cond4_sub89.txt"  "dot_cond4_sub93.txt" 
-[304] "dot_cond4_sub97.txt" </code></pre>
-</div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nFiles</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mFiles</span><span class="op">)</span></span>
+<span><span class="va">pathString</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"data/mc_2024/"</span>,sep<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">mFiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span>path<span class="op">=</span><span class="va">pathString</span>,pattern <span class="op">=</span> <span class="va">loadPattern</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># should be 89 in exp 2</span></span>
+<span><span class="va">nFiles</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mFiles</span><span class="op">)</span></span>
 <span><span class="co"># read in each of the txt files in mFiles - into a single tibble</span></span>
 <span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map2_dfr</a></span><span class="op">(</span><span class="va">mFiles</span>, <span class="va">mFiles</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">pathString</span>, <span class="va">.x</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">mutate</span><span class="op">(</span></span>
-<span>      name <span class="op">=</span> <span class="va">.y</span>,</span>
+<span>      file <span class="op">=</span> <span class="va">.y</span>,</span>
 <span>      condit <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">"cond\\d+"</span><span class="op">)</span>,</span>
-<span>      subject_id <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">"sub\\d+"</span><span class="op">)</span></span>
+<span>      sbjCode <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">"sub\\d+"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html">set_names</a></span><span class="op">(</span><span class="va">col.names</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>, <span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -399,12 +301,87 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span></span>
 <span></span>
 <span></span>
-<span></span>
-<span><span class="co"># order sbjCode by end of training performance</span></span>
 <span><span class="va">dCat</span><span class="op">$</span><span class="va">sbjCode</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">dCat</span><span class="op">$</span><span class="va">sbjCode</span>,levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">dtf</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span></span>
+<span><span class="va">dCat</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu">mutate</span><span class="op">(</span>exp<span class="op">=</span><span class="st">"mc24"</span>,</span>
+<span>                       sbjCode<span class="op">=</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">sbjCode</span>, <span class="st">"\\d+"</span><span class="op">)</span>,</span>
+<span>                       id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sbjCode</span>,<span class="st">"."</span>,<span class="va">condit</span><span class="op">)</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span>,<span class="va">sbjCode</span>,<span class="va">exp</span>,<span class="va">condit</span>,<span class="va">Phase</span>,<span class="va">phase</span>,<span class="va">Stage</span>,<span class="va">trial</span>,</span>
+<span>           <span class="va">Block</span>,<span class="va">BlockTrial</span>,<span class="va">Pattern_Token</span>,<span class="va">Pattern.Token</span>,<span class="va">Pattern</span>,<span class="va">pattern</span>,<span class="va">distortion</span>,</span>
+<span>           <span class="va">Category</span>,<span class="va">Response</span>,<span class="va">Corr</span>,<span class="va">rt</span><span class="op">)</span></span>
+<span>  </span>
 <span></span>
+<span><span class="co">#write out aggregated trial level data</span></span>
+<span><span class="co">#write_rds(dCat, "data/mc24.rds")</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># length(unique(dCat$Pattern.Token))</span></span>
+<span></span>
+<span><span class="co"># dPattern &lt;- dCat |&gt; filter(Phase==2) |&gt; </span></span>
+<span><span class="co">#   group_by(Pattern_Token, Pattern.Token) |&gt; </span></span>
+<span><span class="co">#   summarise(m=mean(Corr), n=n())</span></span>
+<span></span>
+<span><span class="co"># dPattern &lt;- dCat |&gt; filter(Phase==2) |&gt; </span></span>
+<span><span class="co">#   group_by(Pattern_Token, Pattern.Token,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) |&gt; </span></span>
+<span><span class="co">#   dplyr::relocate(Pattern_Token, Pattern.Token, m,n,x1,y1,x2,y2,x3,y3,x4) |&gt;</span></span>
+<span><span class="co">#   arrange(n)</span></span>
+<span></span>
+<span><span class="co"># dPattern &lt;- dCat |&gt; filter(Phase==2) |&gt; </span></span>
+<span><span class="co">#   group_by(x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) |&gt; </span></span>
+<span><span class="co">#   summarise(m=mean(Corr), n=n()) |&gt; </span></span>
+<span><span class="co">#   dplyr::relocate(m,n,x1,y1,x2,y2,x3,y3,x4) |&gt;</span></span>
+<span><span class="co">#   arrange(n)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># dPattern &lt;- dCat |&gt; filter(Phase==2) |&gt; </span></span>
+<span><span class="co">#   select(sbjCode,condit,Pattern_Token, Pattern.Token,Corr,</span></span>
+<span><span class="co">#   "x1","y1","x2","y2","x3","y3","x4","y4","x5","y5","x6","y6","x7","y7","x8","y8","x9","y9") </span></span>
+<span>  </span>
+<span></span>
+<span></span>
+<span><span class="va">dPattern</span> <span class="op">&lt;-</span> <span class="va">dCat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">distortion</span>,<span class="va">Pattern_Token</span>,<span class="va">Category</span>,<span class="va">Response</span>,<span class="va">Corr</span>,<span class="va">rt</span>,<span class="va">x1</span>,<span class="va">y1</span>,<span class="va">x2</span>,<span class="va">y2</span>,<span class="va">x3</span>,<span class="va">y3</span>,<span class="va">x4</span>,<span class="va">y4</span>,<span class="va">x5</span>,<span class="va">y5</span>,<span class="va">x6</span>,<span class="va">y6</span>,<span class="va">x7</span>,<span class="va">y7</span>,<span class="va">x8</span>,<span class="va">y8</span>,<span class="va">x9</span>,<span class="va">y9</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">x1</span>,<span class="va">y1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#write.csv(dPattern, "dPattern24.csv", row.names=FALSE)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co">#The attached data is from a Category Learning experiment. Subjects are trained and then tested on dot pattern categories. </span></span>
+<span><span class="co"># Patterns are distortions from a generating prototype. Subjects never encounter the prototype during training, </span></span>
+<span><span class="co"># but are tested from it. No item is ever repeated (each subject has 3 randomly generated prototypes, </span></span>
+<span><span class="co"># and those unique prototypes are used to generate unique training and testing stimuli for each subject).</span></span>
+<span></span>
+<span><span class="co"># Each dot pattern is defined by 9 coordinates. The x and y coordinates are specified by columns in the dataframe (i.e. x1,y1,x2,y2 etc.). </span></span>
+<span></span>
+<span><span class="co"># I want to train a deep learning model that predicts how difficult a new testing pattern will be given 1) the coordinates of the item; </span></span>
+<span><span class="co">#2) the coordinates of the prototype; and 3) the coordinates of the training items. </span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Data dictionary:</span></span>
+<span><span class="co"># sbjCode - subect identifier</span></span>
+<span><span class="co"># condit: training condition ("low","medium","high","mixed") - degree of distortion from prototype of training items</span></span>
+<span><span class="co"># Pattern_Token: type of pattern ("old","prototype", "new_low","new_med","new_high"); old was a training pattern. </span></span>
+<span><span class="co"># distortion: (1 = low, 2 = med, 3 = high): degree of distortion from prototype</span></span>
+<span><span class="co"># Category: (1-3): Correct category - distinct for each sbjCode</span></span>
+<span><span class="co"># Response: which category was selected (1-3): Correct category - distinct for each sbjCode</span></span>
+<span><span class="co"># Corr: (0 = Incorrect, 1 = Correct)</span></span>
+<span><span class="co"># rt: reaction time</span></span>
+<span><span class="co"># x,y,Coordinates of nine dots: every two columns represent the x and y coordinates of a dot on a 50 x 50 grid</span></span>
+<span></span>
+<span><span class="co"># Groups:   sbjCode, condit [5]</span></span>
+<span><span class="co">#   sbjCode condit Category distortion Pattern_Token Response  Corr    x1    y1    x2    y2    x3    y3    x4    y4    x5    y5    x6    y6    x7    y7    x8    y8    x9    y9</span></span>
+<span><span class="co">#   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt; &lt;chr&gt;      &lt;fct&gt;            &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;</span></span>
+<span><span class="co"># 1 sub399  medium        1 high       new_high             1     1   -25   -12    10    -3     5   -11    -9    -5   -13     7    -7    -1    24   -12     6   -13     9     7</span></span>
+<span><span class="co"># 2 sub399  medium        1 high       new_high             1     1   -25    -9     7    -3     8    -8   -16    -4    -6    18    -4    -2    18   -15    10   -12     3    -1</span></span>
+<span><span class="co"># 3 sub214  medium        1 high       new_high             1     1   -25    -8   -13   -11    -4   -15   -11    14    16   -20     3     1    21    14    -8    -9     1    -8</span></span>
+<span><span class="co"># 4 sub297  mixed         1 high       new_high             1     1   -25    -4   -11    12     4   -13   -12   -15    17    -1   -13    11    -8    -2   -16    -2     5     7</span></span>
+<span><span class="co"># 5 sub109  mixed         3 high       new_high             3     1   -25    -1    12    13     3    11    -9    -6     3    14     2     6    -3     5     0     9    -1   -13</span></span>
+<span></span>
+<span><span class="co"># unique(Pattern_Token)</span></span>
+<span><span class="co"># [1] old    new_high  new_med   new_low   prototype</span></span>
 <span></span>
 <span><span class="co"># d1 &lt;- dCat |&gt; filter(sbjCode=="sub1")</span></span>
 <span><span class="co"># da &lt;- d |&gt; group_by(sbjCode, condit) |&gt; summarise(n = n()) %&gt;% dplyr::arrange(n)</span></span>
