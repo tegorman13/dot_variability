@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dot Pattern Similarity Task</title>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4/plugin-html-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.3"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+</head>
+<body></body>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const jsPsych = initJsPsych({
+        on_finish: function() {
+            jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
+        }
+    });
+
+    function drawPattern(context, pattern, xOffset) {
+        // Assume the grid is 50x50 units with origin (0,0) at center
+        const gridUnit = 50;
+        const scale = context.canvas.width / (gridUnit * 5); // Scale based on canvas size and 3 patterns
+        const centerX = context.canvas.width / 6; // Center for a single pattern part of the canvas
+        const centerY = context.canvas.height / 2;
+
+        pattern.forEach(dot => {
+            context.beginPath();
+            // Scale and translate the dot coordinates
+            const x = (dot.x + gridUnit / 2) * scale + xOffset + centerX - scale * gridUnit / 2;
+            const y = (dot.y + gridUnit / 2) * scale + centerY - scale * gridUnit / 2;
+            context.arc(x, y, scale * 1.5, 0, 2 * Math.PI); // Scale the dot size as well
+            context.fill();
+        });
+    }
+
+    function loadAndStartExperiment() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var json = JSON.parse(xhr.responseText);
+                    
+                    const trials = [];
+                    json.trials.forEach(trialData => {
+                        const trial = {
+                            type: jsPsychCanvasKeyboardResponse,
+                            stimulus: function(canvas) {
+                                const context = canvas.getContext('2d');
+                                const width = canvas.width / 3;
+                                trialData.patterns.forEach((pattern, index) => {
+                                    drawPattern(context, pattern, index * width);
+                                });
+                            },
+                            choices: 'NO_KEYS',
+                            trial_duration: 5000
+                        };
+                        trials.push(trial);
+
+                        const ratingTrial = {
+                            type: jsPsychHtmlSliderResponse,
+                            stimulus: 'Rate the similarity of the patterns.',
+                            labels: ['Not Similar', 'Very Similar'],
+                            slider_start: 50
+                        };
+                        trials.push(ratingTrial);
+                    });
+                    jsPsych.run(trials);
+                    
+                } else {
+                    console.error('There was a problem with the request.');
+                }
+            }
+        };
+        xhr.open('GET', 'dot_patterns.json', true);
+        xhr.send();
+    }
+
+    loadAndStartExperiment();
+});
+</script>
+
+
+
+</html>
