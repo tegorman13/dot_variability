@@ -6,39 +6,6 @@
     <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
     <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"></link>
-    
-    <style>
-        .debug-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            text-align: left;
-            background: rgba(255,255,255,0.9);
-            padding: 5px;
-            z-index: 100;
-        }
-        .debug-info p, .debug-sliders div {
-            margin: 0;
-            font-size: 0.8em;
-            color: #333;
-            margin-bottom: 4px; /* adjust the space between each line */
-        }
-        .debug-sliders {
-            margin-top: 10px;
-            margin-bottom: 20px; /* increased space between the sliders and the dot pattern */
-        }
-        .slider-container {
-            margin-bottom: 8px; /* space between each slider */
-        }
-        .slider-label {
-            display: block; /* ensures the label is on its own line */
-        }
-        .slider {
-            width: 80%; /* decrease the width of the slider */
-            display: block; /* ensures the slider is on its own line */
-            margin-top: 2px; /* space between the label and the slider */
-        }
-    </style>
 </head>
 <body></body>
 
@@ -46,171 +13,96 @@
     document.addEventListener('DOMContentLoaded', function() {
         const jsPsych = initJsPsych({
             on_trial_finish: function() {
-                // Insert the logging code here
-                // var all_data = jsPsych.data.get();
-                // console.log(all_data.csv());
                 var trial_data = jsPsych.data.get().last(1);
                 console.log(trial_data.csv());
             },
             on_finish: function() {
                 jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
             }
-            
         });
         
-        
-        const DEBUG_MODE = true;
-        var dotSize = 1.5;
-        var patternScale = 5;
-        var patternSpacing = 1;
-        
-
-                function drawPattern(context, pattern, xOffset) {
-                    // Get slider values if in debug mode
-                    if (DEBUG_MODE) {
-                        dotSize = document.getElementById('dot-size-slider').value;
-                        patternScale = document.getElementById('pattern-scale-slider').value;
-                        patternSpacing = document.getElementById('pattern-spacing-slider').value;
-                    }
-                    
-                    // Calculate scale and center based on slider values
-                    const scale = context.canvas.width / (50 * patternScale); // Adjusted scale
-                    const centerX = context.canvas.width / (6 * patternSpacing); // Adjusted spacing
-                    
-                    pattern.forEach(dot => {
-                        context.beginPath();
-                        const x = (dot.x + 25) * scale + xOffset + centerX - scale * 25;
-                        const y = (dot.y + 25) * scale + context.canvas.height / 2 - scale * 25;
-                        context.arc(x, y, scale * dotSize, 0, 2 * Math.PI); // Use dotSize for dynamic size
-                        context.fill();
-                    });
-                }
-                // This function will redraw the patterns when the sliders are adjusted
-                function redrawPatterns(context, patterns) {
-                    context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clear the canvas before drawing
-                    
-                    const scale = context.canvas.width / (50 * patternScale); // Adjusted scale
-                    let xOffset = 0; // Start with no offset for the first pattern
-                    
-                    patterns.forEach((pattern, index) => {
-                        drawPattern(context, pattern, xOffset);
-                        xOffset += scale * 50 * patternSpacing; // Increase offset based on patternSpacing for the next pattern
-                    });
-                }
-                
-                
-                function loadAndStartExperiment() {
-                    var xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                var json = JSON.parse(xhr.responseText);
-                                
-                                // Convert the loaded JSON data into the format needed for the trials
-                                const trials = [];
-                                for (let i = 0; i < json.length; i += 3) {
-                                    const patterns = [json[i], json[i + 1], json[i + 2]].map(trialData => {
-                                        return Array.from({length: 9}, (_, idx) => ({
-                                            x: trialData[`x${idx + 1}`],
-                                            y: trialData[`y${idx + 1}`]
-                                        }));
-                                    });
-                                    
-                                    // Define the trial using the patterns
-                                    trials.push({
-                                        type: jsPsychHtmlSliderResponse,
-                                        stimulus: function() {
-                                            
-                                            const current_trial_data = json[i];
-                                            var debugInfoHtml = '';
-                                            var debugSlidersHtml = '';
-                                            if (DEBUG_MODE) {
-                                                const currentTrialNumber = jsPsych.getProgress().current_trial_global + 1;
-                                                const totalTrials = jsPsych.getProgress().total_trials;
-                                                
-                                                debugInfoHtml = `
-                                                <div class="debug-info">
-                                                    <p>Debug Mode On</p>
-                                                    <p>Trial: ${currentTrialNumber} / ${totalTrials}</p>
-                                                    <p>Filename: ${current_trial_data.file}</p>
-                                                    <p>Subject Code: ${current_trial_data.sbjCode}</p>
-                                                </div>
-                                                `;
-                                                debugSlidersHtml = `
-                                                <div class="debug-sliders">
-                                                    <div class="slider-container">
-                                                        <span class="slider-label">Dot Size:</span>
-                                                        <input type="range" class="slider" id="dot-size-slider" min="0.1" max="1" value="${dotSize}" step="0.01">
-                                                    </div>
-                                                    <div class="slider-container">
-                                                        <span class="slider-label">Pattern Scale:</span>
-                                                        <input type="range" class="slider" id="pattern-scale-slider" min="1" max="4" value="${patternScale}" step="0.1">
-                                                    </div>
-                                                    <div class="slider-container">
-                                                        <span class="slider-label">Pattern Spacing:</span>
-                                                        <input type="range" class="slider" id="pattern-spacing-slider" min="0.1" max="2" value="${patternSpacing}" step="0.1">
-                                                    </div>
-                                                </div>
-                                                `;
-                                                debugContainerHtml = `
-                                                <div class="debug-container">
-                                                    ${debugInfoHtml}
-                                                    ${debugSlidersHtml}
-                                                </div>
-                                                `;
-                                            }
-                                            var canvasHtml = '<canvas id="dot-pattern-canvas" width="900" height="300"></canvas>';
-                                            // Return the debugContainerHtml and canvasHtml
-                                            return debugContainerHtml + canvasHtml;
-                                        },
-                                        
-                                        labels: ['Not Similar', 'Very Similar'],
-                                        slider_start: 50,
-                                        on_load: function() {
-                                            const canvas = document.getElementById('dot-pattern-canvas');
-                                            const context = canvas.getContext('2d');
-                                            context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before drawing
-                                            const width = canvas.width / 3; // Width allocated for each pattern
-                                            patterns.forEach((pattern, index) => {
-                                                drawPattern(context, pattern, index * width);
-                                            });
-                                            // Redraw the patterns for the initial load
-                                            redrawPatterns(context, patterns, width);
-                                            
-                                            // Now set up the event listeners for the sliders
-                                            if (DEBUG_MODE) {
-                                                document.getElementById('dot-size-slider').addEventListener('input', function() {
-                                                    redrawPatterns(context, patterns, width);
-                                                });
-                                                document.getElementById('pattern-scale-slider').addEventListener('input', function() {
-                                                    redrawPatterns(context, patterns, width);
-                                                });
-                                                document.getElementById('pattern-spacing-slider').addEventListener('input', function() {
-                                                    redrawPatterns(context, patterns);
-                                                });
-                                            }
-                                        },
-                                        prompt: '<p>Rate the similarity of the patterns.</p>',
-                                        response_ends_trial: true,
-                                        data: {
-                                            pattern_1: JSON.stringify(patterns[0]),
-                                            pattern_2: JSON.stringify(patterns[1]),
-                                            pattern_3: JSON.stringify(patterns[2])
-                                        }
-                                    });
-                                }
-                                
-                                // Run the jsPsych experiment with the trials
-                                jsPsych.run(trials);
-                            } else {
-                                console.error('There was a problem with the request.');
-                            }
-                        }
-                    };
-                    xhr.open('GET', 'mc_patterns.json', true);
-                    xhr.send();
-                }
-                loadAndStartExperiment();
+        function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
+            const dotSize = 1.0; // Size of the dots, adjust as needed.
+            const patternScale = 4.5; // No additional scale, to match R's scale.
+            
+            // Calculate the scale based on the canvas size and the desired plot range.
+            // Assuming a range of 50 units in R (from -25 to 25), adjust as needed.
+            const scale = Math.min(canvasWidth / 3, canvasHeight) / 35; //smaller denom. = larger pattern
+            
+            // Calculate the center of each pattern based on its xOffset.
+            const centerX = (xOffset + (canvasWidth / 6) + 80); // control shift to right
+            const centerY = canvasHeight / 2;
+            
+            // Adjust the coordinate system to match R's.
+            pattern.forEach(dot => {
+                context.beginPath();
+                // Adjust x as per R's coordinate system.
+                const x = (dot.x * scale) + centerX;
+                // Invert y to match R's coordinate system, and adjust as per the scale.
+                const y = centerY - (dot.y * scale);
+                // Draw the arc using the adjusted x, y, and scale.
+                context.arc(x, y, dotSize * scale, 0, 2 * Math.PI);
+                context.fill();
             });
-        </script>
-        </html>
+        }
+        
+        function loadAndStartExperiment() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var json = JSON.parse(xhr.responseText);
+                        const trials = [];
+                        for (let i = 0; i < json.length; i += 3) {
+                            const patterns = [json[i], json[i + 1], json[i + 2]].map(trialData => {
+                                return Array.from({length: 9}, (_, idx) => ({
+                                    x: trialData[`x${idx + 1}`],
+                                    y: trialData[`y${idx + 1}`]
+                                }));
+                            });
+                            
+                            trials.push({
+                                type: jsPsychHtmlSliderResponse,
+                                stimulus: function() {
+                                    var canvasHtml = '<canvas id="dot-pattern-canvas" width="900" height="300"></canvas>';
+                                    return canvasHtml;
+                                },
+                                labels: ['Not Similar', 'Very Similar'],
+                                slider_start: 50,
+                                on_load: function() {
+                                    const canvas = document.getElementById('dot-pattern-canvas');
+                                    const context = canvas.getContext('2d');
+                                    context.clearRect(0, 0, canvas.width, canvas.height);
+                                    
+                                    // Divide the canvas width by the number of patterns to be drawn side by side.
+                                    const patternWidth = canvas.width / 3;
+                                    patterns.forEach((pattern, index) => {
+                                        // Calculate xOffset for each pattern.
+                                        const xOffset = index * patternWidth;
+                                        // Pass canvas width and height divided by the number of patterns for proper scaling.
+                                        drawPattern(context, pattern, xOffset, patternWidth, canvas.height);
+                                    });
+                                },
+                                prompt: '<p>Rate the similarity of the patterns.</p>',
+                                response_ends_trial: true,
+                                data: {
+                                    pattern_1: JSON.stringify(patterns[0]),
+                                    pattern_2: JSON.stringify(patterns[1]),
+                                    pattern_3: JSON.stringify(patterns[2])
+                                }
+                            });
+                        }
+                        
+                        jsPsych.run(trials);
+                    } else {
+                        console.error('There was a problem with the request.');
+                    }
+                }
+            };
+            xhr.open('GET', 'mc_patterns.json', true);
+            xhr.send();
+        }
+        loadAndStartExperiment();
+    });
+</script>
+</html>

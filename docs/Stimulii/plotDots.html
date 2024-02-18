@@ -151,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul class="collapse">
 <li><a href="#pattern-visuals" id="toc-pattern-visuals" class="nav-link active" data-scroll-target="#pattern-visuals">Pattern Visuals</a></li>
-  <li><a href="#task" id="toc-task" class="nav-link" data-scroll-target="#task">Task</a></li>
+  <li><a href="#task-demo" id="toc-task-demo" class="nav-link" data-scroll-target="#task-demo">Task Demo</a></li>
   </ul><div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Stimulii/plotDots.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/Stimulii/plotDots.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
@@ -216,9 +216,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Pattern.Type</span><span class="op">==</span><span class="st">"prototype"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">exp</span>,<span class="va">file</span>,<span class="va">Category</span>,<span class="va">x1</span><span class="op">:</span><span class="va">y9</span><span class="op">)</span></span>
 <span></span>
+<span></span>
+<span></span>
+<span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mc24_patterns</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
 <span><span class="va">pat_themes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span>,<span class="fu">xlim</span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>, <span class="fl">25</span><span class="op">)</span>,<span class="fu">ylim</span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>, <span class="fl">25</span><span class="op">)</span>,</span>
-<span>                   <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Dot Patterns for Each Participant and Category"</span>,</span>
-<span>                        x <span class="op">=</span> <span class="st">"X Coordinate"</span>, y <span class="op">=</span> <span class="st">"Y Coordinate"</span><span class="op">)</span>,</span>
+<span>                        <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"X Coordinate"</span>, y <span class="op">=</span> <span class="st">"Y Coordinate"</span><span class="op">)</span>,</span>
 <span>                   <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span>,<span class="fu">guides</span><span class="op">(</span>alpha <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -230,8 +232,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">#   separate(coordinate, into = c("axis", "number"), sep = 1) %&gt;%</span></span>
 <span><span class="co">#   spread(key = axis, value = value) %&gt;%</span></span>
 <span><span class="co">#   mutate(number = as.integer(number))</span></span>
-<span></span>
-<span></span>
 <span><span class="co"># mc24_prototypes_long |&gt;</span></span>
 <span><span class="co">#   filter(id %in% c("1.low","10.medium","112.high")) |&gt;</span></span>
 <span><span class="co">#   ggplot(aes(x = x, y = y)) +</span></span>
@@ -254,28 +254,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span> <span class="va">pat_long</span> <span class="op">|&gt;</span> </span>
 <span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Category</span><span class="op">==</span><span class="fl">1</span>, <span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span><span class="op">)</span>,</span>
 <span>          <span class="va">Pattern.Type</span><span class="op">!=</span><span class="st">"old"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,col<span class="op">=</span><span class="va">Pattern.Type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Add dots</span></span>
-<span>   <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Create a grid of plots, with subjects by rows and categories by columns</span></span>
-<span>   <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>   <span class="fu">ggh4x</span><span class="fu">::</span><span class="fu"><a href="https://teunbrand.github.io/ggh4x/reference/facet_grid2.html">facet_grid2</a></span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Pattern.Type</span>, margins<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Pattern.Type"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Create a grid of plots, with subjects by rows and categories by columns</span></span>
+<span>   <span class="va">pat_themes</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title<span class="op">=</span><span class="st">"Prototypes from Category 1 - with distortions"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1056"></p>
+<figcaption>Prototypes and their distortions</figcaption></figure>
 </div>
 </div>
+</div>
+<div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="fu">mutate</span><span class="op">(</span>Category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1.low"</span>,<span class="st">"10.medium"</span><span class="op">)</span>,</span>
 <span>          <span class="va">Pattern.Type</span><span class="op">!=</span><span class="st">"old"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,col<span class="op">=</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Add dots</span></span>
 <span>   <span class="co">#ggh4x::facet_nested_wrap(id~Category~Pattern.Type) + </span></span>
-<span>   <span class="fu">ggh4x</span><span class="fu">::</span><span class="fu"><a href="https://teunbrand.github.io/ggh4x/reference/facet_grid2.html">facet_grid2</a></span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Category</span> <span class="op">~</span> <span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>   <span class="co">#ggh4x::facet_grid2(id ~ Category ~ Pattern.Type) +</span></span>
+<span>   <span class="fu">ggh4x</span><span class="fu">::</span><span class="fu"><a href="https://teunbrand.github.io/ggh4x/reference/facet_nested.html">facet_nested</a></span><span class="op">(</span><span class="op">~</span><span class="va">id</span> <span class="op">+</span> <span class="va">Category</span> <span class="op">~</span> <span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="va">pat_themes</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title<span class="op">=</span><span class="st">"all 3 Category Prototypes and their distortions"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1056"></p>
+<figcaption>all 3 Category Prototypes and their distortions</figcaption></figure>
 </div>
 </div>
 </div>
@@ -290,16 +294,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>                                 <span class="st">"new_low"</span> <span class="op">=</span> <span class="st">"#56B4E9"</span>,  <span class="co"># Blue for new_low</span></span>
 <span>                                 <span class="st">"new_med"</span> <span class="op">=</span> <span class="st">"#009E73"</span>,  <span class="co"># Green for new_med</span></span>
 <span>                                 <span class="st">"new_high"</span> <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span><span class="co"># Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +</span></span>
-<span>   <span class="fu">scale_alpha_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"prototype"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"old"</span> <span class="op">=</span> <span class="fl">0.2</span>, <span class="st">"new_low"</span> <span class="op">=</span> <span class="fl">0.2</span>, <span class="st">"new_med"</span> <span class="op">=</span> <span class="fl">0.2</span>, <span class="st">"new_high"</span> <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Category</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>   <span class="fu">scale_alpha_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"prototype"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"old"</span> <span class="op">=</span> <span class="fl">0.2</span>, <span class="st">"new_low"</span> <span class="op">=</span> <span class="fl">0.6</span>, <span class="st">"new_med"</span> <span class="op">=</span> <span class="fl">0.4</span>, <span class="st">"new_high"</span> <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Category</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title<span class="op">=</span><span class="st">"Prototypes with 1 disortion overlaid"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1056"></p>
+<figcaption>Prototypes with 1 disortion overlaid</figcaption></figure>
 </div>
 </div>
+</div>
+<div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long</span> <span class="op">&lt;-</span> <span class="va">mc24_patterns</span> <span class="op">|&gt;</span> </span>
-<span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>   <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">condit</span>,<span class="va">trial</span>, <span class="va">Category</span>, <span class="va">Pattern.Type</span>, <span class="va">x1</span><span class="op">:</span><span class="va">y9</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>   <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>, <span class="va">condit</span>, <span class="va">Category</span>, <span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -307,43 +312,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>   <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"coordinate"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">id</span>, <span class="op">-</span><span class="va">condit</span>,<span class="op">-</span><span class="va">trial</span>, <span class="op">-</span><span class="va">Category</span>,<span class="op">-</span><span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>   <span class="fu">separate</span><span class="op">(</span><span class="va">coordinate</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"axis"</span>, <span class="st">"number"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>   <span class="fu">spread</span><span class="op">(</span>key <span class="op">=</span> <span class="va">axis</span>, value <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>   <span class="fu">mutate</span><span class="op">(</span>number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">number</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="fu">mutate</span><span class="op">(</span>number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">number</span><span class="op">)</span><span class="op">)</span> </span>
+<span></span>
+<span> <span class="va">pat_long</span> <span class="op">|&gt;</span> </span>
 <span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span><span class="op">)</span>,<span class="va">Pattern.Type</span><span class="op">!=</span><span class="st">"old"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">Pattern.Type</span>, alpha <span class="op">=</span> <span class="va">Pattern.Type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">Pattern.Type</span>, alpha <span class="op">=</span> <span class="va">Pattern.Type</span>, size<span class="op">=</span> <span class="va">Pattern.Type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>   <span class="fu">scale_color_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"prototype"</span> <span class="op">=</span> <span class="st">"black"</span>,  <span class="co"># Black for prototype</span></span>
 <span>                                 <span class="st">"old"</span> <span class="op">=</span> <span class="st">"#E69F00"</span>,      <span class="co"># Orange for old</span></span>
 <span>                                 <span class="st">"new_low"</span> <span class="op">=</span> <span class="st">"#56B4E9"</span>,  <span class="co"># Blue for new_low</span></span>
 <span>                                 <span class="st">"new_med"</span> <span class="op">=</span> <span class="st">"#009E73"</span>,  <span class="co"># Green for new_med</span></span>
 <span>                                 <span class="st">"new_high"</span> <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span><span class="co"># Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +</span></span>
-<span>   <span class="fu">scale_alpha_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"prototype"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"old"</span> <span class="op">=</span> <span class="fl">0.2</span>, <span class="st">"new_low"</span> <span class="op">=</span> <span class="fl">0.4</span>, <span class="st">"new_med"</span> <span class="op">=</span> <span class="fl">0.3</span>, <span class="st">"new_high"</span> <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Category</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>   <span class="fu">scale_alpha_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"prototype"</span> <span class="op">=</span> <span class="fl">4</span>,  <span class="st">"new_low"</span> <span class="op">=</span> <span class="fl">0.5</span>, <span class="st">"new_med"</span> <span class="op">=</span> <span class="fl">0.4</span>, <span class="st">"new_high"</span> <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu">scale_size_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"prototype"</span> <span class="op">=</span> <span class="fl">1.5</span>,  <span class="st">"new_low"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"new_med"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"new_high"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Category</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title<span class="op">=</span><span class="st">"Prototypes with 10 disortion overlaid"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long</span> <span class="op">|&gt;</span> </span>
-<span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span><span class="op">)</span>,<span class="va">Pattern.Type</span><span class="op">!=</span><span class="st">"old"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">.9</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>   <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="1056"></p>
+<figcaption>Prototypes with 10 disortion overlaid</figcaption></figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long_train</span> <span class="op">&lt;-</span> <span class="va">mc24_patterns</span> <span class="op">|&gt;</span> </span>
-<span>   <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span>,<span class="va">Category</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">slice_head</span><span class="op">(</span>n<span class="op">=</span><span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long</span> <span class="op">|&gt;</span> </span>
+<span> <span class="fu">mutate</span><span class="op">(</span>Category<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span><span class="op">)</span>,<span class="va">Pattern.Type</span><span class="op">!=</span><span class="st">"old"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">Category</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">.9</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>   <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="1056"></p>
+<figcaption>Prototype separability</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long_train</span> <span class="op">&lt;-</span> <span class="va">mc24_patterns</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>Category<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">ids</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">16</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>   <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">condit</span>,<span class="va">trial</span>, <span class="va">Category</span>, <span class="va">Pattern.Type</span>, <span class="va">x1</span><span class="op">:</span><span class="va">y9</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>   <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>, <span class="va">condit</span>, <span class="va">Category</span>, <span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -354,29 +361,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span> </span>
 <span> <span class="va">pat_long_train</span> <span class="op">|&gt;</span> </span>
 <span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">.9</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">Category</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">.7</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">condit</span> <span class="op">+</span> <span class="va">id</span>,ncol<span class="op">=</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="1056"></p>
+<figcaption>Training exemplar separability - 10 subjects</figcaption></figure>
 </div>
 </div>
 </div>
-</section><section id="task" class="level2 column-page-inset"><h2 class="anchored" data-anchor-id="task">Task</h2>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pat_long_train</span> <span class="op">&lt;-</span> <span class="va">mc24_patterns</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>Category<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">ids</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Pattern.Type</span><span class="op">==</span><span class="st">"prototype"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">condit</span>,<span class="va">trial</span>, <span class="va">Category</span>, <span class="va">Pattern.Type</span>,<span class="va">Phase</span>, <span class="va">x1</span><span class="op">:</span><span class="va">y9</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>, <span class="va">condit</span>, <span class="va">Category</span>, <span class="va">Pattern.Type</span>,<span class="va">Phase</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"coordinate"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">id</span>, <span class="op">-</span><span class="va">condit</span>,<span class="op">-</span><span class="va">trial</span>, <span class="op">-</span><span class="va">Category</span>,<span class="op">-</span><span class="va">Pattern.Type</span>,<span class="op">-</span><span class="va">Phase</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>   <span class="fu">separate</span><span class="op">(</span><span class="va">coordinate</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"axis"</span>, <span class="st">"number"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>   <span class="fu">spread</span><span class="op">(</span>key <span class="op">=</span> <span class="va">axis</span>, value <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>   <span class="fu">mutate</span><span class="op">(</span>number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">number</span><span class="op">)</span>, itemType<span class="op">=</span> <span class="fu">case_match</span><span class="op">(</span><span class="va">Phase</span>,<span class="fl">1</span> <span class="op">~</span><span class="st">"Trained"</span>,<span class="fl">2</span><span class="op">~</span><span class="st">"Prototype"</span><span class="op">)</span><span class="op">)</span></span>
+<span> </span>
+<span> <span class="va">pat_long_train</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">Category</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">.8</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>   <span class="fu">ggh4x</span><span class="fu">::</span><span class="fu"><a href="https://teunbrand.github.io/ggh4x/reference/facet_nested_wrap.html">facet_nested_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">condit</span> <span class="op">+</span> <span class="va">id</span><span class="op">+</span><span class="va">itemType</span>,ncol<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="1056"></p>
+<figcaption>Training exemplar separability compared to prototypes</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">pat_long</span> <span class="op">|&gt;</span> <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">ids</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="op">&amp;</span> <span class="va">Pattern.Type</span><span class="op">==</span><span class="st">"prototype"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html">droplevels</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span> <span class="fu">mutate</span><span class="op">(</span>Category<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color<span class="op">=</span><span class="va">id</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">.9</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>   <span class="fu">facet_grid</span><span class="op">(</span><span class="va">id</span> <span class="op">~</span> <span class="va">Category</span><span class="op">)</span> <span class="op">+</span> <span class="va">pat_themes</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title<span class="op">=</span><span class="st">"Prototypes from first 5 subjects - should match first 10 task trials"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="plotDots_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="1152"></p>
+<figcaption>Prototypes from first 5 subjects - should match first 10 task trials</figcaption></figure>
+</div>
+</div>
+</div>
+</section><section id="task-demo" class="level2 column-page-inset"><h2 class="anchored" data-anchor-id="task-demo">Task Demo</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><embed src="../Task/index.html" width="1050" height="900"></p>
 <figcaption>dot_task</figcaption></figure>
-</div>
-<div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># dot &lt;- dCat %&gt;% ungroup() %&gt;% filter(id=="1.nrep",(Pattern.Type=="Prototype" | Pattern.Type=="New-Low"))%&gt;%  select(typeCount,Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) </span></span>
-<span><span class="co"># nTrial=nrow(dot);</span></span>
-<span><span class="co"># dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)</span></span>
-<span><span class="co"># dotFrame &lt;- data.frame(typeCount=rep(dot$typeCount,each=9),Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)</span></span>
-<span><span class="co"># pg &lt;- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(typeCount~Category)</span></span>
-<span></span>
-<span><span class="co"># pg</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 
@@ -1035,24 +1070,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Pattern.Type<span class="sc">==</span><span class="st">"prototype"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sbjCode,condit,exp,file,Category,x1<span class="sc">:</span>y9)</span>
 <span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>pat_themes <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">theme_minimal</span>(),<span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">25</span>, <span class="dv">25</span>),<span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">25</span>, <span class="dv">25</span>),</span>
-<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Dot Patterns for Each Participant and Category"</span>,</span>
-<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x =</span> <span class="st">"X Coordinate"</span>, <span class="at">y =</span> <span class="st">"Y Coordinate"</span>),</span>
-<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">coord_fixed</span>(),<span class="fu">guides</span>(<span class="at">alpha =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pattern Visuals</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> <span class="fu">unique</span>(mc24_patterns<span class="sc">$</span>id)</span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>pat_themes <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">theme_minimal</span>(),<span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">25</span>, <span class="dv">25</span>),<span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">25</span>, <span class="dv">25</span>),</span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"X Coordinate"</span>, <span class="at">y =</span> <span class="st">"Y Coordinate"</span>),</span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">coord_fixed</span>(),<span class="fu">guides</span>(<span class="at">alpha =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a><span class="co"># mc24_prototypes_long &lt;- mc24_patterns |&gt; </span></span>
-<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(Pattern.Type=="prototype") |&gt;</span></span>
-<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a><span class="co">#   gather(key = "coordinate", value = "value", -id, -condit, -exp, -file, -Category) %&gt;%</span></span>
-<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a><span class="co">#   separate(coordinate, into = c("axis", "number"), sep = 1) %&gt;%</span></span>
-<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="co">#   spread(key = axis, value = value) %&gt;%</span></span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(number = as.integer(number))</span></span>
-<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pattern Visuals</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a><span class="co"># mc24_prototypes_long &lt;- mc24_patterns |&gt; </span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(Pattern.Type=="prototype") |&gt;</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="co">#   gather(key = "coordinate", value = "value", -id, -condit, -exp, -file, -Category) %&gt;%</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a><span class="co">#   separate(coordinate, into = c("axis", "number"), sep = 1) %&gt;%</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a><span class="co">#   spread(key = axis, value = value) %&gt;%</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(number = as.integer(number))</span></span>
 <span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a><span class="co"># mc24_prototypes_long |&gt;</span></span>
 <span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(id %in% c("1.low","10.medium","112.high")) |&gt;</span></span>
 <span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a><span class="co">#   ggplot(aes(x = x, y = y)) +</span></span>
@@ -1063,188 +1098,210 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a> pat_long <span class="ot">&lt;-</span> mc24_patterns <span class="sc">|&gt;</span> </span>
-<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Phase<span class="sc">==</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(id, condit, Category, Pattern.Type, x1<span class="sc">:</span>y9) <span class="sc">|&gt;</span></span>
-<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(id, condit, Category, Pattern.Type) <span class="sc">|&gt;</span> </span>
-<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>   <span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>   <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"coordinate"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="sc">-</span>id, <span class="sc">-</span>condit, <span class="sc">-</span>Category,<span class="sc">-</span>Pattern.Type) <span class="sc">%&gt;%</span></span>
-<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>   <span class="fu">separate</span>(coordinate, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"axis"</span>, <span class="st">"number"</span>), <span class="at">sep =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>   <span class="fu">spread</span>(<span class="at">key =</span> axis, <span class="at">value =</span> value) <span class="sc">%&gt;%</span></span>
-<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">number =</span> <span class="fu">as.integer</span>(number))</span>
-<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
-<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Category<span class="sc">==</span><span class="dv">1</span>, id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),</span>
-<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>          Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="co"># Add dots</span></span>
-<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_grid</span>(id <span class="sc">~</span> Pattern.Type) <span class="sc">+</span> <span class="co"># Create a grid of plots, with subjects by rows and categories by columns</span></span>
-<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>   pat_themes</span>
-<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
-<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>),</span>
-<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a>          Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="co"># Add dots</span></span>
-<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a>   <span class="co">#ggh4x::facet_nested_wrap(id~Category~Pattern.Type) + </span></span>
-<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a>   ggh4x<span class="sc">::</span><span class="fu">facet_grid2</span>(id <span class="sc">~</span> Category <span class="sc">~</span> Pattern.Type) <span class="sc">+</span></span>
-<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a>   pat_themes</span>
-<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
-<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),</span>
-<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a>          Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Pattern.Type, <span class="at">alpha =</span> Pattern.Type)) <span class="sc">+</span> </span>
-<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="st">"black"</span>,  <span class="co"># Black for prototype</span></span>
-<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"old"</span> <span class="ot">=</span> <span class="st">"#E69F00"</span>,      <span class="co"># Orange for old</span></span>
-<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_low"</span> <span class="ot">=</span> <span class="st">"#56B4E9"</span>,  <span class="co"># Blue for new_low</span></span>
-<span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_med"</span> <span class="ot">=</span> <span class="st">"#009E73"</span>,  <span class="co"># Green for new_med</span></span>
-<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_high"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span><span class="co"># Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +</span></span>
-<span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_alpha_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"old"</span> <span class="ot">=</span> <span class="fl">0.2</span>, <span class="st">"new_low"</span> <span class="ot">=</span> <span class="fl">0.2</span>, <span class="st">"new_med"</span> <span class="ot">=</span> <span class="fl">0.2</span>, <span class="st">"new_high"</span> <span class="ot">=</span> <span class="fl">0.2</span>)) <span class="sc">+</span></span>
-<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(id <span class="sc">~</span> Category) <span class="sc">+</span> pat_themes</span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Prototypes and their distortions</span></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 13</span></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a> pat_long <span class="ot">&lt;-</span> mc24_patterns <span class="sc">|&gt;</span> </span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Phase<span class="sc">==</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(id, condit, Category, Pattern.Type, x1<span class="sc">:</span>y9) <span class="sc">|&gt;</span></span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(id, condit, Category, Pattern.Type) <span class="sc">|&gt;</span> </span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>   <span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>   <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"coordinate"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="sc">-</span>id, <span class="sc">-</span>condit, <span class="sc">-</span>Category,<span class="sc">-</span>Pattern.Type) <span class="sc">%&gt;%</span></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a>   <span class="fu">separate</span>(coordinate, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"axis"</span>, <span class="st">"number"</span>), <span class="at">sep =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>   <span class="fu">spread</span>(<span class="at">key =</span> axis, <span class="at">value =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">number =</span> <span class="fu">as.integer</span>(number))</span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Category<span class="sc">==</span><span class="dv">1</span>, id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),</span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>          Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y,<span class="at">col=</span>Pattern.Type)) <span class="sc">+</span></span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="co"># Add dots</span></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>   ggh4x<span class="sc">::</span><span class="fu">facet_grid2</span>(id <span class="sc">~</span> Pattern.Type, <span class="at">margins=</span><span class="fu">c</span>(<span class="st">"Pattern.Type"</span>)) <span class="sc">+</span> <span class="co"># Create a grid of plots, with subjects by rows and categories by columns</span></span>
+<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a>   pat_themes <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Prototypes from Category 1 - with distortions"</span>)</span>
+<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: all 3 Category Prototypes and their distortions</span></span>
+<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 12</span></span>
+<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
+<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">Category =</span> <span class="fu">as.factor</span>(Category)) <span class="sc">|&gt;</span></span>
+<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>),</span>
+<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a>          Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y,<span class="at">col=</span>Category)) <span class="sc">+</span></span>
+<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="co"># Add dots</span></span>
+<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a>   <span class="co">#ggh4x::facet_nested_wrap(id~Category~Pattern.Type) + </span></span>
+<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a>   <span class="co">#ggh4x::facet_grid2(id ~ Category ~ Pattern.Type) +</span></span>
+<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a>   ggh4x<span class="sc">::</span><span class="fu">facet_nested</span>(<span class="sc">~</span>id <span class="sc">+</span> Category <span class="sc">~</span> Pattern.Type) <span class="sc">+</span></span>
+<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a>   pat_themes <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"all 3 Category Prototypes and their distortions"</span>) </span>
+<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-135"><a href="#cb11-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-136"><a href="#cb11-136" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-137"><a href="#cb11-137" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a> pat_long <span class="ot">&lt;-</span> mc24_patterns <span class="sc">|&gt;</span> </span>
-<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Phase<span class="sc">==</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(id, condit,trial, Category, Pattern.Type, x1<span class="sc">:</span>y9) <span class="sc">|&gt;</span></span>
-<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(id, condit, Category, Pattern.Type) <span class="sc">|&gt;</span> </span>
-<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a>   <span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">10</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a>   <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"coordinate"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="sc">-</span>id, <span class="sc">-</span>condit,<span class="sc">-</span>trial, <span class="sc">-</span>Category,<span class="sc">-</span>Pattern.Type) <span class="sc">%&gt;%</span></span>
-<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a>   <span class="fu">separate</span>(coordinate, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"axis"</span>, <span class="st">"number"</span>), <span class="at">sep =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a>   <span class="fu">spread</span>(<span class="at">key =</span> axis, <span class="at">value =</span> value) <span class="sc">%&gt;%</span></span>
-<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">number =</span> <span class="fu">as.integer</span>(number))</span>
-<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
-<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Pattern.Type, <span class="at">alpha =</span> Pattern.Type)) <span class="sc">+</span> </span>
-<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="st">"black"</span>,  <span class="co"># Black for prototype</span></span>
-<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"old"</span> <span class="ot">=</span> <span class="st">"#E69F00"</span>,      <span class="co"># Orange for old</span></span>
-<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_low"</span> <span class="ot">=</span> <span class="st">"#56B4E9"</span>,  <span class="co"># Blue for new_low</span></span>
-<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_med"</span> <span class="ot">=</span> <span class="st">"#009E73"</span>,  <span class="co"># Green for new_med</span></span>
-<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_high"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span><span class="co"># Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +</span></span>
-<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_alpha_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"old"</span> <span class="ot">=</span> <span class="fl">0.2</span>, <span class="st">"new_low"</span> <span class="ot">=</span> <span class="fl">0.4</span>, <span class="st">"new_med"</span> <span class="ot">=</span> <span class="fl">0.3</span>, <span class="st">"new_high"</span> <span class="ot">=</span> <span class="fl">0.2</span>)) <span class="sc">+</span></span>
-<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_grid</span>(id <span class="sc">~</span> Category) <span class="sc">+</span> pat_themes</span>
-<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
-<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(Category)),<span class="at">alpha=</span>.<span class="dv">9</span>) <span class="sc">+</span> </span>
-<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_grid</span>(id <span class="sc">~</span> Pattern.Type) <span class="sc">+</span> pat_themes</span>
-<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Prototypes with 1 disortion overlaid</span></span>
+<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
+<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),</span>
+<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a>          Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Pattern.Type, <span class="at">alpha =</span> Pattern.Type)) <span class="sc">+</span> </span>
+<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="st">"black"</span>,  <span class="co"># Black for prototype</span></span>
+<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"old"</span> <span class="ot">=</span> <span class="st">"#E69F00"</span>,      <span class="co"># Orange for old</span></span>
+<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_low"</span> <span class="ot">=</span> <span class="st">"#56B4E9"</span>,  <span class="co"># Blue for new_low</span></span>
+<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_med"</span> <span class="ot">=</span> <span class="st">"#009E73"</span>,  <span class="co"># Green for new_med</span></span>
+<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_high"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span><span class="co"># Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +</span></span>
+<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_alpha_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"old"</span> <span class="ot">=</span> <span class="fl">0.2</span>, <span class="st">"new_low"</span> <span class="ot">=</span> <span class="fl">0.6</span>, <span class="st">"new_med"</span> <span class="ot">=</span> <span class="fl">0.4</span>, <span class="st">"new_high"</span> <span class="ot">=</span> <span class="fl">0.4</span>)) <span class="sc">+</span></span>
+<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(id <span class="sc">~</span> Category) <span class="sc">+</span> pat_themes <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Prototypes with 1 disortion overlaid"</span>)</span>
+<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Prototypes with 10 disortion overlaid</span></span>
+<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 13</span></span>
+<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a> pat_long <span class="ot">&lt;-</span> mc24_patterns <span class="sc">|&gt;</span> </span>
+<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Phase<span class="sc">==</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(id, condit,trial, Category, Pattern.Type, x1<span class="sc">:</span>y9) <span class="sc">|&gt;</span></span>
+<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(id, condit, Category, Pattern.Type) <span class="sc">|&gt;</span> </span>
+<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a>   <span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">10</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a>   <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"coordinate"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="sc">-</span>id, <span class="sc">-</span>condit,<span class="sc">-</span>trial, <span class="sc">-</span>Category,<span class="sc">-</span>Pattern.Type) <span class="sc">%&gt;%</span></span>
+<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a>   <span class="fu">separate</span>(coordinate, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"axis"</span>, <span class="st">"number"</span>), <span class="at">sep =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a>   <span class="fu">spread</span>(<span class="at">key =</span> axis, <span class="at">value =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">number =</span> <span class="fu">as.integer</span>(number)) </span>
 <span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a> pat_long_train <span class="ot">&lt;-</span> mc24_patterns <span class="sc">|&gt;</span> </span>
-<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(condit,Category) <span class="sc">|&gt;</span> <span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Phase<span class="sc">==</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(id, condit,trial, Category, Pattern.Type, x1<span class="sc">:</span>y9) <span class="sc">|&gt;</span></span>
-<span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(id, condit, Category, Pattern.Type) <span class="sc">|&gt;</span> </span>
-<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a>   <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"coordinate"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="sc">-</span>id, <span class="sc">-</span>condit,<span class="sc">-</span>trial, <span class="sc">-</span>Category,<span class="sc">-</span>Pattern.Type) <span class="sc">%&gt;%</span></span>
-<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a>   <span class="fu">separate</span>(coordinate, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"axis"</span>, <span class="st">"number"</span>), <span class="at">sep =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a>   <span class="fu">spread</span>(<span class="at">key =</span> axis, <span class="at">value =</span> value) <span class="sc">%&gt;%</span></span>
-<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">number =</span> <span class="fu">as.integer</span>(number))</span>
+<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
+<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Pattern.Type, <span class="at">alpha =</span> Pattern.Type, <span class="at">size=</span> Pattern.Type)) <span class="sc">+</span> </span>
+<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="st">"black"</span>,  <span class="co"># Black for prototype</span></span>
+<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"old"</span> <span class="ot">=</span> <span class="st">"#E69F00"</span>,      <span class="co"># Orange for old</span></span>
+<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_low"</span> <span class="ot">=</span> <span class="st">"#56B4E9"</span>,  <span class="co"># Blue for new_low</span></span>
+<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_med"</span> <span class="ot">=</span> <span class="st">"#009E73"</span>,  <span class="co"># Green for new_med</span></span>
+<span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"new_high"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span><span class="co"># Yellow for new_high   scale_alpha_manual(values = c("prototype" = 1, "old" = 0.5, "new_low" = 0.5, "new_med" = 0.5, "new_high" = 0.5)) +</span></span>
+<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_alpha_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="dv">4</span>,  <span class="st">"new_low"</span> <span class="ot">=</span> <span class="fl">0.5</span>, <span class="st">"new_med"</span> <span class="ot">=</span> <span class="fl">0.4</span>, <span class="st">"new_high"</span> <span class="ot">=</span> <span class="fl">0.2</span>)) <span class="sc">+</span></span>
+<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"prototype"</span> <span class="ot">=</span> <span class="fl">1.5</span>,  <span class="st">"new_low"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"new_med"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"new_high"</span> <span class="ot">=</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_grid</span>(id <span class="sc">~</span> Category) <span class="sc">+</span> pat_themes <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Prototypes with 10 disortion overlaid"</span>)</span>
+<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb11-194"><a href="#cb11-194" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a> pat_long_train <span class="sc">|&gt;</span> </span>
-<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(Category)),<span class="at">alpha=</span>.<span class="dv">9</span>) <span class="sc">+</span> </span>
-<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_wrap</span>(<span class="sc">~</span>id) <span class="sc">+</span> pat_themes</span>
-<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-201"><a href="#cb11-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-202"><a href="#cb11-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a>::: column-page-inset</span>
+<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Prototype separability</span></span>
+<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 13</span></span>
 <span id="cb11-207"><a href="#cb11-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-208"><a href="#cb11-208" aria-hidden="true" tabindex="-1"></a><span class="fu">## Task</span></span>
-<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a><span class="al">![dot_task](/Task/index.html)</span>{width="1050" height="900"}</span>
-<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-212"><a href="#cb11-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-213"><a href="#cb11-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-214"><a href="#cb11-214" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig.width=10,fig.height=10}</span></span>
-<span id="cb11-215"><a href="#cb11-215" aria-hidden="true" tabindex="-1"></a><span class="in">#| fig-width: 11</span></span>
-<span id="cb11-216"><a href="#cb11-216" aria-hidden="true" tabindex="-1"></a><span class="in"># dot &lt;- dCat %&gt;% ungroup() %&gt;% filter(id=="1.nrep",(Pattern.Type=="Prototype" | Pattern.Type=="New-Low"))%&gt;%  select(typeCount,Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) </span></span>
-<span id="cb11-217"><a href="#cb11-217" aria-hidden="true" tabindex="-1"></a><span class="in"># nTrial=nrow(dot);</span></span>
-<span id="cb11-218"><a href="#cb11-218" aria-hidden="true" tabindex="-1"></a><span class="in"># dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)</span></span>
-<span id="cb11-219"><a href="#cb11-219" aria-hidden="true" tabindex="-1"></a><span class="in"># dotFrame &lt;- data.frame(typeCount=rep(dot$typeCount,each=9),Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)</span></span>
-<span id="cb11-220"><a href="#cb11-220" aria-hidden="true" tabindex="-1"></a><span class="in"># pg &lt;- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(typeCount~Category)</span></span>
-<span id="cb11-221"><a href="#cb11-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-222"><a href="#cb11-222" aria-hidden="true" tabindex="-1"></a><span class="in"># pg</span></span>
-<span id="cb11-223"><a href="#cb11-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-224"><a href="#cb11-224" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-225"><a href="#cb11-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-226"><a href="#cb11-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-227"><a href="#cb11-227" aria-hidden="true" tabindex="-1"></a>::: </span>
-<span id="cb11-228"><a href="#cb11-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-229"><a href="#cb11-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig.width=5,fig.height=5}</span></span>
-<span id="cb11-230"><a href="#cb11-230" aria-hidden="true" tabindex="-1"></a><span class="in">#| eval: false</span></span>
-<span id="cb11-231"><a href="#cb11-231" aria-hidden="true" tabindex="-1"></a><span class="in">#| include: false</span></span>
-<span id="cb11-232"><a href="#cb11-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-233"><a href="#cb11-233" aria-hidden="true" tabindex="-1"></a><span class="in"># nTrial=200;</span></span>
-<span id="cb11-234"><a href="#cb11-234" aria-hidden="true" tabindex="-1"></a><span class="in"># proto &lt;- dCat %&gt;% ungroup() %&gt;% filter(id=="1.nrep",Pattern.Type=="Prototype")%&gt;%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) </span></span>
-<span id="cb11-235"><a href="#cb11-235" aria-hidden="true" tabindex="-1"></a><span class="in"># nTrial=3;</span></span>
-<span id="cb11-236"><a href="#cb11-236" aria-hidden="true" tabindex="-1"></a><span class="in"># dot=proto</span></span>
-<span id="cb11-237"><a href="#cb11-237" aria-hidden="true" tabindex="-1"></a><span class="in"># dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)</span></span>
-<span id="cb11-238"><a href="#cb11-238" aria-hidden="true" tabindex="-1"></a><span class="in"># dotFrame &lt;- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)</span></span>
-<span id="cb11-239"><a href="#cb11-239" aria-hidden="true" tabindex="-1"></a><span class="in"># pg &lt;- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)</span></span>
-<span id="cb11-240"><a href="#cb11-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-241"><a href="#cb11-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-242"><a href="#cb11-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-243"><a href="#cb11-243" aria-hidden="true" tabindex="-1"></a><span class="in"># nl &lt;- dCat %&gt;% ungroup() %&gt;% filter(id=="1.nrep",Pattern.Type=="New-Low")%&gt;%  select(Category,x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) </span></span>
-<span id="cb11-244"><a href="#cb11-244" aria-hidden="true" tabindex="-1"></a><span class="in"># nTrial=nrow(nl)</span></span>
-<span id="cb11-245"><a href="#cb11-245" aria-hidden="true" tabindex="-1"></a><span class="in"># dot=nl</span></span>
-<span id="cb11-246"><a href="#cb11-246" aria-hidden="true" tabindex="-1"></a><span class="in"># dotx=c(dot$x1,dot$x2,dot$x3,dot$x4,dot$x5,dot$x6,dot$x7,dot$x8,dot$x9); doty=c(dot$y1,dot$y2,dot$y3,dot$y4,dot$y5,dot$y6,dot$y7,dot$y8,dot$y9)</span></span>
-<span id="cb11-247"><a href="#cb11-247" aria-hidden="true" tabindex="-1"></a><span class="in"># dotFrame &lt;- data.frame(Trial=rep(seq(1:nTrial),each=9),Category=factor(rep(dot$Category,each=9)),x=dotx,y=doty)</span></span>
-<span id="cb11-248"><a href="#cb11-248" aria-hidden="true" tabindex="-1"></a><span class="in"># pl &lt;- ggplot(dotFrame,aes(dotx,doty,col=Category))+geom_point()+facet_grid(Trial~Category)</span></span>
-<span id="cb11-249"><a href="#cb11-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-250"><a href="#cb11-250" aria-hidden="true" tabindex="-1"></a><span class="in"># gridExtra::grid.arrange(pg,pl)</span></span>
-<span id="cb11-251"><a href="#cb11-251" aria-hidden="true" tabindex="-1"></a><span class="in"># pg</span></span>
-<span id="cb11-252"><a href="#cb11-252" aria-hidden="true" tabindex="-1"></a><span class="in"># pl</span></span>
-<span id="cb11-253"><a href="#cb11-253" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-254"><a href="#cb11-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-208"><a href="#cb11-208" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> </span>
+<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">Category=</span><span class="fu">as.factor</span>(Category)) <span class="sc">|&gt;</span></span>
+<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span>  <span class="fu">c</span>(<span class="st">"1.low"</span>,<span class="st">"10.medium"</span>,<span class="st">"112.high"</span>),Pattern.Type<span class="sc">!=</span><span class="st">"old"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb11-212"><a href="#cb11-212" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Category),<span class="at">alpha=</span>.<span class="dv">9</span>) <span class="sc">+</span> </span>
+<span id="cb11-213"><a href="#cb11-213" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_grid</span>(id <span class="sc">~</span> Pattern.Type) <span class="sc">+</span> pat_themes</span>
+<span id="cb11-214"><a href="#cb11-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-215"><a href="#cb11-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-216"><a href="#cb11-216" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-217"><a href="#cb11-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-218"><a href="#cb11-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-219"><a href="#cb11-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-222"><a href="#cb11-222" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-223"><a href="#cb11-223" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Training exemplar separability -  10 subjects</span></span>
+<span id="cb11-224"><a href="#cb11-224" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb11-225"><a href="#cb11-225" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 12</span></span>
+<span id="cb11-226"><a href="#cb11-226" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-227"><a href="#cb11-227" aria-hidden="true" tabindex="-1"></a> pat_long_train <span class="ot">&lt;-</span> mc24_patterns <span class="sc">|&gt;</span> </span>
+<span id="cb11-228"><a href="#cb11-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Category=</span><span class="fu">as.factor</span>(Category)) <span class="sc">|&gt;</span></span>
+<span id="cb11-229"><a href="#cb11-229" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span> ids[<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb11-230"><a href="#cb11-230" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Phase<span class="sc">==</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-231"><a href="#cb11-231" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(id, condit,trial, Category, Pattern.Type, x1<span class="sc">:</span>y9) <span class="sc">|&gt;</span></span>
+<span id="cb11-232"><a href="#cb11-232" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(id, condit, Category, Pattern.Type) <span class="sc">|&gt;</span> </span>
+<span id="cb11-233"><a href="#cb11-233" aria-hidden="true" tabindex="-1"></a>   <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"coordinate"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="sc">-</span>id, <span class="sc">-</span>condit,<span class="sc">-</span>trial, <span class="sc">-</span>Category,<span class="sc">-</span>Pattern.Type) <span class="sc">%&gt;%</span></span>
+<span id="cb11-234"><a href="#cb11-234" aria-hidden="true" tabindex="-1"></a>   <span class="fu">separate</span>(coordinate, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"axis"</span>, <span class="st">"number"</span>), <span class="at">sep =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-235"><a href="#cb11-235" aria-hidden="true" tabindex="-1"></a>   <span class="fu">spread</span>(<span class="at">key =</span> axis, <span class="at">value =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb11-236"><a href="#cb11-236" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">number =</span> <span class="fu">as.integer</span>(number))</span>
+<span id="cb11-237"><a href="#cb11-237" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-238"><a href="#cb11-238" aria-hidden="true" tabindex="-1"></a> pat_long_train <span class="sc">|&gt;</span> </span>
+<span id="cb11-239"><a href="#cb11-239" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb11-240"><a href="#cb11-240" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Category),<span class="at">alpha=</span>.<span class="dv">7</span>) <span class="sc">+</span> </span>
+<span id="cb11-241"><a href="#cb11-241" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_wrap</span>(<span class="sc">~</span>condit <span class="sc">+</span> id,<span class="at">ncol=</span><span class="dv">4</span>) <span class="sc">+</span> pat_themes</span>
+<span id="cb11-242"><a href="#cb11-242" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-243"><a href="#cb11-243" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-244"><a href="#cb11-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-245"><a href="#cb11-245" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-246"><a href="#cb11-246" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-247"><a href="#cb11-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-248"><a href="#cb11-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-251"><a href="#cb11-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-252"><a href="#cb11-252" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Training exemplar separability compared to prototypes</span></span>
+<span id="cb11-253"><a href="#cb11-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb11-254"><a href="#cb11-254" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 11</span></span>
 <span id="cb11-255"><a href="#cb11-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-256"><a href="#cb11-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-257"><a href="#cb11-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-258"><a href="#cb11-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-259"><a href="#cb11-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-260"><a href="#cb11-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-261"><a href="#cb11-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-264"><a href="#cb11-264" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-265"><a href="#cb11-265" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb11-266"><a href="#cb11-266" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb11-267"><a href="#cb11-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-268"><a href="#cb11-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-269"><a href="#cb11-269" aria-hidden="true" tabindex="-1"></a>dot <span class="ot">&lt;-</span> dCatTrain[<span class="dv">1</span>,] <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span>  <span class="fu">select</span>(x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6,x7,y7,x8,y8,x9,y9) </span>
-<span id="cb11-270"><a href="#cb11-270" aria-hidden="true" tabindex="-1"></a>dot <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_point</span>(x1,y1)<span class="sc">+</span><span class="fu">geom_point</span>(x2,y2)<span class="sc">+</span><span class="fu">geom_point</span>(x3,y3)</span>
-<span id="cb11-271"><a href="#cb11-271" aria-hidden="true" tabindex="-1"></a>dotx<span class="ot">=</span><span class="fu">c</span>(dot<span class="sc">$</span>x1,dot<span class="sc">$</span>x2,dot<span class="sc">$</span>x3,dot<span class="sc">$</span>x4,dot<span class="sc">$</span>x5,dot<span class="sc">$</span>x6,dot<span class="sc">$</span>x7,dot<span class="sc">$</span>x8,dot<span class="sc">$</span>x9); doty<span class="ot">=</span><span class="fu">c</span>(dot<span class="sc">$</span>y1,dot<span class="sc">$</span>y2,dot<span class="sc">$</span>y3,dot<span class="sc">$</span>y4,dot<span class="sc">$</span>y5,dot<span class="sc">$</span>y6,dot<span class="sc">$</span>y7,dot<span class="sc">$</span>y8,dot<span class="sc">$</span>y9)</span>
-<span id="cb11-272"><a href="#cb11-272" aria-hidden="true" tabindex="-1"></a>dotFrame <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(dotx,doty)</span>
-<span id="cb11-273"><a href="#cb11-273" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dotFrame,<span class="fu">aes</span>(dotx,doty))<span class="sc">+</span><span class="fu">geom_point</span>()</span>
+<span id="cb11-256"><a href="#cb11-256" aria-hidden="true" tabindex="-1"></a>pat_long_train <span class="ot">&lt;-</span> mc24_patterns <span class="sc">|&gt;</span> </span>
+<span id="cb11-257"><a href="#cb11-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Category=</span><span class="fu">as.factor</span>(Category)) <span class="sc">|&gt;</span></span>
+<span id="cb11-258"><a href="#cb11-258" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(id <span class="sc">%in%</span> ids[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb11-259"><a href="#cb11-259" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(Phase<span class="sc">==</span><span class="dv">1</span> <span class="sc">|</span> Pattern.Type<span class="sc">==</span><span class="st">"prototype"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-260"><a href="#cb11-260" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(id, condit,trial, Category, Pattern.Type,Phase, x1<span class="sc">:</span>y9) <span class="sc">|&gt;</span></span>
+<span id="cb11-261"><a href="#cb11-261" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(id, condit, Category, Pattern.Type,Phase) <span class="sc">|&gt;</span> </span>
+<span id="cb11-262"><a href="#cb11-262" aria-hidden="true" tabindex="-1"></a>   <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"coordinate"</span>, <span class="at">value =</span> <span class="st">"value"</span>, <span class="sc">-</span>id, <span class="sc">-</span>condit,<span class="sc">-</span>trial, <span class="sc">-</span>Category,<span class="sc">-</span>Pattern.Type,<span class="sc">-</span>Phase) <span class="sc">%&gt;%</span></span>
+<span id="cb11-263"><a href="#cb11-263" aria-hidden="true" tabindex="-1"></a>   <span class="fu">separate</span>(coordinate, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"axis"</span>, <span class="st">"number"</span>), <span class="at">sep =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-264"><a href="#cb11-264" aria-hidden="true" tabindex="-1"></a>   <span class="fu">spread</span>(<span class="at">key =</span> axis, <span class="at">value =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb11-265"><a href="#cb11-265" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">number =</span> <span class="fu">as.integer</span>(number), <span class="at">itemType=</span> <span class="fu">case_match</span>(Phase,<span class="dv">1</span> <span class="sc">~</span><span class="st">"Trained"</span>,<span class="dv">2</span><span class="sc">~</span><span class="st">"Prototype"</span>))</span>
+<span id="cb11-266"><a href="#cb11-266" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-267"><a href="#cb11-267" aria-hidden="true" tabindex="-1"></a> pat_long_train <span class="sc">|&gt;</span> </span>
+<span id="cb11-268"><a href="#cb11-268" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb11-269"><a href="#cb11-269" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Category),<span class="at">alpha=</span>.<span class="dv">8</span>) <span class="sc">+</span> </span>
+<span id="cb11-270"><a href="#cb11-270" aria-hidden="true" tabindex="-1"></a>   ggh4x<span class="sc">::</span><span class="fu">facet_nested_wrap</span>(<span class="sc">~</span>condit <span class="sc">+</span> id<span class="sc">+</span>itemType,<span class="at">ncol=</span><span class="dv">2</span>) <span class="sc">+</span> pat_themes</span>
+<span id="cb11-271"><a href="#cb11-271" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-272"><a href="#cb11-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-273"><a href="#cb11-273" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-274"><a href="#cb11-274" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-275"><a href="#cb11-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-276"><a href="#cb11-276" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-276"><a href="#cb11-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-279"><a href="#cb11-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-280"><a href="#cb11-280" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Prototypes from first 5 subjects - should match first 10 task trials</span></span>
+<span id="cb11-281"><a href="#cb11-281" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 12</span></span>
+<span id="cb11-282"><a href="#cb11-282" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 11</span></span>
+<span id="cb11-283"><a href="#cb11-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-284"><a href="#cb11-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-285"><a href="#cb11-285" aria-hidden="true" tabindex="-1"></a> pat_long <span class="sc">|&gt;</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-286"><a href="#cb11-286" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">%in%</span> ids[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="sc">&amp;</span> Pattern.Type<span class="sc">==</span><span class="st">"prototype"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-287"><a href="#cb11-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">droplevels</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-288"><a href="#cb11-288" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">Category=</span><span class="fu">as.factor</span>(Category)) <span class="sc">|&gt;</span></span>
+<span id="cb11-289"><a href="#cb11-289" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb11-290"><a href="#cb11-290" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color=</span>id),<span class="at">alpha=</span>.<span class="dv">9</span>) <span class="sc">+</span> </span>
+<span id="cb11-291"><a href="#cb11-291" aria-hidden="true" tabindex="-1"></a>   <span class="fu">facet_grid</span>(id <span class="sc">~</span> Category) <span class="sc">+</span> pat_themes <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Prototypes from first 5 subjects - should match first 10 task trials"</span>)</span>
+<span id="cb11-292"><a href="#cb11-292" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-293"><a href="#cb11-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-294"><a href="#cb11-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-295"><a href="#cb11-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-296"><a href="#cb11-296" aria-hidden="true" tabindex="-1"></a>::: column-page-inset</span>
+<span id="cb11-297"><a href="#cb11-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-298"><a href="#cb11-298" aria-hidden="true" tabindex="-1"></a><span class="fu">## Task Demo</span></span>
+<span id="cb11-299"><a href="#cb11-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-300"><a href="#cb11-300" aria-hidden="true" tabindex="-1"></a><span class="al">![dot_task](/Task/index.html)</span>{width="1050" height="900"}</span>
+<span id="cb11-301"><a href="#cb11-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-302"><a href="#cb11-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-303"><a href="#cb11-303" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-304"><a href="#cb11-304" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
