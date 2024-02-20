@@ -11,6 +11,7 @@ code-tools: true
 
 A preview of the judgement task is included below. The task can be restarted by refreshing the page.
 
+Click here to open the task in a new window: [dot_task](/Task/index.html)
 
 ## Pattern Judgement Task
 ::: column-screen
