@@ -8,10 +8,25 @@
     <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.3"></script>
     <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     
+    
+    
     <style>
-        /* CSS class for reducing line spacing */
-        .compact-label {
-            line-height: 0.95; /* Adjust this value as needed to reduce line spacing */
+        .jspsych-btn { margin: 5px; }
+        .jspsych-content-wrapper {
+            margin-top: 5px; /* Adjust the top margin as needed */
+            margin-bottom: 5px; /* Adjust the bottom margin as needed */
+        }
+        .jspsych-canvas-keyboard-response-stimulus {
+            margin-bottom: 5px; /* Space between the canvas and the prompt */
+        }
+        .jspsych-canvas-keyboard-response-wrapper {
+            margin-bottom: 5px; /* Space between the canvas and the prompt */
+        }
+        .jspsych-html-slider-response-wrapper {
+            margin-top: 0px; /* Adjust if there is a slider and you want to reduce the space above it */
+        }
+        .jspsych-content {
+            padding: 10px; /* Reduced padding around content */
         }
     </style>
     
@@ -20,8 +35,8 @@
 
 <script>
     
-    const CANVAS_WIDTH = 600; // Global variable for canvas width
-    const CANVAS_HEIGHT = 250; // Global variable for canvas height
+    const CANVAS_WIDTH = 550; // Global variable for canvas width
+    const CANVAS_HEIGHT = 300; // Global variable for canvas height
     
     document.addEventListener('DOMContentLoaded', function() {
         const jsPsych = initJsPsych({
@@ -36,18 +51,19 @@
         
         function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
             const dotSize = 1.0; // Size of the dots
-            const patternScale = 5.0; // Increased scale for larger patterns
+            const patternScale = 2.5; // Increased scale for larger patterns
             
             // Adjust the scale and centering based on the new requirements
-            const scale = Math.min(canvasWidth / 2, canvasHeight) / 45; // Adjust scale for larger patterns
-            const centerX = xOffset + (canvasWidth / 4) + 60; // Shift patterns to the right for centering
+            const scale = Math.min(canvasWidth , canvasHeight) / 45; // Adjust scale for larger patterns
+            const centerX = xOffset + (canvasWidth / 2) +10  // Shift patterns to the right for centering
             const centerY = canvasHeight / 2;
             
             pattern.forEach(dot => {
                 context.beginPath();
-                const x = (dot.x * scale) + centerX;
+                
+                const x = (dot.x * scale) + centerX - (canvasWidth * 0.25);
                 const y = centerY - (dot.y * scale);
-                context.arc(x, y, dotSize * scale, 0, 2 * Math.PI);
+                context.arc(x, y, dotSize * patternScale, 0, 2 * Math.PI);
                 context.fill();
             });
         }
@@ -66,23 +82,19 @@
             type: jsPsychInstructions,
             pages: [
             'In this task, you will be presented with pairs of dot patterns. <br><br>' +
-            'Your job is to rate the similarity of each pair on a scale from "Not Similar" to "Very Similar". <br><br>',
+            'Your job is to rate the similarity of each pair using the number keys on your keyboard. ' + 
+            'Please press a key between 1 and 9 to indicate your rating, where 1 means "Not Similar" at all, ' +
+            'and 9 means "Very Similar". You can use any number between 1 and 9 to provide a rating that best ' +
+            'represents your perception of the similarity between the two patterns.<br><br>',
             'Examples of Dot Patterns that are highly similar: ' +
             '<br>' + 
-            '<img src="assets/high_sim.png" style="max-width:90%; height:auto;"></img>', 
+            '<img src="assets/high_sim.png" style="max-width:40%; height:auto;"></img>', 
             'Examples of Dot Patterns that are not similar: ' +
             '<br>' + 
-            '<img src="assets/low_sim.png" style="max-width:90%; height:auto;"></img>'
-
-           ], 
-           show_clickable_nav: true
+            '<img src="assets/low_sim.png" style="max-width:40%; height:auto;"></img>'
+            ], 
+            show_clickable_nav: true
         };
-        
-        // Define the rest of the task here, including trials generation...
-        // For brevity, the loadAndStartExperiment function is not repeated here
-        // but should be included as defined previously
-        
-        // Preload images or any assets if needed
         
         
         function loadAndStartExperiment(callback) {
@@ -98,12 +110,6 @@
                 }
             };
             xhr.send();
-        }
-        
-        function createTrialsFromJson(json) {
-            const trials = [];
-            // Your logic to create trials from JSON data
-            return trials; // Make sure this returns the constructed trials array
         }
         
         
@@ -122,10 +128,11 @@
             xhr.send();
         }
         
-        
         function createTrialsFromJson(json) {
             
             const trials = [];
+            const keys = ['1','2','3','4','5','6','7','8','9']; // Allowed keys for response
+            
             for (let i = 0; i < json.length; i += 3) {
                 const patternSets = [
                 [json[i], json[i + 1]],
@@ -142,32 +149,21 @@
                     });
                     
                     trials.push({
-                        type: jsPsychHtmlSliderResponse, // Corrected plugin type
-                        stimulus: function() {
-                            var canvasHtml = `<canvas id="dot-pattern-canvas" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}"></canvas>`;
-                            return canvasHtml;
-                        },
-                        //labels: ['Not\n Similar','Slightly Similar','Fairly Similar' ,'Very Similar'],
-                        labels: [
-                        '<div class="compact-label">Not<br>Similar</div>', 
-                        '<div class="compact-label">Slightly<br>Similar</div>', 
-                        '<div class="compact-label">Fairly<br>Similar</div>', 
-                        '<div class="compact-label">Very<br>Similar</div>'
-                        ],
-                        slider_width: CANVAS_WIDTH * 0.75,
-                        slider_start: 50,
-                        on_load: function() {
-                            const canvas = document.getElementById('dot-pattern-canvas');
-                            const context = canvas.getContext('2d');
-                            context.clearRect(0, 0, canvas.width, canvas.height);
-                            
-                            const patternWidth = canvas.width / 2; // For two patterns
+                        type: jsPsychCanvasKeyboardResponse, // Use the Canvas Keyboard Response plugin
+                        stimulus: function(c) {
+                            let ctx = c.getContext('2d');
+                            ctx.clearRect(0, 0, c.width, c.height);
+                            const spacing = 80; // Space between patterns
+                            const margin = 20; 
+                            const patternWidth = (c.width - spacing - 2 * margin) / 2;
                             patterns.forEach((pattern, index) => {
-                                const xOffset = index * patternWidth;
-                                drawPattern(context, pattern, xOffset, patternWidth, canvas.height);
+                                const xOffset = margin + index * (patternWidth + spacing);
+                                drawPattern(ctx, pattern, xOffset, c.width / patterns.length, c.height);
                             });
                         },
-                        prompt: '<p>Rate the similarity of the patterns.</p>',
+                        canvas_size: [CANVAS_WIDTH, CANVAS_HEIGHT],
+                        choices: keys,
+                        prompt: '<p>Rate the similarity of the patterns from 1-9 <br> (1=Not Similar, 9=Very Similar).</p>',
                         response_ends_trial: true,
                         data: {
                             pattern_1: JSON.stringify(patterns[0]),
@@ -176,8 +172,8 @@
                     });
                 });
             }
-            return trials
-        } 
+            return trials;
+        }
         
         
         var fullTimeline = [welcome, instructions].concat(loadAndStartExperiment());
