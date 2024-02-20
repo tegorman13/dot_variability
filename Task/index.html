@@ -36,10 +36,29 @@
 <script>
     
     const CANVAS_WIDTH = 550; // Global variable for canvas width
-    const CANVAS_HEIGHT = 300; // Global variable for canvas height
+    const CANVAS_HEIGHT = 250; // Global variable for canvas height
     
     document.addEventListener('DOMContentLoaded', function() {
+        let mainTrialsStarted = false
+        const numPreliminaryTrials = 2; 
         const jsPsych = initJsPsych({
+            on_trial_start: function() {
+                if (mainTrialsStarted) { 
+                    let counterDiv = document.querySelector('.trial-counter');
+                    if (!counterDiv) {
+                        counterDiv = document.createElement('div');
+                        counterDiv.className = 'trial-counter';
+                        document.body.appendChild(counterDiv);
+                    }
+                    const currentTrialIndex = jsPsych.getProgress().current_trial_global + 1; 
+                    const totalMainTrials = jsPsych.getProgress().total_trials - numPreliminaryTrials;
+                    // Only update the counter for main trials
+                    if(currentTrialIndex > numPreliminaryTrials) {
+                        const currentMainTrial = currentTrialIndex - numPreliminaryTrials;
+                        counterDiv.textContent = `Trial ${currentMainTrial} / ${totalMainTrials}`;
+                    }
+                }
+            },
             on_trial_finish: function() {
                 var trial_data = jsPsych.data.get().last(1);
                 console.log(trial_data.csv());
@@ -48,6 +67,7 @@
                 jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
             }
         });
+
         
         function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
             const dotSize = 1.0; // Size of the dots
@@ -95,22 +115,6 @@
             ], 
             show_clickable_nav: true
         };
-        
-        
-        function loadAndStartExperiment(callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'mc_patterns.json', true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    var json = JSON.parse(xhr.responseText);
-                    var trials = createTrialsFromJson(json);
-                    callback(trials); // Callback to continue with the trials
-                } else {
-                    console.error('There was a problem with the request.');
-                }
-            };
-            xhr.send();
-        }
         
         
         function loadAndStartExperiment(callback) {
@@ -176,10 +180,12 @@
         }
         
         
-        var fullTimeline = [welcome, instructions].concat(loadAndStartExperiment());
+        //var fullTimeline = [welcome, instructions].concat(loadAndStartExperiment());
         
         
         loadAndStartExperiment(function(trials) {
+            mainTrialsStarted = true;
+
             var fullTimeline = [welcome, instructions].concat(trials);
             jsPsych.run(fullTimeline);
         });
