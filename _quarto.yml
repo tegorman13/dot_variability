@@ -12,6 +12,7 @@ project:
   resources: 
       - "Task/index.html"
       - "Task/mc_patterns.json"
+      - "Task/assets/*"
 
 
 website:

@@ -1,0 +1,220 @@
+---
+title: Dot Pattern Plots
+date: last-modified
+page-layout: full
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: true
+---
+
+## Find Instruction Patterns
+
+```{r}
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, data.table,readr,here, patchwork, conflicted)
+conflict_prefer_all("dplyr", quiet = TRUE)
+
+# lmc22 <- readRDS(here("data","lmc22.rds"))
+# mc24 <- readRDS(here("data","mc24.rds"))
+
+lmc22_prototypes <- read.csv(here("Stimulii","lmc22_prototypes.csv"))
+mc24_prototypes <- read.csv(here("Stimulii","mc24_prototypes.csv"))
+
+pat_themes <- list(theme_minimal(),xlim(-25, 25),ylim(-25, 25),
+                        labs(x = "X Coordinate", y = "Y Coordinate"),
+                   coord_fixed(),guides(alpha = FALSE))
+```
+
+
+
+### View large set of  protypes from Hu & Nosofsky 2022
+```{r}
+#| fig-cap: Prototypes and their distortions
+#| fig-width: 11
+#| fig-height: 13
+
+proto_long <- lmc22_prototypes |> 
+   select(item_label, x1:y9) |>
+   group_by(item_label) |> 
+   gather(key = "coordinate", value = "value", -item_label) %>%
+   separate(coordinate, into = c("axis", "number"), sep = 1) %>%
+   spread(key = axis, value = value) %>%
+   mutate(number = as.integer(number))
+ 
+proto_long |> 
+  filter(item_label %in% unique(proto_long$item_label)[1:100]) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(size=.75) + 
+   ggh4x::facet_nested_wrap(~item_label) +
+   pat_themes + labs(title="Prototypes from Category 1 - with distortions")
+  
+  
+
+```
+
+
+
+### Prototypes with distinctive patterns
+```{r}
+#| fig-cap: Prototypes with distinctive patterns
+#| fig-width: 14
+#| fig-height: 16
+
+circle <- c("10_nrep_2_287","12_nrep_3_270", "27_rep_3_263")
+hsplit <- c("14_nrep_2_258","13_rep_1_227", "2_nrep_3_261", "14_nrep_1_245","34_nrep_3_229")
+vsplit <- c("1_rep_2_262", "22_nrep_2_239", "12_nrep_1_248", "11_rep_3_264","38_nrep_3_288","32_rep_3_286")
+dsplit <- c("20_nrep_2_236", "20_rep_3_247")
+tower <- c("11_rep_2_281","25_rep_3_248","47_rep_3_235")
+tree <- c("28_nrep_1_234","41_nrep_2_285","40_rep_2_272")
+qmark <- c("12_nrep_2_258","20_nrep_1_267","35_nrep_1_238")
+diag <- c("24_nrep_1_242","16_nrep_3_276", "26_nrep_3_263","48_nrep_3_233","47_nrep_1_227")
+vert <- c("11_rep_1_257", "25_rep_2_250","48_nrep_3_233")
+horiz <- c("22_rep_1_263","4_nrep_2_236")
+onemass <- c("13_rep_1_227", "16_rep_1_241","18_nrep_2_253","47_nrep_2_264")
+triag <- c("18_nrep_3_254","46_rep_3_246")
+incomp <- c("22_nrep_3_235","12_rep_1_282","33_rep_2_282", "44_nrep_1_263")
+
+
+proto_long |> 
+  filter(item_label %in% c(circle, hsplit, vsplit, dsplit, tower, 
+                           qmark, diag, vert, horiz, onemass, triag, incomp,tree)) |>
+  mutate(plabel = case_when(
+    item_label %in% circle ~ "Circle",
+    item_label %in% hsplit ~ "Horizontal Split",
+    item_label %in% vsplit ~ "Vertical Split",
+    item_label %in% dsplit ~ "Diagonal Split",
+    item_label %in% tower ~ "Tower",
+    item_label %in% triag ~ "triag",
+    item_label %in% tree ~ "tree",
+    item_label %in% triag ~ "Trianglish",
+    item_label %in% qmark ~ "Question Mark",
+    item_label %in% diag ~ "Diagonal",
+    item_label %in% vert ~ "Vertical",
+    item_label %in% horiz ~ "Horizontal",
+    item_label %in% incomp ~ "incomp",
+    item_label %in% onemass ~ "One Mass")) |>
+   ggplot(aes(x = x, y = y,col=plabel)) +
+   geom_point(size=.75) + 
+   ggh4x::facet_nested_wrap(~plabel+item_label) +
+   pat_themes + labs(title="Prototypes with Distinctive Patterns") +
+  theme(legend.position = "top")
+
+
+```
+
+
+### Organize subset into pairs
+```{r}
+#| fig-cap: Prototype pairs with different similarity levels
+#| fig-width: 11
+#| fig-height: 10
+
+
+hsim1 <- circle[2:3]
+hsim2 <- onemass[3:4]
+msim1 <- vsplit[1:2]
+lsim1 <- c(diag[1],hsplit[3])
+lsim2 <- c(circle[1],tower[3])
+
+proto_long |> 
+  filter(item_label %in% c(hsim1, hsim2, msim1, lsim1, lsim2)) |>
+  mutate(plabel = case_when(
+    item_label %in% hsim1 ~ "High Similarity 1",
+    item_label %in% hsim2 ~ "High Similarity 2",
+    item_label %in% msim1 ~ "Slight Similarity",
+    item_label %in% lsim1 ~ "Low Similarity 1",
+    item_label %in% lsim2 ~ "Low Similarity")) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(size=2) + 
+    ggh4x::facet_nested_wrap(~plabel+item_label,ncol=2) + 
+    theme(panel.background = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank()) +xlim(-25, 25) + ylim(-25,25)
+
+
+```
+
+
+
+### Finalize and save patterns
+```{r}
+blank_theme <- list( theme(panel.background = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        # no facet labels
+        strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        panel.spacing = unit(12, "lines")), 
+        xlim(-25, 25), ylim(-25,25))
+
+
+phsim1 <- proto_long |> 
+  filter(item_label %in% hsim1) |> 
+   ggplot(aes(x = x, y = y)) +
+   geom_point(size=2) + 
+   facet_wrap(~item_label) +
+  blank_theme 
+  
+phsim2 <- proto_long |>
+  filter(item_label %in% hsim2) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(size=2) + 
+   facet_wrap(~item_label) +
+  blank_theme
+
+pmsim1 <- proto_long |>
+  filter(item_label %in% msim1) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(size=2) + 
+   facet_wrap(~item_label) +
+  blank_theme
+
+
+plsim1 <- proto_long |>
+  filter(item_label %in% lsim1) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(size=2) + 
+   facet_wrap(~item_label) +
+  blank_theme
+
+plsim2 <- proto_long |>
+  filter(item_label %in% lsim2) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(size=2) + 
+   facet_wrap(~item_label) +
+  blank_theme
+
+
+
+# phsim1
+# phsim2
+# pmsim1
+# plsim1
+# plsim2
+
+
+very_similar <- (phsim1/phsim2) 
+not_similar <- (plsim1/plsim2)
+
+very_similar +  plot_annotation(subtitle = 'Examples of Very Similar Pairs')
+not_similar  +  plot_annotation(subtitle = 'Examples of Not Similar Pairs')
+
+# save_plots
+# ggsave(here("Task/assets/high_sim.png"),very_similar)
+# ggsave(here("Task/assets/low_sim.png"),not_similar)
+
+
+```
+
+
+
+
+
+```{r}
+
+
+

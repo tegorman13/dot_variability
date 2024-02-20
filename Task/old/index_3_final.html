@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dot Pattern Similarity Task</title>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+</head>
+<body></body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const jsPsych = initJsPsych({
+            on_trial_finish: function() {
+                var trial_data = jsPsych.data.get().last(1);
+                console.log(trial_data.csv());
+            },
+            on_finish: function() {
+                jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
+            }
+        });
+        
+        function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
+            const dotSize = 1.0; // Size of the dots, adjust as needed.
+            const patternScale = 4.5; // No additional scale, to match R's scale.
+            
+            // Calculate the scale based on the canvas size and the desired plot range.
+            // Assuming a range of 50 units in R (from -25 to 25), adjust as needed.
+            const scale = Math.min(canvasWidth / 3, canvasHeight) / 35; //smaller denom. = larger pattern
+            
+            // Calculate the center of each pattern based on its xOffset.
+            const centerX = (xOffset + (canvasWidth / 6) + 80); // control shift to right
+            const centerY = canvasHeight / 2;
+            
+            // Adjust the coordinate system to match R's.
+            pattern.forEach(dot => {
+                context.beginPath();
+                // Adjust x as per R's coordinate system.
+                const x = (dot.x * scale) + centerX;
+                // Invert y to match R's coordinate system, and adjust as per the scale.
+                const y = centerY - (dot.y * scale);
+                // Draw the arc using the adjusted x, y, and scale.
+                context.arc(x, y, dotSize * scale, 0, 2 * Math.PI);
+                context.fill();
+            });
+        }
+        
+        function loadAndStartExperiment() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var json = JSON.parse(xhr.responseText);
+                        const trials = [];
+                        for (let i = 0; i < json.length; i += 3) {
+                            const patterns = [json[i], json[i + 1], json[i + 2]].map(trialData => {
+                                return Array.from({length: 9}, (_, idx) => ({
+                                    x: trialData[`x${idx + 1}`],
+                                    y: trialData[`y${idx + 1}`]
+                                }));
+                            });
+                            
+                            trials.push({
+                                type: jsPsychHtmlSliderResponse,
+                                stimulus: function() {
+                                    var canvasHtml = '<canvas id="dot-pattern-canvas" width="600" height="300"></canvas>';
+                                    return canvasHtml;
+                                },
+                                labels: ['Not Similar', 'Very Similar'],
+                                slider_start: 50,
+                                on_load: function() {
+                                    const canvas = document.getElementById('dot-pattern-canvas');
+                                    const context = canvas.getContext('2d');
+                                    context.clearRect(0, 0, canvas.width, canvas.height);
+                                    
+                                    // Divide the canvas width by the number of patterns to be drawn side by side.
+                                    const patternWidth = canvas.width / 3;
+                                    patterns.forEach((pattern, index) => {
+                                        // Calculate xOffset for each pattern.
+                                        const xOffset = index * patternWidth;
+                                        // Pass canvas width and height divided by the number of patterns for proper scaling.
+                                        drawPattern(context, pattern, xOffset, patternWidth, canvas.height);
+                                    });
+                                },
+                                prompt: '<p>Rate the similarity of the patterns.</p>',
+                                response_ends_trial: true,
+                                data: {
+                                    pattern_1: JSON.stringify(patterns[0]),
+                                    pattern_2: JSON.stringify(patterns[1]),
+                                    pattern_3: JSON.stringify(patterns[2])
+                                }
+                            });
+                        }
+                        
+                        jsPsych.run(trials);
+                    } else {
+                        console.error('There was a problem with the request.');
+                    }
+                }
+            };
+            xhr.open('GET', 'mc_patterns.json', true);
+            xhr.send();
+        }
+        loadAndStartExperiment();
+    });
+</script>
+</html>

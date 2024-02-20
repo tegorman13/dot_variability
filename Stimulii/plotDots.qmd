@@ -273,11 +273,13 @@ pat_long_train <- mc24_patterns |>
 
 
 
+<!-- {{< embed ../Stimulii/instruction_examples.qmd >}} -->
 
+link to [instruction examples](../Stimulii/instruction_examples.qmd)
 
-## Task Demo
+<!-- ## Task Demo -->
 
-![dot_task](/Task/index.html){width="800" height="700"}
+<!-- ![dot_task](/Task/index.html){width="800" height="700"} -->
 
 
 

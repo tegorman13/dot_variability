@@ -7,12 +7,16 @@ code-tools: true
 ---
 
 
-## Pattern Judgement Task
 
+
+A preview of the judgement task is included below. The task can be restarted by refreshing the page.
+
+
+## Pattern Judgement Task
 ::: column-screen
 
 
 
-![dot_task](/Task/index.html){width="900" height="800"}
+![dot_task](/Task/index.html){width="900" height="850"}
 
 ::: 
