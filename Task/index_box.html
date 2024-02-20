@@ -49,24 +49,53 @@
             }
         });
         
-        function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
-            const dotSize = 1.0; // Size of the dots
-            const patternScale = 2.5; // Increased scale for larger patterns
+        // function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
+        //     const dotSize = 1.0; // Size of the dots
+        //     const patternScale = 2.5; // Increased scale for larger patterns
             
-            // Adjust the scale and centering based on the new requirements
-            const scale = Math.min(canvasWidth , canvasHeight) / 45; // Adjust scale for larger patterns
-            const centerX = xOffset + (canvasWidth / 2) +10  // Shift patterns to the right for centering
-            const centerY = canvasHeight / 2;
+        //     // Adjust the scale and centering based on the new requirements
+        //     const scale = Math.min(canvasWidth , canvasHeight) / 45; // Adjust scale for larger patterns
+        //     const centerX = xOffset + (canvasWidth / 2) +10  // Shift patterns to the right for centering
+        //     const centerY = canvasHeight / 2;
             
-            pattern.forEach(dot => {
-                context.beginPath();
+        //     pattern.forEach(dot => {
+        //         context.beginPath();
                 
-                const x = (dot.x * scale) + centerX - (canvasWidth * 0.25);
-                const y = centerY - (dot.y * scale);
-                context.arc(x, y, dotSize * patternScale, 0, 2 * Math.PI);
-                context.fill();
-            });
-        }
+        //         const x = (dot.x * scale) + centerX - (canvasWidth * 0.25);
+        //         const y = centerY - (dot.y * scale);
+        //         context.arc(x, y, dotSize * patternScale, 0, 2 * Math.PI);
+        //         context.fill();
+        //     });
+        // }
+        function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
+    // Constants
+    const DOT_SIZE = 1.0; // Size of each dot in the pattern
+    const BOX_PADDING = 10; // Padding around the bounding box
+    const PATTERN_GRID_SIZE = 50; // The size of the grid that the pattern is defined on
+    const SCALE_FACTOR = Math.min(canvasWidth, canvasHeight) / PATTERN_GRID_SIZE; // Scale factor to fit pattern to canvas size
+    const BOX_SIZE = PATTERN_GRID_SIZE * SCALE_FACTOR; // Size of the bounding box, scaled to canvas size
+    const HALF_BOX_SIZE = BOX_SIZE / 2; // Half the size of the bounding box for centering
+
+    // Calculate the center of the bounding box (adjust these as needed)
+    let centerX = xOffset + canvasWidth / 2; // Adjusted to center in the right half of the canvas
+    let centerY = canvasHeight / 2;
+
+    // Draw bounding box for reference
+    context.strokeStyle = 'black';
+    context.strokeRect(centerX - HALF_BOX_SIZE - BOX_PADDING, centerY - HALF_BOX_SIZE - BOX_PADDING,
+        BOX_SIZE + BOX_PADDING * 2, BOX_SIZE + BOX_PADDING * 2);
+
+    // Draw the pattern
+    pattern.forEach(dot => {
+        context.beginPath();
+        // Adjust the dot positions based on the center of the bounding box
+        // Each dot's position is scaled and translated from the pattern's grid to the canvas
+        const x = centerX + (dot.x - PATTERN_GRID_SIZE / 2) * SCALE_FACTOR;
+        const y = centerY + (dot.y - PATTERN_GRID_SIZE / 2) * SCALE_FACTOR;
+        context.arc(x, y, DOT_SIZE, 0, 2 * Math.PI);
+        context.fill();
+    });
+}
         
         // Welcome page
         var welcome = {
@@ -176,11 +205,13 @@
         }
         
         
-        var fullTimeline = [welcome, instructions].concat(loadAndStartExperiment());
+      //  var fullTimeline = [welcome, instructions].concat(loadAndStartExperiment());
+        
         
         
         loadAndStartExperiment(function(trials) {
-            var fullTimeline = [welcome, instructions].concat(trials);
+            //var fullTimeline = [welcome, instructions].concat(trials);
+            var fullTimeline = [].concat(trials);
             jsPsych.run(fullTimeline);
         });
         
