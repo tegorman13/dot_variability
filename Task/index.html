@@ -9,24 +9,48 @@
     <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     
     
-    
     <style>
         .jspsych-btn { margin: 5px; }
         .jspsych-content-wrapper {
-            margin-top: 5px; /* Adjust the top margin as needed */
-            margin-bottom: 5px; /* Adjust the bottom margin as needed */
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
         .jspsych-canvas-keyboard-response-stimulus {
-            margin-bottom: 5px; /* Space between the canvas and the prompt */
+            margin-bottom: 5px;
+            position: relative; /* Ensure that the trial counter is positioned relative to this container */
+
         }
-        .jspsych-canvas-keyboard-response-wrapper {
-            margin-bottom: 5px; /* Space between the canvas and the prompt */
+        .jspsych-canvas-keyboard-response-stimulus{
+            margin-bottom: 1px;
+            position: relative; 
         }
         .jspsych-html-slider-response-wrapper {
-            margin-top: 0px; /* Adjust if there is a slider and you want to reduce the space above it */
+            margin-top: 0px;
         }
         .jspsych-content {
-            padding: 10px; /* Reduced padding around content */
+            padding: 10px;
+        }
+        
+        .trial-counter {
+            position: absolute; /* Changed from fixed to absolute */
+            bottom: 10px;
+            left: 10px;
+            background-color: #f8f8f8;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 10; /* Lower than the prompt to ensure it stays in the background */
+        }
+        
+        .jspsych-content-wrapper {
+            position: relative; /* Ensure that the trial counter is positioned relative to this container */
+            padding-bottom: 60px; /* Add space for the trial counter */
+        }
+        
+        .jspsych-display-element {
+            max-width: 100%;
+            height: auto;
+            position: relative; /* Ensure that the prompt is positioned relative to this element */
+            z-index: 20; /* Ensure the prompt appears above the trial counter */
         }
     </style>
     
@@ -35,21 +59,54 @@
 
 <script>
     
-    const CANVAS_WIDTH = 550; // Global variable for canvas width
-    const CANVAS_HEIGHT = 250; // Global variable for canvas height
+    const CANVAS_WIDTH = window.innerWidth * 0.8; // 80% of viewport width
+    const CANVAS_HEIGHT = window.innerHeight * 0.7; // 60% of viewport height
+    
+    
+    
     
     document.addEventListener('DOMContentLoaded', function() {
         let mainTrialsStarted = false
         const numPreliminaryTrials = 2; 
+        
+        // Create or update the prompt container
+        function updatePromptContainer(promptText) {
+            let promptContainer = document.querySelector('.prompt-container');
+            if (!promptContainer) {
+                promptContainer = document.createElement('div');
+                promptContainer.className = 'prompt-container';
+                document.body.appendChild(promptContainer);
+            }
+            promptContainer.innerHTML = promptText;
+        }
+        
+        function updateCanvasSize() {
+            const maxWidth = window.innerWidth * 0.8; // Use 80% of window width
+            const maxHeight = window.innerHeight * 0.6; // Use 60% of window height
+            return {
+                width: Math.min(650, maxWidth), // Ensure canvas is not wider than 650px or window width
+                height: Math.min(350, maxHeight) // Ensure canvas is not taller than 350px or window height
+            };
+        }
+        const canvasSize = updateCanvasSize(); // Initial canvas size
+        window.addEventListener('resize', function() {
+            // Optional: Adjust the canvas size on window resize for a fully responsive design
+            const newCanvasSize = updateCanvasSize();
+            // You may need to redraw or adjust the layout here if you want to handle live resizing
+        });
+        
+        
+        
         const jsPsych = initJsPsych({
             on_trial_start: function() {
                 if (mainTrialsStarted) { 
                     let counterDiv = document.querySelector('.trial-counter');
-                    if (!counterDiv) {
-                        counterDiv = document.createElement('div');
-                        counterDiv.className = 'trial-counter';
-                        document.body.appendChild(counterDiv);
-                    }
+                if (!counterDiv) {
+                    counterDiv = document.createElement('div');
+                    counterDiv.className = 'trial-counter';
+                    // Append the trial counter to the jspsych-content-wrapper element
+                    document.querySelector('.jspsych-content-wrapper').appendChild(counterDiv);
+                }
                     const currentTrialIndex = jsPsych.getProgress().current_trial_global + 1; 
                     const totalMainTrials = jsPsych.getProgress().total_trials - numPreliminaryTrials;
                     // Only update the counter for main trials
@@ -67,15 +124,15 @@
                 jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
             }
         });
-
+        
         
         function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
-            const dotSize = 1.0; // Size of the dots
+            const dotSize = .85; // Size of the dots
             const patternScale = 2.5; // Increased scale for larger patterns
             
             // Adjust the scale and centering based on the new requirements
             const scale = Math.min(canvasWidth , canvasHeight) / 45; // Adjust scale for larger patterns
-            const centerX = xOffset + (canvasWidth / 2) +10  // Shift patterns to the right for centering
+            const centerX = xOffset + (canvasWidth / 2) +1 // Shift patterns to the right for centering
             const centerY = canvasHeight / 2;
             
             pattern.forEach(dot => {
@@ -157,8 +214,8 @@
                         stimulus: function(c) {
                             let ctx = c.getContext('2d');
                             ctx.clearRect(0, 0, c.width, c.height);
-                            const spacing = 80; // Space between patterns
-                            const margin = 20; 
+                            const spacing = 60; // Space between patterns
+                            const margin = 15; 
                             const patternWidth = (c.width - spacing - 2 * margin) / 2;
                             patterns.forEach((pattern, index) => {
                                 const xOffset = margin + index * (patternWidth + spacing);
@@ -179,13 +236,9 @@
             return trials;
         }
         
-        
-        //var fullTimeline = [welcome, instructions].concat(loadAndStartExperiment());
-        
-        
         loadAndStartExperiment(function(trials) {
             mainTrialsStarted = true;
-
+            
             var fullTimeline = [welcome, instructions].concat(trials);
             jsPsych.run(fullTimeline);
         });
