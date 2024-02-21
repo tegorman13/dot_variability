@@ -18,6 +18,6 @@ Click here to open the task in a new window: [dot_task](/Task/index.html)
 
 
 
-![dot_task](/Task/index.html){width="900" height="850"}
+![dot_task](/Task/index.html){width="600" height="550"}
 
 ::: 
