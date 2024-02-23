@@ -111,7 +111,8 @@
                 .join('');
                 const fileName = `dotSim_${sbjCode}_${dateTimeString}.csv`;
                 
-                jsPsych.data.get().localSave('csv', fileName);
+                //jsPsych.data.get().localSave('csv', fileName);
+                jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).localSave('csv', fileName);
             }
         });
         
