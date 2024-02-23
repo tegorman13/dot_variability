@@ -14,7 +14,6 @@
     <style>
         
         /* * { border: 1px solid red; } */
-        
         .jspsych-canvas-stimulus {
             position: fixed;
             bottom: 55%; /* Position from the top of the viewport */
@@ -48,8 +47,11 @@
     // const CANVAS_HEIGHT = window.innerHeight * 0.7; // 60% of viewport height
     const CANVAS_WIDTH = 350; 
     const CANVAS_HEIGHT = 300
-    const nSets = 5 //152; 
+    const nSets = 2 //152; 
     const printAtEnd = true; 
+    let sbjCode = '';
+    let totalMainTrials; 
+    var timeline = [];
     
     document.addEventListener('DOMContentLoaded', function() {
         let mainTrialsStarted = false
@@ -79,11 +81,12 @@
                         // Append the trial counter to the jspsych-content-wrapper element
                         document.querySelector('.jspsych-content-wrapper').appendChild(counterDiv);
                     }
-                    const currentTrialIndex = jsPsych.getProgress().current_trial_global + 1; 
-                    const totalMainTrials = (jsPsych.getProgress().total_trials)/2 - numPreliminaryTrials;
+                    const currentTrialIndex = jsPsych.getProgress().current_trial_global 
+                    // const totalMainTrials = (jsPsych.getProgress().total_trials) - numPreliminaryTrials; //fixation trials and set reps cancel out
                     // Only update the counter for main trials
                     if(currentTrialIndex > numPreliminaryTrials) {
-                        const currentMainTrial = currentTrialIndex - numPreliminaryTrials;
+                        //const currentMainTrial = currentTrialIndex - numPreliminaryTrials;
+                        const currentMainTrial = Math.floor((currentTrialIndex - numPreliminaryTrials) / 2) + 1;
                         counterDiv.textContent = `Trial ${currentMainTrial} / ${totalMainTrials}`;
                     }
                 }
@@ -97,7 +100,8 @@
                     // Print the data to the screen
                     document.body.innerHTML = "<h1>Experiment Finished</h1>" + 
                     "<p>Here are your results:</p>" + 
-                    "<pre>" + JSON.stringify(jsPsych.data.get().values(), null, 2) + "</pre>";
+                    // "<pre>" + JSON.stringify(jsPsych.data.get().values(), null, 2) + "</pre>";
+                    "<pre>" + JSON.stringify(jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}),null,2); + "</pre>";
                 }
                 jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
             }
@@ -152,6 +156,11 @@
             ],
             on_finish: function(data) {
                 // You can process or save the subject code here
+                sbjCode = data.response.subjectCode;
+                jsPsych.data.addProperties({
+                    sbjCode: sbjCode
+                });
+                
                 console.log(data.response.subjectCode); // Log subject code to console
             }
         };
@@ -176,20 +185,6 @@
             'Please make sure to ask the experimenter if you have any questions.';
             
             
-            function loadAndStartExperiment(callback) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'mc_patterns.json', true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        var json = JSON.parse(xhr.responseText);
-                        var trials = createTrialsFromJson(json);
-                        if(callback) callback(trials); // Ensure callback is called with the trials
-                    } else {
-                        console.error('There was a problem with the request.');
-                    }
-                };
-                xhr.send();
-            }
             
             function createTrialsFromJson(json) {
                 
@@ -231,11 +226,18 @@
                     
                     patternSets.forEach(patternSet => {
                         const patterns = patternSet.map(trialData => {
-                            return Array.from({length: 9}, (_, idx) => ({
-                                x: trialData[`x${idx + 1}`],
-                                y: trialData[`y${idx + 1}`]
-                            }));
+                            return {
+                                dots: Array.from({length: 9}, (_, idx) => ({
+                                    x: trialData[`x${idx + 1}`],
+                                    y: trialData[`y${idx + 1}`]
+                                })),
+                                item_label: trialData.item_label,
+                                file: trialData.file
+                            };
                         });
+                        
+                        console.log("Selected Sets Structure: ", selectedSets);
+                        
                         
                         trials.push({
                             type: jsPsychCanvasKeyboardResponse, // Use the Canvas Keyboard Response plugin
@@ -247,12 +249,12 @@
                                 const patternWidth = (c.width - spacing - 2 * margin) / 2;
                                 patterns.forEach((pattern, index) => {
                                     const xOffset = margin + index * (patternWidth + spacing);
-                                    drawPattern(ctx, pattern, xOffset, c.width / patterns.length, c.height);
+                                    drawPattern(ctx, pattern.dots, xOffset, c.width / patterns.length, c.height);
                                 });
                             },
                             canvas_size: [CANVAS_WIDTH, CANVAS_HEIGHT],
                             choices: keys,
-                            prompt: '<p class="prompt-container">Rate the similarity of the patterns from 1-9 <br> (1=Not Similar, 9=Very Similar).</p>',
+                            prompt: '<p class="prompt-container">Rate the similarity of the patterns from 1-9 <br> (1=Most Dissimilar, 9=Most Similar).</p>',
                             response_ends_trial: true,
                             on_start: function() {
                                 // Move the canvas to the dot-pattern-container on trial start
@@ -261,15 +263,29 @@
                                     dotPatternContainer.appendChild(canvasElement);
                                 }
                             },
+                            on_finish: function(data) {
+                                // Record the date and time when the trial finishes
+                                const now = new Date();
+                                data.date = now.toLocaleDateString();
+                                data.time = now.toLocaleTimeString();
+                            },
                             data: {
-                                pattern_1: JSON.stringify(patterns[0]),
-                                pattern_2: JSON.stringify(patterns[1])
+                                sbjCode: sbjCode,
+                                trial: function() {
+                                    const currentTrialIndex = jsPsych.getProgress().current_trial_global;
+                                    return Math.floor((currentTrialIndex - numPreliminaryTrials) / 2) + 1; 
+                                },
+                                pattern_1: JSON.stringify(patterns[0].dots),
+                                pattern_2: JSON.stringify(patterns[1].dots),
+                                item_label_1: patterns[0].item_label, // Ensure this matches your patternSet structure
+                                item_label_2: patterns[1].item_label, // Ensure this matches your patternSet structure
+                                file: patterns[0].file
                             }
                         });
                     });
                 }
                 
-                var timeline = [];
+                
                 
                 let randomizedTrials = jsPsych.randomization.shuffle(trials);
                 
@@ -281,6 +297,28 @@
                 });
                 
                 return timeline;
+            }
+            
+            
+            function loadAndStartExperiment(callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'mc_patterns.json', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        var json = JSON.parse(xhr.responseText);
+                        var trials = createTrialsFromJson(json);
+                        totalMainTrials = trials.length / 2; // Adjust this calculation based on your actual experiment structure
+                        
+                        if(callback) callback(trials); // Ensure callback is called with the trials
+                    } else {
+                        console.error('There was a problem with the request.');
+                    }
+                };
+                
+                
+                xhr.send();
+                
+                
             }
             
             loadAndStartExperiment(function(timeline) {
@@ -295,15 +333,18 @@
                     '<img src="assets/high_sim.png" style="max-width:40%; height:auto;"></img>', 
                     'Examples of Dot Patterns that are not similar: ' +
                     '<br>' + 
-                    '<img src="assets/low_sim.png" style="max-width:40%; height:auto;"></img>'
+                    '<img src="assets/low_sim.png" style="max-width:40%; height:auto;"></img>',
+                    `Please click NEXT to start the rating experiment`
                     ], 
                     show_clickable_nav: true
                 };
-                const totalTrials = (timeline.length)/2 - numPreliminaryTrials;
+                const totalTrials = (timeline.length)/2 //- numPreliminaryTrials;
                 console.log(totalTrials);
                 instructions.pages[0] = instructions.pages[0].replace('[N]', totalTrials);
                 
                 var fullTimeline = [subjectCodeTrial,instructions].concat(timeline);
+                //var fullTimeline = [].concat(timeline);
+                
                 jsPsych.run(fullTimeline);
             });
             
