@@ -255,7 +255,7 @@
                             },
                             canvas_size: [CANVAS_WIDTH, CANVAS_HEIGHT],
                             choices: keys,
-                            prompt: '<p class="prompt-container">Rate the similarity of the patterns from 1-9 <br> (1=Not Similar, 9=Very Similar).</p>',
+                            prompt: '<p class="prompt-container">Rate the similarity of the patterns from 1-9 <br> (1=Most Dissimilar, 9=Most Similar).</p>',
                             response_ends_trial: true,
                             on_start: function() {
                                 // Move the canvas to the dot-pattern-container on trial start
@@ -334,7 +334,8 @@
                     '<img src="assets/high_sim.png" style="max-width:40%; height:auto;"></img>', 
                     'Examples of Dot Patterns that are not similar: ' +
                     '<br>' + 
-                    '<img src="assets/low_sim.png" style="max-width:40%; height:auto;"></img>'
+                    '<img src="assets/low_sim.png" style="max-width:40%; height:auto;"></img>',
+                    `Please click NEXT to start the rating experiment`
                     ], 
                     show_clickable_nav: true
                 };
