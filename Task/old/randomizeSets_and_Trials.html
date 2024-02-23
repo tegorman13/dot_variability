@@ -48,8 +48,7 @@
     // const CANVAS_HEIGHT = window.innerHeight * 0.7; // 60% of viewport height
     const CANVAS_WIDTH = 350; 
     const CANVAS_HEIGHT = 300
-    const nSets = 5 //152; 
-    const printAtEnd = true; 
+    const nSets = 152; 
     
     document.addEventListener('DOMContentLoaded', function() {
         let mainTrialsStarted = false
@@ -68,8 +67,6 @@
         
         
         const jsPsych = initJsPsych({
-            minimum_valid_rt: 300,
-            default_iti: 200,
             on_trial_start: function() {
                 if (mainTrialsStarted) { 
                     let counterDiv = document.querySelector('.trial-counter');
@@ -93,12 +90,6 @@
                 console.log(trial_data.csv());
             },
             on_finish: function() {
-                if (printAtEnd) {
-                    // Print the data to the screen
-                    document.body.innerHTML = "<h1>Experiment Finished</h1>" + 
-                    "<p>Here are your results:</p>" + 
-                    "<pre>" + JSON.stringify(jsPsych.data.get().values(), null, 2) + "</pre>";
-                }
                 jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
             }
         });
