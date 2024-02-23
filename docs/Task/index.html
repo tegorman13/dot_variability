@@ -103,10 +103,18 @@
                     // "<pre>" + JSON.stringify(jsPsych.data.get().values(), null, 2) + "</pre>";
                     "<pre>" + JSON.stringify(jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}),null,2); + "</pre>";
                 }
-                jsPsych.data.get().localSave('csv', 'similarity_ratings.csv');
+                
+                //const randomNumber = Math.floor(Math.random() * 900) + 100;
+                const now = new Date();
+                const dateTimeString = [now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
+                .map(num => String(num).padStart(2, '0'))
+                .join('');
+                const fileName = `dotSim_${sbjCode}_${dateTimeString}.csv`;
+                
+                //jsPsych.data.get().localSave('csv', fileName);
+                jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).localSave('csv', fileName);
             }
         });
-        
         
         function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
             const dotSize = 1.9; // Size of the dots

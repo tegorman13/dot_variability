@@ -17,7 +17,6 @@ Click here to open the task in a new window: [dot_task](/Task/index.html)
 ::: column-screen
 
 
-
 ![dot_task](/Task/index.html){width="600" height="550"}
 
 ::: 
