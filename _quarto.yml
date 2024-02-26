@@ -11,6 +11,7 @@ project:
     
   resources: 
       - "Task/index.html"
+      - "Task/debug.html"
       - "Task/mc_patterns.json"
       - "Task/assets/*"
 

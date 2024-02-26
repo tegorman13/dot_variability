@@ -17,7 +17,6 @@ conflict_prefer_all("dplyr", quiet = TRUE)
 lmc22 <- readRDS(here("data","lmc22.rds"))
 mc24 <- readRDS(here("data","mc24.rds"))
 
-
 mc24_patterns <- mc24 |> 
   ungroup() |>
   rename(Pattern.Type="Pattern_Token") |>

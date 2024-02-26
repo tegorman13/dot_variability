@@ -48,8 +48,8 @@
     // const CANVAS_HEIGHT = window.innerHeight * 0.7; // 60% of viewport height
     const CANVAS_WIDTH = 350; 
     const CANVAS_HEIGHT = 300
-    const nSets = 101 //152; 
-    const printAtEnd = true; 
+    const nSets = 2 //152; 
+    const printAtEnd = false; 
     let sbjCode = '';
     let totalMainTrials; 
     var timeline = [];
@@ -266,7 +266,7 @@
                             };
                         });
                         
-                        //console.log("Selected Sets Structure: ", selectedSets);
+                        console.log("Selected Sets Structure: ", selectedSets);
                         
                         
                         trials.push({
@@ -383,7 +383,7 @@
                         const dateTimeString = [now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
                         .map(num => String(num).padStart(2, '0'))
                         .join('');
-                         const fileName = `dotSim_${sbjCode}_${dateTimeString}.csv`;
+                         const fileName = `debug_dotSim_${sbjCode}_${dateTimeString}.csv`;
                          //local save
                         jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).localSave('csv', fileName);
                         //save to server (requries php set up to write on server)
