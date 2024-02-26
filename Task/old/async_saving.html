@@ -49,7 +49,7 @@
     const CANVAS_WIDTH = 350; 
     const CANVAS_HEIGHT = 300
     const nSets = 101 //152; 
-    const printAtEnd = true; 
+    const printAtEnd = false; 
     let sbjCode = '';
     let totalMainTrials; 
     var timeline = [];
@@ -64,8 +64,7 @@
     
     document.addEventListener('DOMContentLoaded', function() {
         let mainTrialsStarted = false
-        const numPreliminaryTrials = 2; //sbjCode entry, instructions
-        const numPostTrials = 2;  //saveTrial, debrief
+        const numPreliminaryTrials = 4; //sbjCode entry, instructions, saveTrial, debrief
         
         function updateCanvasSize() {
             const maxWidth = window.innerWidth * 0.8; // Use 80% of window width
@@ -96,7 +95,7 @@
                     // Only update the counter for main trials
                     if(currentTrialIndex > numPreliminaryTrials) {
                         //const currentMainTrial = currentTrialIndex - numPreliminaryTrials;
-                        const currentMainTrial = Math.floor((currentTrialIndex - numPreliminaryTrials - numPostTrials) / 2) + 2;
+                        const currentMainTrial = Math.floor((currentTrialIndex - numPreliminaryTrials) / 2) + 1;
                         counterDiv.textContent = `Trial ${currentMainTrial} / ${totalMainTrials}`;
                     }
                 }
@@ -266,7 +265,7 @@
                             };
                         });
                         
-                        //console.log("Selected Sets Structure: ", selectedSets);
+                        console.log("Selected Sets Structure: ", selectedSets);
                         
                         
                         trials.push({
@@ -303,7 +302,7 @@
                                 sbjCode: sbjCode,
                                 trial: function() {
                                     const currentTrialIndex = jsPsych.getProgress().current_trial_global;
-                                    return Math.floor((currentTrialIndex - numPreliminaryTrials - numPostTrials) / 2) + 2; 
+                                    return Math.floor((currentTrialIndex - numPreliminaryTrials) / 2) + 1; 
                                 },
                                 pattern_1: JSON.stringify(patterns[0].dots),
                                 pattern_2: JSON.stringify(patterns[1].dots),
@@ -383,7 +382,7 @@
                         const dateTimeString = [now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
                         .map(num => String(num).padStart(2, '0'))
                         .join('');
-                         const fileName = `dotSim_${sbjCode}_${dateTimeString}.csv`;
+                         const fileName = `debug_dotSim_${sbjCode}_${dateTimeString}.csv`;
                          //local save
                         jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).localSave('csv', fileName);
                         //save to server (requries php set up to write on server)
