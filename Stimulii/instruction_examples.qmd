@@ -211,10 +211,17 @@ not_similar  +  plot_annotation(subtitle = 'Examples of Not Similar Pairs')
 ```
 
 
-
-
-
+# save examples separately 
 ```{r}
+
+# ggsave(here("Task/assets/high_sim1.png"),phsim1)
+# ggsave(here("Task/assets/high_sim2.png"),phsim2)
+# 
+# ggsave(here("Task/assets/low_sim1.png"),plsim1)
+# ggsave(here("Task/assets/low_sim2.png"),plsim2)
+
+```
+
 
 
 

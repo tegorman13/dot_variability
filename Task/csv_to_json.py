@@ -15,6 +15,11 @@ def csv_to_json(csv_file_path, json_file_path):
 # Use the function with your specific file paths
 csv_file_path = 'Stimulii/mc24_prototypes.csv'  # Replace with your CSV file path
 json_file_path = 'Task/mc_patterns.json'  # Replace with your desired JSON file path
-
-# Convert the file
 csv_to_json(csv_file_path, json_file_path)
+
+
+# csv_file_path = 'Stimulii/teg_test_patterns.csv'  # Replace with your CSV file path
+# json_file_path = 'Task/teg_test_patterns.json'  # Replace with your desired JSON file path
+
+# # Convert the file
+# csv_to_json(csv_file_path, json_file_path)

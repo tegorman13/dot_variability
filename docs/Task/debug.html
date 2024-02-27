@@ -49,7 +49,7 @@
     const CANVAS_WIDTH = 350; 
     const CANVAS_HEIGHT = 300
     const nSets = 2 //152; 
-    const printAtEnd = false; 
+    const printAtEnd = true; 
     let sbjCode = '';
     let totalMainTrials; 
     var timeline = [];
@@ -281,6 +281,15 @@
                                     const xOffset = margin + index * (patternWidth + spacing);
                                     drawPattern(ctx, pattern.dots, xOffset, c.width / patterns.length, c.height);
                                 });
+                                
+                                const middleOfCanvas = c.width / 2;
+                                // Draw a thin gray line between patterns
+                                ctx.beginPath();
+                                ctx.moveTo(middleOfCanvas, 0);
+                                ctx.lineTo(middleOfCanvas, c.height);
+                                ctx.strokeStyle = '#cccccc'; // Light gray color
+                                ctx.lineWidth = 1; // Thin line
+                                ctx.stroke();
                             },
                             canvas_size: [CANVAS_WIDTH, CANVAS_HEIGHT],
                             choices: keys,
@@ -358,12 +367,18 @@
                     type: jsPsychInstructions,
                     pages: [
                     instructionsText,
-                    'Examples of Dot Patterns that are highly similar: ' +
+                    'Example of Dot Patterns that are highly <strong>similar</strong>: ' +
                     '<br>' + 
-                    '<img src="assets/high_sim.png" style="max-width:40%; height:auto;"></img>', 
-                    'Examples of Dot Patterns that are not similar: ' +
+                    '<img src="assets/high_sim1.png" style="max-width:50%; height:auto;"></img>', 
+                    'Another example of Dot Patterns that are highly <strong>similar</strong>: ' +
                     '<br>' + 
-                    '<img src="assets/low_sim.png" style="max-width:40%; height:auto;"></img>',
+                    '<img src="assets/high_sim2.png" style="max-width:50%; height:auto;"></img>', 
+                    'Example of Dot Patterns that are highly <strong>dissimilar</strong> ' +
+                    '<br>' + 
+                    '<img src="assets/low_sim1.png" style="max-width:50%; height:auto;"></img>',
+                    'Another Example of Dot Patterns that are highly <strong>dissimilar</strong> ' +
+                    '<br>' + 
+                    '<img src="assets/low_sim2.png" style="max-width:50%; height:auto;"></img>',
                     `Please click NEXT to start the rating experiment`
                     ], 
                     show_clickable_nav: true

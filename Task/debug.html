@@ -48,8 +48,8 @@
     // const CANVAS_HEIGHT = window.innerHeight * 0.7; // 60% of viewport height
     const CANVAS_WIDTH = 350; 
     const CANVAS_HEIGHT = 300
-    const nSets = 2 //152; 
-    const printAtEnd = false; 
+    const nSets = 4 //152; 
+    const printAtEnd = true; 
     let sbjCode = '';
     let totalMainTrials; 
     var timeline = [];
@@ -99,11 +99,13 @@
                         const currentMainTrial = Math.floor((currentTrialIndex - numPreliminaryTrials - numPostTrials) / 2) + 2;
                         counterDiv.textContent = `Trial ${currentMainTrial} / ${totalMainTrials}`;
                     }
+                    
                 }
             },
             on_trial_finish: function() {
                 var trial_data = jsPsych.data.get().last(1);
-                console.log(trial_data.csv());
+                // console.log(trial_data.csv());
+                //console.log(jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}))
             },
             on_finish: function() {
                 if (printAtEnd) {
@@ -214,7 +216,7 @@
             'categories that are generated from those prototypes. <br>' +
             'See Posner & Keele (1968) or Hu & Nosofsky (2024) for related work.<br><br>' +
             'Please let the experimenter know that you have finished the task.';
-
+            
             
             function createTrialsFromJson(json) {
                 
@@ -230,13 +232,20 @@
                 
                 let selectedSets = [];
                 let indices = [];
+                // pick random nSets
                 while(indices.length < nSets) {
-                    let r = Math.floor(Math.random() * json.length / 3) * 3; // Ensure we pick a set start index
+                    let r = Math.floor(Math.random() * json.length / 3) * 3; 
                     if(indices.indexOf(r) === -1) indices.push(r);
                 }
                 indices.forEach(index => {
                     selectedSets.push(json[index], json[index + 1], json[index + 2]);
                 });
+                
+                // for (let i = 0; i < nSets * 3; i += 3) { // Assuming each set has 3 patterns
+                //     selectedSets.push(json[i], json[i + 1], json[i + 2]);
+                // }
+                
+                
                 
                 
                 const trials = [];
@@ -281,6 +290,15 @@
                                     const xOffset = margin + index * (patternWidth + spacing);
                                     drawPattern(ctx, pattern.dots, xOffset, c.width / patterns.length, c.height);
                                 });
+                                
+                                const middleOfCanvas = c.width / 2;
+                                // Draw a thin gray line between patterns
+                                ctx.beginPath();
+                                ctx.moveTo(middleOfCanvas, 0);
+                                ctx.lineTo(middleOfCanvas, c.height);
+                                ctx.strokeStyle = '#cccccc'; // Light gray color
+                                ctx.lineWidth = 1; // Thin line
+                                ctx.stroke();
                             },
                             canvas_size: [CANVAS_WIDTH, CANVAS_HEIGHT],
                             choices: keys,
@@ -318,8 +336,7 @@
                 
                 
                 let randomizedTrials = jsPsych.randomization.shuffle(trials);
-                
-                
+                //let randomizedTrials = trials;
                 // Intersperse fixation trials between each pattern similarity trial
                 randomizedTrials.forEach((trial) => {
                     timeline.push(fixation);
@@ -333,6 +350,7 @@
             function loadAndStartExperiment(callback) {
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', 'mc_patterns.json', true);
+                //xhr.open('GET', 'teg_test_patterns.json', true);
                 xhr.onload = function() {
                     if (xhr.status === 200) {
                         var json = JSON.parse(xhr.responseText);
@@ -358,23 +376,29 @@
                     type: jsPsychInstructions,
                     pages: [
                     instructionsText,
-                    'Examples of Dot Patterns that are highly similar: ' +
+                    'Example of Dot Patterns that are highly <strong>similar</strong>: ' +
                     '<br>' + 
-                    '<img src="assets/high_sim.png" style="max-width:40%; height:auto;"></img>', 
-                    'Examples of Dot Patterns that are not similar: ' +
+                    '<img src="assets/high_sim1.png" style="max-width:50%; height:auto;"></img>', 
+                    'Another example of Dot Patterns that are highly <strong>similar</strong>: ' +
                     '<br>' + 
-                    '<img src="assets/low_sim.png" style="max-width:40%; height:auto;"></img>',
+                    '<img src="assets/high_sim2.png" style="max-width:50%; height:auto;"></img>', 
+                    'Example of Dot Patterns that are highly <strong>dissimilar</strong> ' +
+                    '<br>' + 
+                    '<img src="assets/low_sim1.png" style="max-width:50%; height:auto;"></img>',
+                    'Another Example of Dot Patterns that are highly <strong>dissimilar</strong> ' +
+                    '<br>' + 
+                    '<img src="assets/low_sim2.png" style="max-width:50%; height:auto;"></img>',
                     `Please click NEXT to start the rating experiment`
                     ], 
                     show_clickable_nav: true
                 };
-
+                
                 debrief = {
                     type: jsPsychInstructions,
                     pages: [debriefText],
                     show_clickable_nav: true
                 };
-
+                
                 saveTrial = {
                     type:  jsPsychCallFunction,
                     async: true,
@@ -383,19 +407,19 @@
                         const dateTimeString = [now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
                         .map(num => String(num).padStart(2, '0'))
                         .join('');
-                         const fileName = `debug_dotSim_${sbjCode}_${dateTimeString}.csv`;
-                         //local save
+                        const fileName = `debug_dotSim_${sbjCode}_${dateTimeString}.csv`;
+                        //local save
                         jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).localSave('csv', fileName);
                         //save to server (requries php set up to write on server)
                         var csvData = jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).csv();
                         saveData(fileName, csvData);
                         done(); // need done() so it doesn't get stuck here. 
-
+                        
                     }
                 };
-
-
-
+                
+                
+                
                 const totalTrials = (timeline.length)/2 //- numPreliminaryTrials;
                 console.log(totalTrials);
                 instructions.pages[0] = instructions.pages[0].replace('[N]', totalTrials);

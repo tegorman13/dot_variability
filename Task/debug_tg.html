@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dot Pattern Similarity Task</title>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.3"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    
+    
+    <style>
+        
+        /* * { border: 1px solid red; } */
+        .jspsych-canvas-stimulus {
+            position: fixed;
+            bottom: 55%; /* Position from the top of the viewport */
+            left: 12%;
+            transform: translateX(-50%); /* Center horizontally */
+            z-index: 50;
+        }
+        .prompt-container {
+            position: fixed; /* Change to 'fixed' to keep it visible in the viewport */
+            bottom: 10%; /* Position from the bottom of the viewport */
+            text-align: center; /* Center the text */
+            z-index: 30; /* Ensure it's above other elements */
+        }
+        .trial-counter {
+            position: fixed; /* Position it at the bottom left */
+            bottom: 10px;
+            left: 10px;
+            background-color: #f8f8f8;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+    </style>
+    
+</head>
+<body></body>
+
+<script>
+    
+    // const CANVAS_WIDTH = window.innerWidth * 0.8; // 80% of viewport width
+    // const CANVAS_HEIGHT = window.innerHeight * 0.7; // 60% of viewport height
+    const CANVAS_WIDTH = 350; 
+    const CANVAS_HEIGHT = 300
+    const nSets = 3 //152; 
+    const printAtEnd = true; 
+    let sbjCode = '';
+    let totalMainTrials; 
+    var timeline = [];
+    
+    function saveData(name, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'php/write_data.php'); // Adjust the path if needed
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({filename: name,filedata: data}));
+    }
+    
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        let mainTrialsStarted = false
+        const numPreliminaryTrials = 2; //sbjCode entry, instructions
+        const numPostTrials = 2;  //saveTrial, debrief
+        
+        function updateCanvasSize() {
+            const maxWidth = window.innerWidth * 0.8; // Use 80% of window width
+            const maxHeight = window.innerHeight * 0.6; // Use 60% of window height
+            return {
+                width: Math.min(650, maxWidth), // Ensure canvas is not wider than 650px or window width
+                height: Math.min(350, maxHeight) // Ensure canvas is not taller than 350px or window height
+            };
+        }
+        const canvasSize = updateCanvasSize(); // Initial canvas size
+        
+        
+        
+        const jsPsych = initJsPsych({
+            minimum_valid_rt: 300,
+            default_iti: 200,
+            on_trial_start: function() {
+                if (mainTrialsStarted) { 
+                    let counterDiv = document.querySelector('.trial-counter');
+                    if (!counterDiv) {
+                        counterDiv = document.createElement('div');
+                        counterDiv.className = 'trial-counter';
+                        // Append the trial counter to the jspsych-content-wrapper element
+                        document.querySelector('.jspsych-content-wrapper').appendChild(counterDiv);
+                    }
+                    const currentTrialIndex = jsPsych.getProgress().current_trial_global 
+                    // const totalMainTrials = (jsPsych.getProgress().total_trials) - numPreliminaryTrials; //fixation trials and set reps cancel out
+                    // Only update the counter for main trials
+                    if(currentTrialIndex > numPreliminaryTrials) {
+                        //const currentMainTrial = currentTrialIndex - numPreliminaryTrials;
+                        const currentMainTrial = Math.floor((currentTrialIndex - numPreliminaryTrials - numPostTrials) / 2) + 2;
+                        counterDiv.textContent = `Trial ${currentMainTrial} / ${totalMainTrials}`;
+                    }
+                }
+            },
+            on_trial_finish: function() {
+                var trial_data = jsPsych.data.get().last(1);
+                console.log(trial_data.csv());
+            },
+            on_finish: function() {
+                if (printAtEnd) {
+                    // Print the data to the screen
+                    document.body.innerHTML = "<h1>Experiment Finished</h1>" + 
+                    "<p>Here are your results:</p>" + 
+                    // "<pre>" + JSON.stringify(jsPsych.data.get().values(), null, 2) + "</pre>";
+                    "<pre>" + JSON.stringify(jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}),null,2); + "</pre>";
+                }
+                
+                // move saving code to async trial 
+                //const randomNumber = Math.floor(Math.random() * 900) + 100;
+                // const now = new Date();
+                // const dateTimeString = [now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
+                // .map(num => String(num).padStart(2, '0'))
+                // .join('');
+                // const fileName = `dotSim_${sbjCode}_${dateTimeString}.csv`;
+                
+                //jsPsych.data.get().localSave('csv', fileName);
+                //save to local computer
+                // jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).localSave('csv', fileName);
+                
+                // // save to server (php writing must be set up on server)
+                // var csvData = jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).csv();
+                // saveData(fileName, csvData);
+            }
+        });
+        
+        function drawPattern(context, pattern, xOffset, canvasWidth, canvasHeight) {
+            const dotSize = 1.9; // Size of the dots
+            const patternScale = 3.5; // Increased scale for larger patterns
+            
+            // Calculate the bounding box of the pattern
+            let minX = Math.min(...pattern.map(dot => dot.x));
+            let maxX = Math.max(...pattern.map(dot => dot.x));
+            let minY = Math.min(...pattern.map(dot => dot.y));
+            let maxY = Math.max(...pattern.map(dot => dot.y));
+            
+            // Determine the width and height of the pattern
+            let patternWidth = maxX - minX;
+            let patternHeight = maxY - minY;
+            
+            // Calculate available space for each pattern considering spacing and margin
+            const spacing = 65; // Adjusted space between patterns
+            const margin = 20; // Margin around the canvas
+            const availableWidth = (canvasWidth - spacing - 2 * margin) / 2;
+            const availableHeight = canvasHeight - 2 * margin;
+            
+            // Determine the scale factor to fit the pattern within the available space
+            const scaleX = availableWidth / patternWidth;
+            const scaleY = availableHeight / patternHeight;
+            const scale = Math.min(scaleX, scaleY) * patternScale; // Use the smallest scale factor and ensure it's not more than 1
+            
+            // Center the pattern on its half of the canvas
+            const centerX = xOffset + availableWidth / 2;
+            const centerY = canvasHeight / 2;
+            
+            pattern.forEach(dot => {
+                context.beginPath();
+                
+                // Apply the scaling and centering adjustments
+                const x = (dot.x - minX) * scale + centerX - (availableWidth * 0.5);
+                const y = (dot.y - minY) * scale + centerY - (patternHeight * scale / 2);
+                context.arc(x, y, dotSize, 0, 2 * Math.PI);
+                context.fill();
+            });
+        }
+        
+        
+        var subjectCodeTrial = {
+            type: jsPsychSurveyText,
+            questions: [
+            {prompt: "Please enter the subject code:", name: 'subjectCode', required: true}
+            ],
+            on_finish: function(data) {
+                // You can process or save the subject code here
+                sbjCode = data.response.subjectCode;
+                jsPsych.data.addProperties({
+                    sbjCode: sbjCode
+                });
+                
+                console.log(data.response.subjectCode); // Log subject code to console
+            }
+        };
+        
+        // Welcome page
+        // var welcome = {
+            //     type: jsPsychInstructions,
+            //     pages: [
+            //     'Welcome to the Dot Pattern Similarity Task. <br><br> Press "Next" to continue.'
+            //     ],
+            //     show_clickable_nav: true
+            // };
+            
+            
+            var instructionsText = 'Thank you for participating in our experiment!<br><br>' +
+            'In this task, you will be presented with pairs of dot patterns.<br>' +
+            'Your job is to rate the similarity of each pair using the number keys on your keyboard.<br>' +
+            'Please press a key between 1 and 9 to indicate your rating, where 1 means "Most Dissimilar" and 9 means "Most Similar".<br>' +
+            'You can use any number between 1 and 9 to provide a rating that best represents your judgment of the similarity between the two patterns.<br>' +
+            'Please try to use the full rating scale.<br><br>' +
+            'The task has a total of [N] trials. You can keep track of your progress with a counter that is provided on the lower-left of the screen.<br><br>' +
+            'Please make sure to ask the experimenter if you have any questions.';
+            
+            var debriefText = 'Thank you for participating in our experiment!<br><br>' +
+            'Our study is examining how people perceive the similarity between abstract patterns, and ' +
+            'how the perceived similarity between pairs of pattern prototypes relates to the ease of learning ' +
+            'categories that are generated from those prototypes. <br>' +
+            'See Posner & Keele (1968) or Hu & Nosofsky (2024) for related work.<br><br>' +
+            'Please let the experimenter know that you have finished the task.';
+
+            
+            function createTrialsFromJson(json) {
+                
+                var fixation = {
+                    type: jsPsychHtmlKeyboardResponse,
+                    stimulus: '<div style="font-size:60px;">+</div>',
+                    choices: "NO_KEYS",
+                    trial_duration: function(){
+                        return jsPsych.randomization.sampleWithoutReplacement([250], 1)[0];
+                    }
+                }
+                
+                
+                let selectedSets = [];
+                let indices = [];
+
+                // while(indices.length < nSets) {
+                //     let r = Math.floor(Math.random() * json.length / 3) * 3; // Ensure we pick a set start index
+                //     if(indices.indexOf(r) === -1) indices.push(r);
+                // }
+                // indices.forEach(index => {
+                //     selectedSets.push(json[index], json[index + 1], json[index + 2]);
+                // });
+
+                for (let i = 0; i < nSets * 3; i += 3) { // Assuming each set has 3 patterns
+                    selectedSets.push(json[i], json[i + 1], json[i + 2]);
+                }
+                
+                
+                const trials = [];
+                const keys = ['1','2','3','4','5','6','7','8','9']; // Allowed keys for response
+                
+                // Create a dot-pattern-container and append it to the body only once
+                const dotPatternContainer = document.createElement('div');
+                dotPatternContainer.className = 'dot-pattern-container';
+                document.body.appendChild(dotPatternContainer);
+                
+                for (let i = 0; i < selectedSets.length; i += 3) {
+                    const patternSets = [
+                    [selectedSets[i], selectedSets[i + 1]],
+                    [selectedSets[i], selectedSets[i + 2]],
+                    [selectedSets[i + 1], selectedSets[i + 2]]
+                    ];
+                    
+                    patternSets.forEach(patternSet => {
+                        const patterns = patternSet.map(trialData => {
+                            return {
+                                dots: Array.from({length: 9}, (_, idx) => ({
+                                    x: trialData[`x${idx + 1}`],
+                                    y: trialData[`y${idx + 1}`]
+                                })),
+                                item_label: trialData.item_label,
+                                file: trialData.file
+                            };
+                        });
+                        
+                        console.log("Selected Sets Structure: ", selectedSets);
+                        
+                        
+                        trials.push({
+                            type: jsPsychCanvasKeyboardResponse, // Use the Canvas Keyboard Response plugin
+                            stimulus: function(c) {
+                                let ctx = c.getContext('2d');
+                                ctx.clearRect(0, 0, c.width, c.height);
+                                const spacing = 60; //these get overwritten // Space between patterns
+                                const margin = 10; 
+                                const patternWidth = (c.width - spacing - 2 * margin) / 2;
+                                patterns.forEach((pattern, index) => {
+                                    const xOffset = margin + index * (patternWidth + spacing);
+                                    drawPattern(ctx, pattern.dots, xOffset, c.width / patterns.length, c.height);
+                                });
+                                
+                                const middleOfCanvas = c.width / 2;
+                                // Draw a thin gray line between patterns
+                                ctx.beginPath();
+                                ctx.moveTo(middleOfCanvas, 0);
+                                ctx.lineTo(middleOfCanvas, c.height);
+                                ctx.strokeStyle = '#cccccc'; // Light gray color
+                                ctx.lineWidth = 1; // Thin line
+                                ctx.stroke();
+                            },
+                            canvas_size: [CANVAS_WIDTH, CANVAS_HEIGHT],
+                            choices: keys,
+                            prompt: '<p class="prompt-container">Rate the similarity of the patterns from 1-9 <br> (1=Most Dissimilar, 9=Most Similar).</p>',
+                            response_ends_trial: true,
+                            on_start: function() {
+                                // Move the canvas to the dot-pattern-container on trial start
+                                const canvasElement = document.querySelector('.jspsych-canvas-stimulus');
+                                if (canvasElement) {
+                                    dotPatternContainer.appendChild(canvasElement);
+                                }
+                            },
+                            on_finish: function(data) {
+                                // Record the date and time when the trial finishes
+                                const now = new Date();
+                                data.date = now.toLocaleDateString();
+                                data.time = now.toLocaleTimeString();
+                            },
+                            data: {
+                                sbjCode: sbjCode,
+                                trial: function() {
+                                    const currentTrialIndex = jsPsych.getProgress().current_trial_global;
+                                    return Math.floor((currentTrialIndex - numPreliminaryTrials - numPostTrials) / 2) + 2; 
+                                },
+                                pattern_1: JSON.stringify(patterns[0].dots),
+                                pattern_2: JSON.stringify(patterns[1].dots),
+                                item_label_1: patterns[0].item_label, // Ensure this matches your patternSet structure
+                                item_label_2: patterns[1].item_label, // Ensure this matches your patternSet structure
+                                file: patterns[0].file
+                            }
+                        });
+                    });
+                }
+                
+                
+                
+                //let randomizedTrials = jsPsych.randomization.shuffle(trials);
+                let randomizedTrials = trials;
+                // Intersperse fixation trials between each pattern similarity trial
+                randomizedTrials.forEach((trial) => {
+                    timeline.push(fixation);
+                    timeline.push(trial);
+                });
+                
+                return timeline;
+            }
+            
+            
+            function loadAndStartExperiment(callback) {
+                var xhr = new XMLHttpRequest();
+                //xhr.open('GET', 'mc_patterns.json', true);
+                xhr.open('GET', 'teg_test_patterns.json', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        var json = JSON.parse(xhr.responseText);
+                        var trials = createTrialsFromJson(json);
+                        totalMainTrials = trials.length / 2; // Adjust this calculation based on your actual experiment structure
+                        
+                        if(callback) callback(trials); // Ensure callback is called with the trials
+                    } else {
+                        console.error('There was a problem with the request.');
+                    }
+                };
+                
+                
+                xhr.send();
+                
+                
+            }
+            
+            loadAndStartExperiment(function(timeline) {
+                mainTrialsStarted = true;
+                
+                instructions = {
+                    type: jsPsychInstructions,
+                    pages: [
+                    instructionsText,
+                    'Example of Dot Patterns that are highly <strong>similar</strong>: ' +
+                    '<br>' + 
+                    '<img src="assets/high_sim1.png" style="max-width:50%; height:auto;"></img>', 
+                    'Another example of Dot Patterns that are highly <strong>similar</strong>: ' +
+                    '<br>' + 
+                    '<img src="assets/high_sim2.png" style="max-width:50%; height:auto;"></img>', 
+                    'Example of Dot Patterns that are highly <strong>dissimilar</strong> ' +
+                    '<br>' + 
+                    '<img src="assets/low_sim1.png" style="max-width:50%; height:auto;"></img>',
+                    'Another Example of Dot Patterns that are highly <strong>dissimilar</strong> ' +
+                    '<br>' + 
+                    '<img src="assets/low_sim2.png" style="max-width:50%; height:auto;"></img>',
+                    `Please click NEXT to start the rating experiment`
+                    ], 
+                    show_clickable_nav: true
+                };
+
+                debrief = {
+                    type: jsPsychInstructions,
+                    pages: [debriefText],
+                    show_clickable_nav: true
+                };
+
+                saveTrial = {
+                    type:  jsPsychCallFunction,
+                    async: true,
+                    func: function(done){
+                        const now = new Date();
+                        const dateTimeString = [now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
+                        .map(num => String(num).padStart(2, '0'))
+                        .join('');
+                         const fileName = `debug_dotSim_${sbjCode}_${dateTimeString}.csv`;
+                         //local save
+                        jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).localSave('csv', fileName);
+                        //save to server (requries php set up to write on server)
+                        var csvData = jsPsych.data.get().filter({trial_type: 'canvas-keyboard-response'}).csv();
+                        saveData(fileName, csvData);
+                        done(); // need done() so it doesn't get stuck here. 
+
+                    }
+                };
+
+
+
+                const totalTrials = (timeline.length)/2 //- numPreliminaryTrials;
+                console.log(totalTrials);
+                instructions.pages[0] = instructions.pages[0].replace('[N]', totalTrials);
+                
+                var fullTimeline = [subjectCodeTrial,instructions].concat(timeline).concat([saveTrial,debrief]);
+                //var fullTimeline = [subjectCodeTrial,instructions].concat(timeline);
+                //var fullTimeline = [].concat(timeline);
+                
+                jsPsych.run(fullTimeline);
+            });
+            
+        });
+    </script>
+    </html>
+    

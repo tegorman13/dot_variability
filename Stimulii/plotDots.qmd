@@ -17,28 +17,31 @@ conflict_prefer_all("dplyr", quiet = TRUE)
 lmc22 <- readRDS(here("data","lmc22.rds"))
 mc24 <- readRDS(here("data","mc24.rds"))
 
-mc24_patterns <- mc24 |> 
-  ungroup() |>
-  rename(Pattern.Type="Pattern_Token") |>
-  mutate(Pattern.Type=forcats::fct_relevel(Pattern.Type,"prototype","old","new_low","new_med","new_high")) |>
-  select(id,sbjCode,condit,exp,file,Phase,trial,Block,Pattern.Type,Category,Response,Corr,x1:y9) |>
-  arrange(sbjCode,condit,Category)
-  
 
-lmc22_patterns <- lmc22 |> 
-  ungroup() |> 
-  mutate(Pattern.Type = as.character(Pattern.Type)) |> # Convert to character first
-  mutate(Pattern.Type = factor(case_match(Pattern.Type,
-                                          "Trained.Med" ~ "old",
-                                          "Prototype" ~ "prototype",
-                                          "New.Low" ~ "new_low",
-                                          "New.Med" ~ "new_med",
-                                          "New.High" ~ "new_high",
-                                          .default = Pattern.Type), # Include a default case
-                               levels = c("prototype", "old", "new_low", "new_med", "new_high"))) |>
-  select(id,sbjCode,condit,exp,file,Phase,trial,Block,Pattern.Type,Category,Response,Corr,x1:y9) |>
-  arrange(sbjCode,condit,Category)
+# mc24_patterns <- mc24 |> 
+#   ungroup() |>
+#   rename(Pattern.Type="Pattern_Token") |>
+#   mutate(Pattern.Type=forcats::fct_relevel(Pattern.Type,"prototype","old","new_low","new_med","new_high")) |>
+#   select(id,sbjCode,condit,exp,file,Phase,trial,Block,Pattern.Type,Category,Response,Corr,x1:y9) |>
+#   arrange(sbjCode,condit,Category)
+# 
+# lmc22_patterns <- lmc22 |> 
+#   ungroup() |> 
+#   mutate(Pattern.Type = as.character(Pattern.Type)) |> # Convert to character first
+#   mutate(Pattern.Type = factor(case_match(Pattern.Type,
+#                                           "Trained.Med" ~ "old",
+#                                           "Prototype" ~ "prototype",
+#                                           "New.Low" ~ "new_low",
+#                                           "New.Med" ~ "new_med",
+#                                           "New.High" ~ "new_high",
+#                                           .default = Pattern.Type), # Include a default case
+#                                levels = c("prototype", "old", "new_low", "new_med", "new_high"))) |>
+#   select(id,sbjCode,condit,exp,file,Phase,trial,Block,Pattern.Type,Category,Response,Corr,x1:y9) |>
+#   arrange(sbjCode,condit,Category)
 
+
+mc24_patterns <- read.csv(here("Stimulii","mc24_patterns.csv"))
+lmc22_patterns <- read.csv(here("Stimulii","lmc22_patterns.csv"))
 
   
 mc24_prototypes <- mc24_patterns |> 
@@ -157,10 +160,10 @@ pat_themes <- list(theme_minimal(),xlim(-25, 25),ylim(-25, 25),
 
  pat_long <- mc24_patterns |> 
    filter(Phase==2) |> 
-   select(id, condit,trial, Category, Pattern.Type, x1:y9) |>
+   select(id, condit,trial, item_label,Category, Pattern.Type, x1:y9) |>
    group_by(id, condit, Category, Pattern.Type) |> 
    slice_head(n=10) |> 
-   gather(key = "coordinate", value = "value", -id, -condit,-trial, -Category,-Pattern.Type) %>%
+   gather(key = "coordinate", value = "value", -id, -condit,-trial,-item_label, -Category,-Pattern.Type) %>%
    separate(coordinate, into = c("axis", "number"), sep = 1) %>%
    spread(key = axis, value = value) %>%
    mutate(number = as.integer(number)) 
@@ -268,6 +271,14 @@ pat_long_train <- mc24_patterns |>
    ggplot(aes(x = x, y = y)) +
    geom_point(aes(color=id),alpha=.9) + 
    facet_grid(id ~ Category) + pat_themes + labs(title="Prototypes from first 5 subjects - should match first 10 task trials")
+ 
+  pat_long |> ungroup() |>
+  filter(id %in% ids[1:5] & Pattern.Type=="prototype") |>
+  droplevels() |>
+ mutate(Category=as.factor(Category)) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(aes(color=id),alpha=.9) + 
+   ggh4x::facet_wrap2(~id+item_label) + pat_themes + labs(title="Prototypes from first 5 subjects - should match first 10 task trials")
 ```
 
 

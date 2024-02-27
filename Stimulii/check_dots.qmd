@@ -1,0 +1,124 @@
+
+
+
+```{r}
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted)
+conflict_prefer_all("dplyr", quiet = TRUE)
+
+col.names = c("Phase","Block","BlockTrial","Pattern","Category","Pattern.Token","distortion","Response","Corr","rt",
+              "x1","y1","x2","y2","x3","y3","x4","y4","x5","y5","x6","y6","x7","y7","x8","y8","x9","y9", "file", "condit", "sbjCode")
+
+d <- read.table(here::here("data/dot_4conds_random/dot_cond4_sub99.txt")) |>
+  mutate(file="dot_cond4_sub99",condit="4",sbjCode="tgtest") |> purrr::set_names(col.names) |> group_by(sbjCode, condit) |>
+  mutate(trial = row_number()) |> 
+  relocate("sbjCode", "condit", "trial") 
+
+
+dCat <- d |> 
+  mutate(
+    phase = case_when(
+      Phase == "1" ~ "Training",
+      Phase == "2" ~ "Test"
+    ), 
+    Stage = case_when(
+      trial %in% 1:90 ~ "Start",
+      trial %in% 91:180 ~ "Middle",
+      trial %in% 181:270 ~ "End",
+      trial %in% 271:354 ~ "Test"
+    ),
+    pattern = case_when(
+      Pattern == "1" ~ "old",
+      Pattern == "2" ~ "prototype",
+      Pattern == "3" ~ "new_low",
+      Pattern == "4" ~ "new_med",
+      Pattern == "5" ~ "new_high"
+    ),
+    distortion = recode(distortion,
+                        `0` = "prototype",
+                        `1` = "low",
+                        `2` = "med",
+                        `3` = "high"),
+    Pattern_Token = case_when(
+      pattern == "old" & Pattern.Token %in% 1:90 ~ "old",
+      pattern == "prototype" & Pattern.Token == 0 ~ "prototype",
+      pattern == "new_low" & Pattern.Token %in% 1:3 ~ "new_low",
+      pattern == "new_med" & Pattern.Token %in% 1:6 ~ "new_med",
+      pattern == "new_high" & Pattern.Token %in% 1:9 ~ "new_high"
+    ),
+    condit = recode(condit,
+                    "cond1" = "low",
+                    "cond2" = "medium",
+                    "cond3" = "high",
+                    "cond4" = "mixed")
+  ) |> 
+  relocate(Stage, .after=trial) |> relocate(Pattern_Token, pattern, .after=Pattern.Token)
+
+dCat$Pattern_Token = factor(dCat$Pattern_Token,levels=c("old","prototype","new_low","new_med","new_high")) 
+dCat <- dCat |> mutate(exp="mc24",
+                       id=paste0(sbjCode,".",condit))  |>
+  relocate(id,sbjCode,exp,condit,Phase,phase,Stage,trial,
+           Block,BlockTrial,Pattern_Token,Pattern.Token,Pattern,pattern,distortion,
+           Category,Response,Corr,rt)
+  
+
+teg_test_patterns <- dCat |> 
+  ungroup() |>
+  rename(Pattern.Type="Pattern_Token") |>
+  mutate(Pattern.Type=forcats::fct_relevel(Pattern.Type,"prototype","old","new_low","new_med","new_high")) |>
+  mutate(item_label = paste(sbjCode,condit,Category,trial,sep="_")) |>
+  select(id,sbjCode,item_label,condit,exp,file,Phase,trial,Block,Pattern.Type,Category,Response,Corr,x1:y9) |>
+  arrange(sbjCode,trial,condit,Category)
+
+
+
+write.csv(teg_test_patterns |> slice_head(n=9),here("Stimulii","teg_test_patterns.csv"), row.names = FALSE)
+
+
+
+ids <- unique(teg_test_patterns$id)
+pat_themes <- list(theme_minimal(),xlim(-25, 25),ylim(-25, 25),
+                        labs(x = "X Coordinate", y = "Y Coordinate"),
+                   coord_fixed(),guides(alpha = FALSE))
+```
+
+
+```{r}
+#| fig-width: 11
+#| fig-height: 10
+
+
+ pat_long <- teg_test_patterns |> 
+    filter(Block==1,Phase==1) |>
+   select(id, condit, Category,Phase, item_label,trial,Block,Pattern.Type, x1:y9) |>
+   group_by(id, trial,item_label,condit, Category,Phase, Pattern.Type) |> 
+   gather(key = "coordinate", value = "value", -id,-Phase,-Block, -condit,-trial,-item_label, -Category,-Pattern.Type) %>%
+   separate(coordinate, into = c("axis", "number"), sep = 1) %>%
+   spread(key = axis, value = value) %>%
+   mutate(number = as.integer(number))
+ 
+ pat_long |> 
+   ggplot(aes(x = x, y = y,col=Pattern.Type)) +
+   geom_point() + # Add dots
+   ggh4x::facet_wrap2(~trial+item_label) + # Create a grid of plots, with subjects by rows and categories by columns
+   pat_themes + labs(title="Prototypes from Category 1 - with distortions")
+   
+
+
+```
+
+### Attempt flip to match MATLAB - this works
+```{r}
+#| fig-width: 11
+#| fig-height: 11
+
+pat_long |> 
+   mutate(y=-y) |>
+   ggplot(aes(x = x, y = y,col=Pattern.Type)) +
+   geom_point() + # Add dots
+   ggh4x::facet_wrap2(~trial+item_label) + # Create a grid of plots, with subjects by rows and categories by columns
+   pat_themes + labs(title="Prototypes from Category 1 - with distortions")
+   
+```
+
+
+![cat-learn24](nosof_lab_dot_pics.png)
