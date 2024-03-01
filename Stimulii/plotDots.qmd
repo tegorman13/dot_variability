@@ -279,6 +279,24 @@ pat_long_train <- mc24_patterns |>
    ggplot(aes(x = x, y = y)) +
    geom_point(aes(color=id),alpha=.9) + 
    ggh4x::facet_wrap2(~id+item_label) + pat_themes + labs(title="Prototypes from first 5 subjects - should match first 10 task trials")
+  
+  
+  pat_long |> ungroup() |>
+  filter(id=="57.low" & Pattern.Type=="prototype") |>
+  droplevels() |>
+ mutate(Category=as.factor(Category)) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(aes(color=id),alpha=.9) + 
+   ggh4x::facet_wrap2(~id+item_label) + pat_themes + labs(title="Prototypes from first 5 subjects - should match first 10 task trials")
+  
+  pat_long |> ungroup() |>
+  filter(id=="57.low" & Pattern.Type=="prototype") |>
+  droplevels() |>
+ mutate(Category=as.factor(Category), y = -y) |>
+   ggplot(aes(x = x, y = y)) +
+   geom_point(aes(color=id),alpha=.9) + 
+   ggh4x::facet_wrap2(~id+item_label) + pat_themes + labs(title="Prototypes from first 5 subjects - should match first 10 task trials")  
+  
 ```
 
 

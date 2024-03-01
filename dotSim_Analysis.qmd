@@ -1,0 +1,111 @@
+
+
+still need to update plots to fix y axis
+
+```{r}
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted, jsonlite,stringr)
+conflict_prefer_all("dplyr", quiet = TRUE)
+walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
+mc24_proto <- read.csv(here("Stimulii","mc24_prototypes.csv"))
+
+
+dfiles <- tibble(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
+
+d <- map_dfr(dfiles, ~{read.csv(.x) |> 
+    mutate(sfile=tools::file_path_sans_ext(basename(.x)))}) |> 
+  select(-trial_index, -internal_node_id,-trial_type) |>
+   mutate(set = paste(str_extract(item_label_1, "^\\d+"),
+                     str_extract(item_label_1, "[a-z]+"), sep = "_")) |>
+  relocate(sbjCode,date,set,trial,item_label_1,item_label_2,response,rt)
+
+
+```
+
+
+## Plot Pairs
+```{r}
+#| fig-cap: Prototypes with 10 disortion overlaid
+#| fig-width: 10
+#| fig-height: 12
+
+
+d %>% filter(trial==1) %>%
+  plot_dots()
+
+d %>% filter(trial==1) %>%
+  plot_dots2()
+
+d %>% filter(trial<6) %>%
+  plot_dotsAll()
+
+
+
+```
+
+# Compare to original prototypes
+```{r}
+
+#| fig-width: 6
+#| fig-height: 9
+
+
+d %>% filter(file %in% unique(d$file[1])) %>%
+  plot_dotsAll()
+
+plot_dotsAll_orig <- function(df) {
+  plots <- list()
+
+  for (i in 1:nrow(df)) {
+    p1 <- df[i, ] %>%
+      pivot_longer(cols = starts_with("x"), names_to = "dot", values_to = "x") %>%
+      mutate(dot = as.numeric(str_remove(dot, "x"))) %>%
+      pivot_longer(cols = starts_with("y"), names_to = "dot2", values_to = "y") %>%
+      mutate(dot2 = as.numeric(str_remove(dot2, "y"))) %>%
+      filter(dot == dot2) %>%
+      ggplot(aes(x = x, y = y)) +
+      geom_point() +
+      coord_cartesian(xlim = c(-25, 25), ylim = c(-25, 25)) +
+      theme_minimal() +
+      labs(title = df$id[i]) + theme_blank
+
+    plots <- append(plots, list(p1))
+  }
+
+  patchwork::wrap_plots(plots, ncol = 1)
+}
+
+mc24_proto |> filter(file %in% unique(d$file[1])) %>% plot_dotsAll_orig()
+
+
+```
+
+
+
+# Sanity checks
+```{r}
+
+
+d |> group_by(sbjCode, item_label_1, item_label_2) |> summarise(n=n())
+
+d |> pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(sbjCode, item) |> summarise(n=n())
+  
+
+d |> group_by(sbjCode, file) |> summarise(n=n())
+d |> group_by(sbjCode, set) |> summarise(n=n())
+
+d |> group_by(sbjCode) |> summarise(n_distinct(file))
+d |> group_by(sbjCode) |> summarise(n_distinct(set))
+
+
+```
+
+
+
+
+```{r}
+
+
+
+```
+
