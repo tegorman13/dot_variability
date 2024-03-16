@@ -43,11 +43,21 @@ lmc22_prototypes <- lmc22_patterns |>
   arrange(sbjCode,condit,Category)
 
 
-write.csv(mc24_prototypes,here("Stimulii","mc24_prototypes.csv"), row.names = FALSE)
-write.csv(lmc22_prototypes,here("Stimulii","lmc22_prototypes.csv"), row.names = FALSE)
+# write.csv(mc24_prototypes,here("Stimulii","mc24_prototypes.csv"), row.names = FALSE)
+# write.csv(lmc22_prototypes,here("Stimulii","lmc22_prototypes.csv"), row.names = FALSE)
+# 
+# write.csv(mc24_patterns,here("Stimulii","mc24_patterns.csv"), row.names = FALSE)
+# write.csv(lmc22_patterns,here("Stimulii","lmc22_patterns.csv"), row.names = FALSE)
 
-write.csv(mc24_patterns,here("Stimulii","mc24_patterns.csv"), row.names = FALSE)
-write.csv(lmc22_patterns,here("Stimulii","lmc22_patterns.csv"), row.names = FALSE)
+
+
+
+sbj_cat <- mc24_patterns |> 
+  group_by(id,sbjCode,condit,Category,Pattern.Type,file) |> 
+  summarise(n=n(),Corr=mean(Corr,na.rm=TRUE)) |>
+  left_join(mc24_prototypes |> select(id,Category,item_label),by=c("id","Category") )
+
+#write.csv(sbj_cat,here("data","mc24_sbj_cat.csv"), row.names = FALSE)
 
 
 

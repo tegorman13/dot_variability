@@ -35,6 +35,49 @@ plot_dotsAll <- function(df) {
 }
 
 
+plot_dotsAll_orig <- function(df) {
+  # Transform the dataframe to a long format for plotting
+  df_long <- df %>%
+    pivot_longer(cols = starts_with("x") | starts_with("y"),
+                 names_pattern = "([xy])(\\d)",
+                 names_to = c(".value", "dot")) %>%
+    group_by(id) %>%
+    mutate(dot = as.numeric(dot)) %>%
+    arrange(dot)
+  
+  plots <- list()
+  
+  # Iterate over each unique ID to generate plots
+  unique_ids <- unique(df_long$id)
+  for (id in unique_ids) {
+    # Filter the dataframe for the current ID
+    df_filtered <- filter(df_long, id == !!id)
+    
+    # Plot
+    p <- ggplot(df_filtered, aes(x = x, y = y)) +
+      geom_point() +
+      coord_cartesian(xlim = c(-25, 25), ylim = c(-25, 25)) +
+      theme_minimal() +
+      labs(title = id) + 
+      theme(
+        panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank()
+      )
+    
+    plots <- append(plots, list(p))
+  }
+  
+  # Use patchwork to arrange all plots in a grid
+  return(wrap_plots(plots, ncol = 2))
+}
+
+
+
+
+
+
 
 plot_dots <- function(df) {
   df %>%

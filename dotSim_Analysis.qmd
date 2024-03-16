@@ -7,19 +7,149 @@ pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted, jsonlite,
 conflict_prefer_all("dplyr", quiet = TRUE)
 walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
 mc24_proto <- read.csv(here("Stimulii","mc24_prototypes.csv"))
+sbj_cat <- read.csv(here("data","mc24_sbj_cat.csv"))
 
 
-dfiles <- tibble(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
 
-d <- map_dfr(dfiles, ~{read.csv(.x) |> 
+
+dfiles <- list(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
+
+d <- map_dfr(dfiles$path, ~read.csv(.x))
+
+d <- map_dfr(dfiles$path, ~{read.csv(.x) |> 
     mutate(sfile=tools::file_path_sans_ext(basename(.x)))}) |> 
   select(-trial_index, -internal_node_id,-trial_type) |>
    mutate(set = paste(str_extract(item_label_1, "^\\d+"),
                      str_extract(item_label_1, "[a-z]+"), sep = "_")) |>
-  relocate(sbjCode,date,set,trial,item_label_1,item_label_2,response,rt)
+  mutate(pair_label = paste0(item_label_1,"_",item_label_2)) |>
+  relocate(sbjCode,date,set,pair_label,trial,item_label_1,item_label_2,response,rt)
+
+
 
 
 ```
+
+
+
+```{r}
+
+
+patternAvg <- d |> pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(item,file) |> summarise(n_rating=n(),resp=mean(response),sd=sd(response)) |> arrange(desc(n_rating))
+
+
+cat_sim <- sbj_cat |> 
+  mutate(item=item_label) |>
+  left_join(patternAvg,by=c("file","item"))  |> arrange(desc(n_rating)) |>
+  #remove rows where n_rating is NA, or less than 4
+  filter(!is.na(n_rating),n_rating>=12) 
+  
+
+
+cat_sim |> ggplot(aes(x=Corr,y=resp)) + 
+  geom_point(aes(col=Pattern.Type)) + 
+  #geom_smooth(aes(fill=Pattern.Type)) + 
+  facet_wrap(~condit)
+
+
+cat_sim |> ggplot(aes(x=Corr,y=resp)) + 
+  geom_point(aes(col=condit)) + 
+  #geom_smooth(aes(fill=Pattern.Type)) + 
+  facet_wrap(~Pattern.Type)
+
+```
+
+
+
+
+
+
+## Sanity checks
+```{r}
+
+d |> summarize(n=n(), n_distinct(sbjCode), n_distinct(file), n_distinct(set), n_distinct(trial), n_distinct(item_label_1), n_distinct(item_label_2))
+d |> group_by(sbjCode, item_label_1, item_label_2) |> summarise(n=n())
+
+# (1-.33)^8
+# (factorial(8)/(factorial(6)*factorial(8-6))) * (.33^6)*((1-.33)^(8-6))
+# (factorial(8)/(factorial(7)*factorial(8-7))) *(.33^6)*((1-.33)^(8-7))
+# (factorial(8)/(factorial(8)*factorial(8-8))) *(.33^6)*(1-.33)^(8-8)
+
+
+d |> pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(sbjCode, item) |> summarise(n=n())
+
+patternCounts <- d |> pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(item) |> summarise(n=n(),resp=mean(response),sd=sd(response)) |> arrange(desc(n))
+
+setCounts <- d |> pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(set) |> summarise(n=n(),resp=mean(response),sd=sd(response)) |> arrange(desc(n))
+
+pairCounts <- d |> 
+  group_by(pair_label) |> 
+  summarise(n=n(),resp=mean(response),sd=sd(response)) |> arrange(desc(n)) |> ungroup()
+
+
+
+patternCounts
+
+d |> group_by(sbjCode, file) |> summarise(n=n())
+d |> group_by(sbjCode, set) |> summarise(n=n())
+
+d |> group_by(sbjCode) |> summarise(n_distinct(file))
+d |> group_by(sbjCode) |> summarise(n_distinct(set))
+
+
+pairCounts |> 
+  mutate(set=reorder(pair_label,n)) |>
+  ggplot(aes(x=set,y=n)) + geom_col()
+
+
+pairCounts |> 
+  ggplot(aes(x=resp))+geom_histogram() 
+
+d |> ggplot(aes(x=response))+geom_histogram() + facet_wrap(~sbjCode)
+
+d |> ggplot(aes(x=rt))+geom_density() + facet_wrap(~sbjCode,scale="free_x")
+```
+
+
+
+
+
+
+```{r}
+#| fig-width: 7
+#| fig-height: 12
+
+
+
+patternCounts |> filter(n>=8) |>  slice_min(resp)
+patternCounts |> filter(n>=8) |>  slice_max(resp)
+
+setCounts |> filter(n>=24) |>  slice_min(resp)
+setCounts |> filter(n>=24) |>  slice_max(resp)
+
+
+pairCounts |> filter(n>=5) |>  slice_min(resp,n=2)
+pairCounts |> filter(n>=5) |>  slice_max(resp)
+
+
+
+d %>% filter(pair_label %in% {pairCounts |> filter(n>=7) |>  slice_min(resp,n=5) |> pull(pair_label)} ) |>
+  group_by(pair_label) |>
+  slice_head(n=1) %>%
+  plot_dotsAll()
+
+
+d %>% filter(pair_label %in% {pairCounts |> filter(n>=7) |>  slice_max(resp,n=5) |> pull(pair_label)} ) |>
+  group_by(pair_label) |>
+  slice_head(n=1) %>%
+  plot_dotsAll()
+
+```
+
+
 
 
 ## Plot Pairs
@@ -28,21 +158,20 @@ d <- map_dfr(dfiles, ~{read.csv(.x) |>
 #| fig-width: 10
 #| fig-height: 12
 
-
 d %>% filter(trial==1) %>%
   plot_dots()
 
 d %>% filter(trial==1) %>%
   plot_dots2()
 
-d %>% filter(trial<6) %>%
+d %>% filter(trial<2) %>%
   plot_dotsAll()
-
-
 
 ```
 
-# Compare to original prototypes
+
+
+## Compare to original prototypes
 ```{r}
 
 #| fig-width: 6
@@ -81,24 +210,7 @@ mc24_proto |> filter(file %in% unique(d$file[1])) %>% plot_dotsAll_orig()
 
 
 
-# Sanity checks
-```{r}
 
-
-d |> group_by(sbjCode, item_label_1, item_label_2) |> summarise(n=n())
-
-d |> pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
-  group_by(sbjCode, item) |> summarise(n=n())
-  
-
-d |> group_by(sbjCode, file) |> summarise(n=n())
-d |> group_by(sbjCode, set) |> summarise(n=n())
-
-d |> group_by(sbjCode) |> summarise(n_distinct(file))
-d |> group_by(sbjCode) |> summarise(n_distinct(set))
-
-
-```
 
 
 
