@@ -3,6 +3,7 @@ title: Dot Pattern Similarity
 date: last-modified
 lightbox: true
 toc: true
+page-layout: full
 toc-depth: 3
 code-fold: true
 code-tools: true
@@ -10,6 +11,12 @@ execute:
   warning: false
   eval: true
 ---
+
+
+
+prototype sets refer to sets of 3 prototypes that correspond to a single participant in the Hu & Nosofsky 2024 study. 
+prototype pairs refer to the specific pairs of prototypes that are displayed together on a rating trial (3 pairs per set). 
+
 
 
 ```{r}
@@ -34,6 +41,22 @@ d <- map_dfr(dfiles$path, ~{read.csv(.x) |>
   relocate(sbjCode,date,set,pair_label,trial,item_label_1,item_label_2,response,rt)
 
 
+setCounts <- d |> 
+  pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(set) |> summarise(n=n_distinct(sbjCode),resp=mean(response),sd=sd(response)) |> arrange(desc(n))
+
+# length(unique(mc_proto$set)) # 304
+setCounts2 <- mc24_proto |> group_by(set) |> 
+  slice_head(n=1) |> 
+  select(id,file,set) |> 
+  left_join(setCounts,by="set") |> 
+  mutate(n = ifelse(is.na(n), 0, n), .groups="drop") |> 
+  arrange(n) |> ungroup()
+
+pairCounts <- d |> 
+  group_by(pair_label,set) |> 
+  summarise(n=n(),mean_resp=mean(response),sd=sd(response)) |> arrange(desc(n)) |> ungroup()
+
 
 
 ```
@@ -44,15 +67,32 @@ d <- map_dfr(dfiles$path, ~{read.csv(.x) |>
 ## Data Inspection & Sanity Checks
 
 
+
 ```{r}
+#| label: tbl-totals
+#| tbl-cap: "Current counts of unique subjects, and prototype sets"
+
+avg_set_rating <- setCounts2 |> summarise("Avg Ratings Per Set" = mean(n)) |> pull(1)
+
+d |> 
+  summarize("N Subjects" = n_distinct(sbjCode), "N Prototype Sets" = n_distinct(set)) |> 
+  mutate("Avg Ratings Per Set" = avg_set_rating) |>
+  kbl()
+
+
+
+```
+
+```{r}
+#| label: tbl-indv-sbj
+#| tbl-cap: "Individual Subject Ratings "
+
 
 # d |> summarize(n=n(), n_distinct(sbjCode), n_distinct(file), n_distinct(set), n_distinct(trial), n_distinct(item_label_1), n_distinct(item_label_2))
 
 
 
-d |> 
-  summarize(n_subjects = n_distinct(sbjCode), n_prototype_sets = n_distinct(set)) |> 
-  kbl()
+
 
 
 # d %>%
@@ -99,6 +139,7 @@ sbj_sum <- d |> group_by(sbjCode) |>
   
 
 sbj_sum |> mutate(total_time=as.numeric(`Total Time (min)`)) |> 
+  rename("Subject"=sbjCode, "N_Sets" = n_prototype_sets) |> 
   summarize("Average Completion Time (min)" = mean(total_time), "Min Completion Time (min)" = min(total_time), "Max Completion Time (min)" = max(total_time)) |> kbl()
 
 
@@ -145,22 +186,6 @@ sbj_sum |> mutate(total_time=as.numeric(`Total Time (min)`)) |>
 #     pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> select(sbjCode,set,pair_label,item_label,item,response) |>  group_by(set) |>
 #     summarize(n=n_distinct(sbjCode)) |> arrange(desc(n)) 
 
-
-setCounts <- d |> 
-  pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
-  group_by(set) |> summarise(n=n_distinct(sbjCode),resp=mean(response),sd=sd(response)) |> arrange(desc(n))
-
-# length(unique(mc_proto$set)) # 304
-setCounts2 <- mc24_proto |> group_by(set) |> 
-  slice_head(n=1) |> 
-  select(id,file,set) |> 
-  left_join(setCounts,by="set") |> 
-  mutate(n = ifelse(is.na(n), 0, n), .groups="drop") |> 
-  arrange(n) |> ungroup()
-
-pairCounts <- d |> 
-  group_by(pair_label,set) |> 
-  summarise(n=n(),mean_resp=mean(response),sd=sd(response)) |> arrange(desc(n)) |> ungroup()
 
 
 
@@ -297,8 +322,10 @@ d %>% filter(pair_label %in% {pairCounts |> filter(n>=min_resp) |>
 ## All pairs with >=5 ratings
 
 - click on column headers to change sort order
+  - e.g. clicking on "Mean Rating" will toggle showing the pairs rated most similar or most dissimilar
+  - clicking on "SD" will toggle showing the pairs with the most or least agreement in ratings
 
-::: column-page-inset-right
+::: column-page-right
 
 ```{r}
 
@@ -328,7 +355,7 @@ pat_table_plot <- function(Pair){
           #theme_blank +
           theme_void() + 
           theme(strip.text = element_text(size = 7,hjust=.5),
-                panel.spacing.x=unit(-9.0, "lines")) 
+                panel.spacing.x=unit(-7.3, "lines")) 
 }
 
 
@@ -338,15 +365,16 @@ p5 <- pairCounts |> filter(n>=5)
 
 p5 |> 
 relocate(pair_label,.after=sd) |>
-rename("Pair"=pair_label, "N Ratings"=n, "Mean Rating"=mean_resp, "SD"=sd) |>
+rename("Pair"=pair_label, "N"=n, "Mean Rating"=mean_resp, "SD"=sd) |>
 #group_by(Pair) |> 
 gt() |> 
+tab_options(table.font.size = px(8L)) |>
   cols_width(
-    set ~ px(120),
-    Pair ~ px(500),
-    `N Ratings` ~ px(100),
-    `Mean Rating` ~ px(100),
-    SD ~ px(90)
+    set ~ px(116),
+    Pair ~ px(380),
+    `N` ~ px(50),
+    `Mean Rating` ~ px(90),
+    SD ~ px(55)
   ) |>  
   fmt_number(decimals = 1) |> #fmt_integer() |>
   cols_align('left', columns = set) |> 
@@ -354,11 +382,12 @@ gt() |>
     locations = cells_body(columns = Pair),
     fn = function(column) {
       map(column, pat_table_plot) |>
-        ggplot_image(height = px(220), aspect_ratio = 2)
+        ggplot_image(height = px(210), aspect_ratio = 1.8)
     }
   ) |>  
   opt_interactive(page_size_default=5, 
-    use_page_size_select= TRUE, use_search=TRUE, use_resizers=TRUE,use_filters=TRUE, page_size_values = c(10, 25, 50, 100))
+    use_page_size_select= TRUE, use_search=TRUE, use_resizers=TRUE,use_filters=TRUE, page_size_values = c(5, 10, 25, 50, 100)) 
+    
 
 
 ```
