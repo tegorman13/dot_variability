@@ -114,17 +114,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-<li class="nav-item">
-    <a class="nav-link" href="../dp_22.html"> 
-<span class="menu-text">2022_Paper</span></a>
+<li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prior-work" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Prior Work</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-prior-work">
+<li>
+    <a class="dropdown-item" href="../dp_22.html">
+ <span class="dropdown-text">2022_Paper</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../dp_24.html"> 
-<span class="menu-text">Hu_Nosofsky24</span></a>
+        <li>
+    <a class="dropdown-item" href="../dp_24.html">
+ <span class="dropdown-text">Hu_Nosofsky24</span></a>
   </li>  
+    </ul>
+</li>
   <li class="nav-item">
     <a class="nav-link" href="../Stimulii/plotDots.html"> 
 <span class="menu-text">Dot Patterns</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../dotSim_Analysis.html"> 
+<span class="menu-text">Dot Similarity</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../Task/Task.html"> 
@@ -374,11 +385,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section></section><section id="save-examples-separately" class="level1"><h1>save examples separately</h1>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggsave</span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">"Task/assets/high_sim1.png"</span><span class="op">)</span>,<span class="va">phsim1</span><span class="op">)</span></span>
-<span><span class="fu">ggsave</span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">"Task/assets/high_sim2.png"</span><span class="op">)</span>,<span class="va">phsim2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ggsave</span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">"Task/assets/low_sim1.png"</span><span class="op">)</span>,<span class="va">plsim1</span><span class="op">)</span></span>
-<span><span class="fu">ggsave</span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">"Task/assets/low_sim2.png"</span><span class="op">)</span>,<span class="va">plsim2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ggsave(here("Task/assets/high_sim1.png"),phsim1)</span></span>
+<span><span class="co"># ggsave(here("Task/assets/high_sim2.png"),phsim2)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ggsave(here("Task/assets/low_sim1.png"),plsim1)</span></span>
+<span><span class="co"># ggsave(here("Task/assets/low_sim2.png"),plsim2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 
@@ -1200,11 +1211,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a><span class="fu"># save examples separately </span></span>
 <span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Task/assets/high_sim1.png"</span>),phsim1)</span>
-<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Task/assets/high_sim2.png"</span>),phsim2)</span>
-<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Task/assets/low_sim1.png"</span>),plsim1)</span>
-<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Task/assets/low_sim2.png"</span>),plsim2)</span>
+<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(here("Task/assets/high_sim1.png"),phsim1)</span></span>
+<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(here("Task/assets/high_sim2.png"),phsim2)</span></span>
+<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(here("Task/assets/low_sim1.png"),plsim1)</span></span>
+<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(here("Task/assets/low_sim2.png"),plsim2)</span></span>
 <span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a></span>
@@ -1213,8 +1224,25 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2024 (Thomas Gorman)[https://tegorman13.github.io]</p>
+</div>   
+    <div class="nav-footer-center">
+<p>site created with <a href="https://cran.r-project.org/">R</a> and <a href="https://quarto.org">quarto</a></p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Stimulii/instruction_examples.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/Stimulii/instruction_examples.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+<li class="nav-item">
+    <a class="nav-link" href="https://github.com/tegorman13/dot_variability" target="_blank">
+{{}}
+</a>
+  </li>  
+</ul>
+</div>
+  </div>
+</footer>
 
 
-
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Stimulii/instruction_examples.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/Stimulii/instruction_examples.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

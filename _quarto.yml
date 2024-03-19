@@ -19,7 +19,7 @@ project:
 website:
   title: "Dot Pattern Variability"
   repo-url: https://github.com/tegorman13/dot_variability
-  site-url: "https://tegorman13.github.io"
+  site-url: "https://tegorman13.github.io/dot_variability"
   repo-actions: [source, edit, issue]
   reader-mode: true
   page-navigation: true
@@ -31,15 +31,27 @@ website:
       - icon: github
         href: https://github.com/tegorman13/dot_variability
     left:
-      - text: "2022_Paper"
-        href: dp_22.qmd
-      - text: "Hu_Nosofsky24"
-        href:  dp_24.qmd
+      - text: "Prior Work"
+        menu: 
+          - text: "2022_Paper"
+            href: dp_22.qmd
+          - text: "Hu_Nosofsky24"
+            href:  dp_24.qmd
       - text: "Dot Patterns"
         href:  Stimulii/plotDots.qmd
+      - text: "Dot Similarity"
+        href:  dotSim_Analysis.qmd
       - text: "Task"
         href:  Task/Task.qmd
         #href:  Task/index.html
+  page-footer:
+    left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
+    center: "site created with [R](https://cran.r-project.org/) and [quarto](https://quarto.org)"
+    right: 
+      - text: "{{< fa brands github size=2.0x >}}"
+        aria-label: GitHub
+        target: _blank
+        href: https://github.com/tegorman13/dot_variability
         
 execute:
   freeze: auto

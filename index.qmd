@@ -1,0 +1,12 @@
+---
+title: "Dot Pattern Similarity Project"
+listing:
+  contents:
+    - dotSim_Analysis.qmd
+    - Stimulii/plotDots.qmd
+    - dp_24.qmd
+    - dp_22.qmd
+    - Task/Task.qmd
+    # - "reports/*.qmd"
+    # - "lab-notes/*reports.qmd"
+---
