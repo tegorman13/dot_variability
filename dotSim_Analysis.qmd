@@ -296,8 +296,8 @@ prtg/prtid
 # pairCounts |> filter(n>=5) |>  slice_min(resp,n=2)
 # pairCounts |> filter(n>=5) |>  slice_max(resp)
 
-min_resp=4
-n_show=2
+min_resp=7
+n_show=3
 
 d %>% filter(pair_label %in% {pairCounts |> filter(n>=min_resp) |>  
   slice_min(mean_resp,n=n_show, with_ties=FALSE) |> pull(pair_label)} ) |>
@@ -360,7 +360,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=5) 
+p5 <- pairCounts |> filter(n>=8) 
 
 
 p5 |> 
