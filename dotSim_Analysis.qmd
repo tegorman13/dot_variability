@@ -281,7 +281,7 @@ prtg/prtid
 ## Lowest and Highest Rated Pairs
 
 ```{r}
-#| fig-width: 10
+#| fig-width: 9
 #| fig-height: 8
 
 # patternCounts |> filter(n>=8) |>  slice_min(resp)
@@ -369,7 +369,7 @@ gt() |>
 tab_options(table.font.size = px(8L)) |>
   cols_width(
     set ~ px(116),
-    Pair ~ px(380),
+    Pair ~ px(415),
     `N` ~ px(50),
     `Mean Rating` ~ px(90),
     SD ~ px(55)
@@ -380,7 +380,7 @@ tab_options(table.font.size = px(8L)) |>
     locations = cells_body(columns = Pair),
     fn = function(column) {
       map(column, pat_table_plot) |>
-        ggplot_image(height = px(210), aspect_ratio = 1.8)
+        ggplot_image(height = px(230), aspect_ratio = 1.8)
     }
   ) |>  
   opt_interactive(page_size_default=5, 
@@ -446,7 +446,6 @@ t3 |> kbl(caption="Extreme Groups")
 - Each subject in the 2024 study has a similarity score for each of their 3 categories. (averaged over 2 comparisons with that categories prototype)
 - The same category similarity scores are then compared to their accuracy for each of the Pattern Tyeps (old, prototype, new low, new med, new high)
 ```{r}
-
 
 
 cat_sim %>% # round all numerics except sbjCode to 2 decimal places
