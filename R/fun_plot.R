@@ -8,8 +8,14 @@ theme_blank <- theme(
 
 
 
+stat_bar <- list(stat_summary(fun=mean, geom="bar", position=position_dodge()),
+                 stat_summary(fun.data=mean_se, geom="errorbar", color="black", position=position_dodge(), linewidth=.5))
 
-
+ 
+round_tibble <- function(tbl, rn) {
+  tbl %>% 
+    mutate(across(where(is.numeric), ~round(., rn)))
+}
 
 plot_dotsAll <- function(df) {
   plots <- list()

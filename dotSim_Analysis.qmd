@@ -21,7 +21,7 @@ prototype pairs refer to the specific pairs of prototypes that are displayed tog
 
 ```{r}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, 
-  conflicted, jsonlite,stringr, gt, knitr, kableExtra, lubridate)
+  conflicted, jsonlite,stringr, gt, knitr, kableExtra, lubridate,ggh4x)
 conflict_prefer_all("dplyr", quiet = TRUE)
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
@@ -39,7 +39,6 @@ d <- map_dfr(dfiles$path, ~{read.csv(.x) |>
                      str_extract(item_label_1, "[a-z]+"), sep = "_")) |>
   mutate(pair_label = paste0(item_label_1,"_",item_label_2)) |>
   relocate(sbjCode,date,set,pair_label,trial,item_label_1,item_label_2,response,rt)
-
 
 setCounts <- d |> 
   pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
@@ -172,7 +171,6 @@ sbj_sum |> mutate(total_time=as.numeric(`Total Time (min)`)) |>
 # (factorial(8)/(factorial(6)*factorial(8-6))) * (.33^6)*((1-.33)^(8-6))
 # (factorial(8)/(factorial(7)*factorial(8-7))) *(.33^6)*((1-.33)^(8-7))
 # (factorial(8)/(factorial(8)*factorial(8-8))) *(.33^6)*(1-.33)^(8-8)
-
 
 # d |> pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
 #   group_by(sbjCode, item) |> summarise(n=n())
@@ -319,7 +317,7 @@ d %>% filter(pair_label %in% {pairCounts |> filter(n>=min_resp) |>
 
 
 
-## All pairs with >=5 ratings
+## All pairs with >=10 ratings
 
 - click on column headers to change sort order
   - e.g. clicking on "Mean Rating" will toggle showing the pairs rated most similar or most dissimilar
@@ -360,7 +358,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=8) 
+p5 <- pairCounts |> filter(n>=10) 
 
 
 p5 |> 
@@ -395,15 +393,16 @@ tab_options(table.font.size = px(8L)) |>
 :::
 
 
-<!-- 
 
 ### Correlations with Accuracy in Hu & Nosofsky 2024
 
 - not really enough data for this yet
 
+
+#### Assess # of patterns in various binnings - e.g. quartile, decile
 ```{r}
-#| fig-width: 10
-#| fig-height: 7
+
+
 
 patternAvg <- d |> 
   pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
@@ -416,14 +415,134 @@ cat_sim <- sbj_cat |>
   mutate(item=item_label) |>
   left_join(patternAvg,by=c("file","item"))  |> arrange(desc(n_rating)) |>
   #remove rows where n_rating is NA, or less than 4
-  filter(!is.na(n_rating),n_rating>=12) 
-  
+  filter(!is.na(n_rating),n_rating>=12) |> 
+  mutate(sim_group = ifelse(resp>6.0,"Very Similar",ifelse(resp<3.5,"Very Dissimilar","Medium"))) |> 
+  mutate(sim_group=factor(sim_group,levels=c("Very Dissimilar","Medium","Very Similar"))) 
+
+
+# bin data by rating (resp) into quartiles
+t1 <- cat_sim |> 
+  mutate(Quartile = ntile(resp, 5))|>
+  group_by(Quartile) |>
+  summarize("Avg. Similarity Rating"=mean(resp),sd=sd(resp),n_ratings=n_distinct(file), .groups="drop") 
+
+t2 <- cat_sim |> 
+  mutate(Decile = ntile(resp, 10))|>
+  group_by(Decile) |>
+  summarize("Avg. Similarity Rating"=mean(resp),sd=sd(resp),n_ratings=n_distinct(file), .groups="drop") 
+
+
+t3 <- cat_sim |> 
+  group_by(sim_group) |>
+  summarize("Avg. Similarity Rating"=mean(resp),sd=sd(resp),n_ratings=n_distinct(file), .groups="drop") 
+
+t1 |> kbl(caption="Quartiles")
+t2 |> kbl(caption="Deciles")
+t3 |> kbl(caption="Extreme Groups")
+```
+
+#### Combined Category Testing Performance with Similarity Ratings (resp)
+
+- Each subject in the 2024 study has a similarity score for each of their 3 categories. (averaged over 2 comparisons with that categories prototype)
+- The same category similarity scores are then compared to their accuracy for each of the Pattern Tyeps (old, prototype, new low, new med, new high)
+```{r}
+
+
+
+cat_sim %>% # round all numerics except sbjCode to 2 decimal places
+ mutate(across(where(is.numeric), ~round(., 1))) |> select(-id,-sim_group,-item_label) |> 
+  relocate(item,file, .after=sd) |>
+  rename("Category Similarity" = resp, "CatLearn Accuracy" = Corr) |>
+   DT::datatable(options = list(pageLength = 6))
+
+
+```
+
+
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+
+
+
+p3 <- cat_sim |> 
+  mutate(Quartile = ntile(resp, 4)) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_wrap(~Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quintile", title="Effect by Pattern Type")
+
+
+p4 <- cat_sim |> 
+  mutate(Decile = ntile(resp, 10)) |> 
+  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
+  stat_bar + 
+  facet_wrap(~Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Pattern Type")
+
+
+
+
+
+p5 <- cat_sim |> 
+  mutate(Quartile = ntile(resp, 4)) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Training Condition")
+
+
+p6 <- cat_sim |> 
+  mutate(Decile = ntile(resp, 10)) |> 
+  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
+  stat_bar + 
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Training Condition")
+
+
+p7 <- cat_sim |> 
+  mutate(Quartile = ntile(resp, 4)) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_nested_wrap(~condit+Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quintile", title="Effect by Training Condition and Pattern Type")
+
+
+p3 + p4
+p5 + p6
+p7
+
+
+
+
+
+
+p9 <- cat_sim |> 
+  ggplot(aes(y=Corr,x=Pattern.Type, fill=sim_group)) + 
+  stat_bar + labs(title="Group by Pattern Type",y="CatLearn Accuracy")
+
+p10 <- cat_sim |> 
+  ggplot(aes(y=Corr,x=condit, fill=sim_group)) + 
+  stat_bar + labs(title="Group by Condit",y="CatLearn Accuracy")
+
+ p9 / p10
+
+```
+
+
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
 
 
 cat_sim |> ggplot(aes(x=Corr,y=resp)) + 
   geom_point(aes(col=Pattern.Type)) + 
-  #geom_smooth(aes(fill=Pattern.Type)) + 
-  facet_wrap(~condit)
+  geom_smooth(aes(fill=Pattern.Type),method = "lm") + 
+ labs(y="Similarity Rating", x="Aggregated Accuracy in CatLearn study")
+
+cat_sim |> ggplot(aes(x=Corr,y=resp)) + 
+  geom_point(aes(col=Pattern.Type)) + 
+  geom_smooth(aes(fill=Pattern.Type),method = "lm") + 
+  facet_wrap(~condit) + labs(y="Similarity Rating", x="Aggregated Accuracy in CatLearn study")
+
+
 
 
 cat_sim |> ggplot(aes(x=Corr,y=resp)) + 
@@ -432,7 +551,13 @@ cat_sim |> ggplot(aes(x=Corr,y=resp)) +
   facet_wrap(~Pattern.Type)
 
 ```
- -->
+
+
+
+
+
+
+
 
 <!-- ### Plot Pairs -->
 ```{r}
