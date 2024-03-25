@@ -18,7 +18,6 @@ prototype sets refer to sets of 3 prototypes that correspond to a single partici
 prototype pairs refer to the specific pairs of prototypes that are displayed together on a rating trial (3 pairs per set). 
 
 
-
 ```{r}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, 
   conflicted, jsonlite,stringr, gt, knitr, kableExtra, lubridate,ggh4x)
@@ -64,7 +63,6 @@ pairCounts <- d |>
 
 
 ## Data Inspection & Sanity Checks
-
 
 
 ```{r}
