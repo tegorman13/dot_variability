@@ -53,11 +53,11 @@ lmc22_prototypes <- lmc22_patterns |>
 
 
 sbj_cat <- mc24_patterns |> 
-  group_by(id,sbjCode,condit,Category,Pattern.Type,file) |> 
+  group_by(id,sbjCode,Phase,Block,condit,Category,Pattern.Type,file) |> 
   summarise(n=n(),Corr=mean(Corr,na.rm=TRUE)) |>
   left_join(mc24_prototypes |> select(id,Category,item_label),by=c("id","Category") )
 
-#write.csv(sbj_cat,here("data","mc24_sbj_cat.csv"), row.names = FALSE)
+write.csv(sbj_cat,here("data","mc24_sbj_cat.csv"), row.names = FALSE)
 
 
 
