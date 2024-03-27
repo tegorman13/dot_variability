@@ -620,7 +620,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=14) 
+p5 <- pairCounts |> filter(n>=18) 
 
 
 p5 |> 
