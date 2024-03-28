@@ -77,10 +77,12 @@ cat_sim_test <- cat_sim |>
   filter(Phase==2) 
 
 
+#cor(cat_sim$resp,cat_sim$Corr)
+
+
 
 
 ```
-
 
 
 
@@ -287,40 +289,35 @@ trIndv
 #| fig-height: 9
 
 
-p1 <- cat_sim_test |> ggplot(aes(x=resp,y=Corr)) + 
-  geom_point(aes(col=Pattern.Type)) + 
-  geom_smooth(aes(fill=Pattern.Type),method = "lm") + 
+p1 <- cat_sim_test |> ggplot(aes(x=resp,y=Corr,col=Pattern.Type,fill=Pattern.Type)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
  labs(y="CatLearn Accuracy", x="Similarity Rating")
 
-p2 <- cat_sim_test |> ggplot(aes(x=resp,y=Corr)) + 
-  geom_point(aes(col=Pattern.Type)) + 
-  geom_smooth(aes(fill=Pattern.Type),method = "lm") + 
+p2 <- cat_sim_test |> ggplot(aes(x=resp,y=Corr, col=Pattern.Type,fill=Pattern.Type)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
   facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating")
 
 
 p3 <- cat_sim_test |> 
 mutate(Decile = ntile(resp, 10)) |> 
-ggplot(aes(x=Decile,y=Corr)) + 
-  geom_point(aes(col=Pattern.Type)) + 
-  geom_smooth(aes(fill=Pattern.Type),method = "lm") + 
+ggplot(aes(x=Decile,y=Corr, col=Pattern.Type,fill=Pattern.Type)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
  labs(y="CatLearn Accuracy", x="Similarity Rating Decile")
 
 
 p4 <- cat_sim_test |> 
 mutate(Decile = ntile(resp, 10)) |> 
-ggplot(aes(x=Decile,y=Corr)) + 
-  geom_point(aes(col=condit)) + 
-  geom_smooth(aes(fill=condit),method = "lm") + 
- labs(y="CatLearn Accuracy", x="Similarity Rating Decile", fill="Training Condition")
+ggplot(aes(x=Decile,y=Corr, col=condit,fill=condit)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+ labs(y="CatLearn Accuracy", x="Similarity Rating Decile", fill="Training Condition", col="Training Condition")
 
 
 (p1+p2) / (p3+p4)
 ```
-
-
-
-
-
 
 
 
@@ -339,8 +336,6 @@ d |>
   mutate("Avg Ratings Per Set" = avg_set_rating) |>
   kbl()
 
-
-
 ```
 
 ```{r}
@@ -349,10 +344,6 @@ d |>
 
 
 # d |> summarize(n=n(), n_distinct(sbjCode), n_distinct(file), n_distinct(set), n_distinct(trial), n_distinct(item_label_1), n_distinct(item_label_2))
-
-
-
-
 
 
 # d %>%
@@ -578,7 +569,7 @@ d %>% filter(pair_label %in% {pairCounts |> filter(n>=min_resp) |>
 
 
 
-## All pairs with >=10 ratings
+## All pairs with >=20 ratings
 
 - click on column headers to change sort order
   - e.g. clicking on "Mean Rating" will toggle showing the pairs rated most similar or most dissimilar
@@ -619,7 +610,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=18) 
+p5 <- pairCounts |> filter(n>=20) 
 
 
 p5 |> 
