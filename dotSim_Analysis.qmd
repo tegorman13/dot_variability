@@ -20,8 +20,9 @@ prototype pairs refer to the specific pairs of prototypes that are displayed tog
 
 ```{r}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, 
-  conflicted, jsonlite,stringr, gt, knitr, kableExtra, lubridate,ggh4x)
-conflict_prefer_all("dplyr", quiet = TRUE)
+  conflicted, jsonlite,stringr, gt, knitr, kableExtra, 
+  lubridate,ggh4x, lmerTest)
+walk(c("dplyr", "lmerTest"), conflict_prefer_all, quiet = TRUE)
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
 mc24_proto <- read.csv(here("Stimulii","mc24_prototypes.csv")) |> mutate(set=paste0(sbjCode,"_",condit)) 
@@ -81,6 +82,28 @@ cat_sim_test <- cat_sim |>
 
 
 
+#  m1 <- lmer(Corr ~ resp + (1|sbjCode), data=cat_sim)
+#  summary(m1)
+
+#  m1 <- lmer(Corr ~ resp + (1|Pattern.Type) +  (1|sbjCode), data=cat_sim)
+#  summary(m1)
+
+#  m1 <- lmer(Corr ~ resp*Pattern.Type*condit +  (1|sbjCode), data=cat_sim)
+#  summary(m1)
+
+
+# m1 <- lmer(Corr ~ sim_group +  (1|sbjCode), data=cat_sim)
+# summary(m1)
+
+# m1 <- lmer(Corr ~ sim_group*condit +  (1|sbjCode), data=cat_sim)
+# summary(m1)
+
+# m1 <- lmer(Corr ~ sim_group*condit*Pattern.Type +  (1|sbjCode), data=cat_sim)
+# summary(m1)
+
+
+
+
 
 ```
 
@@ -94,9 +117,6 @@ cat_sim_test <- cat_sim |>
 
 #### Assess # of patterns in various binnings - e.g. quartile, decile
 ```{r}
-
-
-
 
 # bin data by rating (resp) into quartiles
 t1 <- cat_sim |> 
