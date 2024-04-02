@@ -699,8 +699,6 @@ pat_table_plot <- function(Pair){
 
 p5 <- pairCounts |> filter(n>=23) 
 
-
-
 p5 |> 
 arrange(mean_resp) |>
 relocate(pair_label,.after=sd) |>
