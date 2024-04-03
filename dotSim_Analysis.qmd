@@ -146,41 +146,42 @@ t3 |> kbl(caption="Extreme Groups")
 ### Relationship between catLearn accuracy and binnings of similarity rating
 
 - generally a negative correlation - higher simimlarity rating -> lower accuracy
+- quartiles and deciles are roughly evenly grouped bins, while the extreme similarity grouping has the bulk of the ratings in the medium group
 
-
+#### Quartiles and Deciles
 ```{r}
 #| label: fig-sim-acc-test
 #| fig-cap: "2024 CatLearn accuracy by different similarity rating groups"
-#| fig-width: 10
-#| fig-height: 8
-
-
+#| fig-width: 12
+#| fig-height: 10
 
 p3 <- cat_sim_test |> 
   mutate(Quartile = as.factor(ntile(resp, 4))) |> 
   ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
   stat_bar + 
-  facet_wrap(~Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Pattern Type")
+  facet_wrap(~Pattern.Type) + 
+  labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Pattern Type",fill="Similarity Rating Quartile")
 
 
 p4 <- cat_sim_test |> 
   mutate(Decile = as.factor(ntile(resp, 10))) |> 
   ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
   stat_bar + 
-  facet_wrap(~Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Pattern Type")
+  facet_wrap(~Pattern.Type) + 
+  labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Pattern Type", fill="Similarity Rating Decile")
 
 p5 <- cat_sim_test |> 
   mutate(Quartile = as.factor(ntile(resp, 4))) |> 
   ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
   stat_bar + 
-  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Training Condition")
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Training Condition", fill="Similarity Rating Quartile")
 
 
 p6 <- cat_sim_test |> 
   mutate(Decile = as.factor(ntile(resp, 10))) |> 
   ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
   stat_bar + 
-  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Training Condition")
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Training Condition", fill="Similarity Rating Decile")
 
 
 p7 <- cat_sim_test |> 
@@ -189,23 +190,43 @@ p7 <- cat_sim_test |>
   stat_bar + 
   facet_nested_wrap(~condit+Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quintile", title="Effect by Training Condition and Pattern Type")
 
-
 p3 + p4
 p5 + p6
 p7
 
 
+
+```
+
+
+#### Extreme similarity rating groups
+```{r}
+#| label: fig-sim-acc-test2
+#| fig-cap: "2024 CatLearn accuracy by different similarity rating groups"
+#| fig-width: 13
+#| fig-height: 15
+
 p9 <- cat_sim_test |> 
   ggplot(aes(y=Corr,x=Pattern.Type, fill=sim_group)) + 
-  stat_bar + labs(title="Group by Pattern Type",y="CatLearn Accuracy")
+  stat_bar + labs(title="Group by Pattern Type",y="CatLearn Accuracy", fill="Similarity Rating Group")
 
 p10 <- cat_sim_test |> 
   ggplot(aes(y=Corr,x=condit, fill=sim_group)) + 
-  stat_bar + labs(title="Group by Condit",y="CatLearn Accuracy")
+  stat_bar + labs(title="Group by Condit",y="CatLearn Accuracy", fill="Similarity Rating Group")
 
- p9 / p10
+p11 <- cat_sim_test |> 
+  ggplot(aes(y=Corr,x=sim_group, fill=sim_group)) + 
+  stat_bar + 
+  facet_nested_wrap(~condit+Pattern.Type) +
+  labs(title="Separate by Condit and Pattern Type",y="CatLearn Accuracy", fill="Similarity Rating Group") +
+  theme(axis.text.x = element_text(size=5,angle = 45, hjust = 0.5, vjust = 0.5))
 
+
+ (p9 / p10)/p11 + plot_annotation(title="CatLearn accuracy by extreme similarity rating groups") +
+  plot_layout(heights = c(1,1,2))
 ```
+
+
 
 ::: {.panel-tabset}
 
@@ -356,6 +377,7 @@ ggplot(aes(x=Decile,y=Corr, col=condit,fill=condit)) +
 Example of how data is structure after combining similarity ratings with CatLearn accuracy. 5 Pattern types * 3 Categories = 15 rows per subject in the 2024 study
 {.striped .hover .sm}
 ::: 
+
 
 
 ```{r}
@@ -696,7 +718,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=28) 
+p5 <- pairCounts |> filter(n>=32) 
 
 p5 |> 
 arrange(mean_resp) |>
