@@ -143,11 +143,9 @@ t3 |> kbl(caption="Extreme Groups")
 
 
 
+### Relationship between catLearn accuracy and binnings of similarity rating
 
-
-
-
-
+- generally a negative correlation - higher simimlarity rating -> lower accuracy
 
 
 ```{r}
@@ -162,7 +160,7 @@ p3 <- cat_sim_test |>
   mutate(Quartile = as.factor(ntile(resp, 4))) |> 
   ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
   stat_bar + 
-  facet_wrap(~Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quintile", title="Effect by Pattern Type")
+  facet_wrap(~Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Pattern Type")
 
 
 p4 <- cat_sim_test |> 
@@ -290,6 +288,7 @@ trIndv
 
 :::
 
+### Correlations between similarity ratings and CatLearn accuracy
 
 ```{r}
 #| label: fig-sim-acc-corr
@@ -388,6 +387,8 @@ cat_sim_test %>% # round all numerics except sbjCode to 2 decimal places
 ## Data Inspection & Sanity Checks
 
 
+
+
 ```{r}
 #| label: tbl-totals
 #| tbl-cap: "Current counts of unique subjects, and prototype sets"
@@ -400,9 +401,6 @@ d |>
   kbl()
 
 ```
-
-
-
 
 
 
@@ -495,7 +493,7 @@ sh
 ```{r}
 #| fig-cap: Rating distributions
 #| fig-width: 12
-#| fig-height: 13
+#| fig-height: 14
 
 pgr <- d |> 
   ggplot(aes(x=response))+geom_histogram(binwidth=1) + 
@@ -518,7 +516,7 @@ pgr/pir
 ```{r}
 #| fig-cap: Reaction time distributions
 #| fig-width: 12
-#| fig-height: 13
+#| fig-height: 14
 
 
 prtg <- d |> ggplot(aes(x=rt))+
@@ -636,12 +634,13 @@ d %>% filter(pair_label %in% {pairCounts |> filter(n>=min_resp) |>
 ```
 
 
-
-## All pairs with >=20 ratings
+## Pattern Pair Table
+**All pairs with >=25 ratings**
 
 - click on column headers to change sort order
   - e.g. clicking on "Mean Rating" will toggle showing the pairs rated most similar or most dissimilar
   - clicking on "SD" will toggle showing the pairs with the most or least agreement in ratings
+- **note your screen may need to be at full width to see all columns**
 
 ::: column-page-right
 
@@ -697,7 +696,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=23) 
+p5 <- pairCounts |> filter(n>=28) 
 
 p5 |> 
 arrange(mean_resp) |>
