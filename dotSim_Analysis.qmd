@@ -424,7 +424,6 @@ d |>
 
 ```
 
-
 ### Prototype set counts
 
 \ \
