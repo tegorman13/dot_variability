@@ -1,5 +1,5 @@
 ---
-title: Dot Pattern Similarity
+title: Dot Pattern Ratings - data checks
 date: last-modified
 lightbox: true
 toc: true
@@ -109,307 +109,7 @@ cat_sim_test <- cat_sim |>
 
 
 
-## Correlations with Accuracy in Hu & Nosofsky 2024
-
-
-
-#### Assess # of patterns in various binnings - e.g. quartile, decile
-```{r}
-
-# bin data by rating (resp) into quartiles
-t1 <- cat_sim |> 
-  mutate(Quartile = ntile(resp, 4))|>
-  group_by(Quartile) |>
-  summarize("Avg. Similarity Rating"=mean(resp),sd=sd(resp),n_ratings=n_distinct(file), .groups="drop") 
-
-t2 <- cat_sim |> 
-  mutate(Decile = ntile(resp, 10))|>
-  group_by(Decile) |>
-  summarize("Avg. Similarity Rating"=mean(resp),sd=sd(resp),n_ratings=n_distinct(file), .groups="drop") 
-
-
-t3 <- cat_sim |> 
-  group_by(sim_group) |>
-  summarize("Avg. Similarity Rating"=mean(resp),sd=sd(resp),n_ratings=n_distinct(file), .groups="drop") 
-
-t1 |> kbl(caption="Quartiles")
-t2 |> kbl(caption="Deciles")
-t3 |> kbl(caption="Extreme Groups")
-```
-
-
-
-
-
-
-
-### Relationship between catLearn accuracy and binnings of similarity rating
-
-- generally a negative correlation - higher simimlarity rating -> lower accuracy
-- quartiles and deciles are roughly evenly grouped bins, while the extreme similarity grouping has the bulk of the ratings in the medium group
-
-#### Quartiles and Deciles
-```{r}
-#| label: fig-sim-acc-test
-#| fig-cap: "2024 CatLearn accuracy by different similarity rating groups"
-#| fig-width: 12
-#| fig-height: 10
-
-p3 <- cat_sim_test |> 
-  mutate(Quartile = as.factor(ntile(resp, 4))) |> 
-  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
-  stat_bar + 
-  facet_wrap(~Pattern.Type) + 
-  labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Pattern Type",fill="Similarity Rating Quartile")
-
-
-p4 <- cat_sim_test |> 
-  mutate(Decile = as.factor(ntile(resp, 10))) |> 
-  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
-  stat_bar + 
-  facet_wrap(~Pattern.Type) + 
-  labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Pattern Type", fill="Similarity Rating Decile")
-
-p5 <- cat_sim_test |> 
-  mutate(Quartile = as.factor(ntile(resp, 4))) |> 
-  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
-  stat_bar + 
-  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Training Condition", fill="Similarity Rating Quartile")
-
-
-p6 <- cat_sim_test |> 
-  mutate(Decile = as.factor(ntile(resp, 10))) |> 
-  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
-  stat_bar + 
-  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Training Condition", fill="Similarity Rating Decile")
-
-
-p7 <- cat_sim_test |> 
-  mutate(Quartile = as.factor(ntile(resp, 4))) |> 
-  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
-  stat_bar + 
-  facet_nested_wrap(~condit+Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quintile", title="Effect by Training Condition and Pattern Type")
-
-p3 + p4
-p5 + p6
-p7
-
-
-
-```
-
-
-#### Extreme similarity rating groups
-```{r}
-#| label: fig-sim-acc-test2
-#| fig-cap: "2024 CatLearn accuracy by different similarity rating groups"
-#| fig-width: 13
-#| fig-height: 15
-
-p9 <- cat_sim_test |> 
-  ggplot(aes(y=Corr,x=Pattern.Type, fill=sim_group)) + 
-  stat_bar + labs(title="Group by Pattern Type",y="CatLearn Accuracy", fill="Similarity Rating Group")
-
-p10 <- cat_sim_test |> 
-  ggplot(aes(y=Corr,x=condit, fill=sim_group)) + 
-  stat_bar + labs(title="Group by Condit",y="CatLearn Accuracy", fill="Similarity Rating Group")
-
-p11 <- cat_sim_test |> 
-  ggplot(aes(y=Corr,x=sim_group, fill=sim_group)) + 
-  stat_bar + 
-  facet_nested_wrap(~condit+Pattern.Type) +
-  labs(title="Separate by Condit and Pattern Type",y="CatLearn Accuracy", fill="Similarity Rating Group") +
-  theme(axis.text.x = element_text(size=5,angle = 45, hjust = 0.5, vjust = 0.5))
-
-
- (p9 / p10)/p11 + plot_annotation(title="CatLearn accuracy by extreme similarity rating groups") +
-  plot_layout(heights = c(1,1,2))
-```
-
-
-
-::: {.panel-tabset}
-
-### learning curves
-```{r}
-#| label: fig-train-sim
-#| fig-cap: "Training accuracy by block and similarity rating" 
-#| fig-width: 10
-#| fig-height: 9
-
-
-# trSim1 <- cat_sim |> filter(Phase==1) |> 
-#   group_by(condit,Block) |> 
-#   mutate(Quartile = as.factor(ntile(resp, 4))) |> 
-#   ggplot(aes(x=Block,y=Corr, fill=Quartile)) + stat_bar+  facet_wrap(~condit)  +
-#    labs(x="Training Block", y="CatLearn Accuracy",fill="Similarity Rating Quartile")
-
-
-# trSim2 <- cat_sim |> filter(Phase==1) |> 
-#   group_by(condit,Block) |> 
-#   ggplot(aes(x=Block,y=Corr, fill=sim_group)) +
-#    stat_bar+  
-#    facet_wrap(~condit) +
-#   labs(x="Training Block", y="CatLearn Accuracy",fill="Similarity Rating Group")
-
-
-
-
-trSim1 <- cat_sim |> filter(Phase==1) |> 
-  group_by(condit,Block) |> 
-  mutate(Quartile = as.factor(ntile(resp, 4))) |> 
-  ggplot(aes(x=Block,y=Corr, col=Quartile)) + 
-    stat_summary(shape=0,geom="point",fun="mean")+
-  stat_summary(geom="line",fun="mean")+ 
-   facet_wrap(~condit)  +
-   labs(x="Training Block", y="CatLearn Accuracy",fill="Similarity Rating Quartile",title = "Training Accuracy by Block and Similarity Quartile")
-
-trSim2 <- cat_sim |> filter(Phase==1) |> 
-  group_by(condit,Block) |> 
-  ggplot(aes(x=Block,y=Corr, col=sim_group)) +
-      stat_summary(shape=0,geom="point",fun="mean")+
-  stat_summary(geom="line",fun="mean")+ 
-   facet_wrap(~condit) +
-  labs(x="Training Block", y="CatLearn Accuracy",fill="Similarity Rating Group", title="Training Accuracy by Block and Similarity Extreme similarity Grouping")
-
-
-trSim1/trSim2
-
-
-```
-
-### Individual Learning Curves
-```{r}
-#| label: fig-train-sim-indv
-#| fig-cap: "Training accuracy by block and similarity rating" 
-#| fig-width: 12
-#| fig-height: 15
-
- trIndv <- cat_sim |> filter(Phase==1, !(sim_group=="Medium")) |> 
-  group_by(condit,Block) |> 
-  mutate(Quartile = as.factor(ntile(resp, 4))) |> 
-  ggplot(aes(x=Block,y=Corr, col=sim_group)) + 
-      stat_summary(shape=0,geom="point",fun="mean")+
-  stat_summary(geom="line",fun="mean")+ 
-   facet_wrap2(~condit+sim_group+sbjCode) +
-  labs(x="Training Block", y="CatLearn Accuracy",fill="Similarity Rating Group", title="Training Accuracy by Block and Similarity Extreme similarity Grouping")
-
-trIndv 
-
-#cat_sim |> filter(Phase==1) |> group_by(id) |> summarize(n_sim = n_distinct(sim_group)) |> arrange(desc(n_sim)) |> head(10)
-
-# cat_sim |> filter(Phase==1) |> group_by(id) |> mutate(n_sim = n_distinct(sim_group)) |> filter(n_sim>1)  |> group_by(condit,Block) |> 
-#   ggplot(aes(x=Block,y=Corr, col=sim_group)) + 
-#       stat_summary(shape=0,geom="point",fun="mean")+
-#   stat_summary(geom="line",fun="mean")+ 
-#    facet_wrap2(~condit+sbjCode)
-
-
-```
-
-:::
-
-### Correlations between similarity ratings and CatLearn accuracy
-
-```{r}
-#| label: fig-sim-acc-corr
-#| fig-cap: "Correlations between similarity ratings and CatLearn accuracy" 
-#| fig-width: 11
-#| fig-height: 9
-
-
-p1 <- cat_sim_test |> ggplot(aes(x=resp,y=Corr,col=Pattern.Type,fill=Pattern.Type)) + 
-  geom_point() + 
-  geom_smooth(method = "lm") + 
- labs(y="CatLearn Accuracy", x="Similarity Rating")
-
-p2 <- cat_sim_test |> ggplot(aes(x=resp,y=Corr, col=Pattern.Type,fill=Pattern.Type)) + 
-  geom_point() + 
-  geom_smooth(method = "lm") + 
-  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating")
-
-
-p3 <- cat_sim_test |> 
-mutate(Decile = ntile(resp, 10)) |> 
-ggplot(aes(x=Decile,y=Corr, col=Pattern.Type,fill=Pattern.Type)) + 
-  geom_point() + 
-  geom_smooth(method = "lm") + 
- labs(y="CatLearn Accuracy", x="Similarity Rating Decile")
-
-
-p4 <- cat_sim_test |> 
-mutate(Decile = ntile(resp, 10)) |> 
-ggplot(aes(x=Decile,y=Corr, col=condit,fill=condit)) + 
-  geom_point() + 
-  geom_smooth(method = "lm") + 
- labs(y="CatLearn Accuracy", x="Similarity Rating Decile", fill="Training Condition", col="Training Condition")
-
-
-(p1+p2) / (p3+p4)
-```
-
-
-#### Stucture of dataframe after merging similarity ratings with CatLearn accuracy
-
-- Each subject in the 2024 study has a similarity score for each of their 3 categories. (averaged over 2 comparisons with that categories prototype)
-- The same category similarity scores are then compared to their accuracy for each of the 5 Pattern Tyeps (old, prototype, new low, new med, new high)
-- 5 Pattern types * 3 Categories = 15 comparisons per subject
-
-::: {#tbl-ee-brms1}
-| sbjCode | condit | Category | Pattern.Type | n | CatLearn Accuracy | n_rating | Category Similarity | sd  |      item      |
-|:-------:|:------:|:--------:|:------------:|:-:|:-----------------:|:--------:|:-------------------:|:---:|:--------------:|
-|   316   |  high  |    1     |  prototype   | 1 |         1         |    60    |         5.1         | 2.6 | 316_high_1_285 |
-|   316   |  high  |    1     |     old      | 9 |        0.4        |    60    |         5.1         | 2.6 | 316_high_1_285 |
-|   316   |  high  |    1     |   new_low    | 3 |        0.3        |    60    |         5.1         | 2.6 | 316_high_1_285 |
-|   316   |  high  |    1     |   new_med    | 6 |        0.3        |    60    |         5.1         | 2.6 | 316_high_1_285 |
-|   316   |  high  |    1     |   new_high   | 9 |        0.4        |    60    |         5.1         | 2.6 | 316_high_1_285 |
-|   316   |  high  |    2     |  prototype   | 1 |         0         |    60    |         3.8         |  2  | 316_high_2_327 |
-|   316   |  high  |    2     |     old      | 9 |        0.7        |    60    |         3.8         |  2  | 316_high_2_327 |
-|   316   |  high  |    2     |   new_low    | 3 |        0.7        |    60    |         3.8         |  2  | 316_high_2_327 |
-|   316   |  high  |    2     |   new_med    | 6 |        0.2        |    60    |         3.8         |  2  | 316_high_2_327 |
-|   316   |  high  |    2     |   new_high   | 9 |        0.2        |    60    |         3.8         |  2  | 316_high_2_327 |
-|   316   |  high  |    3     |  prototype   | 1 |         0         |    60    |         5.2         | 2.4 | 316_high_3_287 |
-|   316   |  high  |    3     |     old      | 9 |        0.1        |    60    |         5.2         | 2.4 | 316_high_3_287 |
-|   316   |  high  |    3     |   new_low    | 3 |        0.7        |    60    |         5.2         | 2.4 | 316_high_3_287 |
-|   316   |  high  |    3     |   new_med    | 6 |         0         |    60    |         5.2         | 2.4 | 316_high_3_287 |
-|   316   |  high  |    3     |   new_high   | 9 |        0.3        |    60    |         5.2         | 2.4 | 316_high_3_287 |
-
-Example of how data is structure after combining similarity ratings with CatLearn accuracy. 5 Pattern types * 3 Categories = 15 rows per subject in the 2024 study
-{.striped .hover .sm}
-::: 
-
-
-
-```{r}
-#| label: tbl-htw-modelError-e1
-#| tbl-cap: "Example of how data is structure after combining similarity ratings with CatLearn accuracy. 5 Pattern types * 3 Categories = 15 rows per subject in the 2024 study"
-#| eval: true
-
-cat_sim_test %>% # round all numerics except sbjCode to 2 decimal places
- mutate(across(where(is.numeric), ~round(., 1))) |> select(-id,-sim_group,-item_label) |> 
-  relocate(item,file, .after=sd) |>
-  select(-Phase,-Block) |> 
-  rename("Category Similarity" = resp, "CatLearn Accuracy" = Corr) |>
-   DT::datatable(options = list(pageLength = 6))
-
-# cat_sim_test %>% # round all numerics except sbjCode to 2 decimal places
-#      mutate(across(where(is.numeric), ~round(., 1))) |> select(-id,-sim_group,-item_label) |> 
-#      filter(sbjCode==316) |> 
-#       relocate(item,file, .after=sd) |>
-#       select(-Phase,-Block, -file) |> 
-#       rename("Category Similarity" = resp, "CatLearn Accuracy" = Corr) |> pander::pandoc.table(style="rmarkdown",split.table=Inf)
-```
-
-
-
-
-
-
-
 ## Data Inspection & Sanity Checks
-
-
-
 
 ```{r}
 #| label: tbl-totals
@@ -716,7 +416,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=32) 
+p5 <- pairCounts |> filter(n>=34) 
 
 p5 |> 
 arrange(mean_resp) |>
@@ -826,3 +526,55 @@ tab_options(table.font.size = px(8L)) |>
 
 
 
+
+
+## Stucture of dataframe after merging similarity ratings with CatLearn accuracy
+
+- Each subject in the 2024 study has a similarity score for each of their 3 categories. (averaged over 2 comparisons with that categories prototype)
+- The same category similarity scores are then compared to their accuracy for each of the 5 Pattern Tyeps (old, prototype, new low, new med, new high)
+- 5 Pattern types * 3 Categories = 15 comparisons per subject
+
+::: {#tbl-ee-brms1}
+| sbjCode | condit | Category | Pattern.Type | n | CatLearn Accuracy | n_rating | Category Similarity | sd  |      item      |
+|:-------:|:------:|:--------:|:------------:|:-:|:-----------------:|:--------:|:-------------------:|:---:|:--------------:|
+|   316   |  high  |    1     |  prototype   | 1 |         1         |    60    |         5.1         | 2.6 | 316_high_1_285 |
+|   316   |  high  |    1     |     old      | 9 |        0.4        |    60    |         5.1         | 2.6 | 316_high_1_285 |
+|   316   |  high  |    1     |   new_low    | 3 |        0.3        |    60    |         5.1         | 2.6 | 316_high_1_285 |
+|   316   |  high  |    1     |   new_med    | 6 |        0.3        |    60    |         5.1         | 2.6 | 316_high_1_285 |
+|   316   |  high  |    1     |   new_high   | 9 |        0.4        |    60    |         5.1         | 2.6 | 316_high_1_285 |
+|   316   |  high  |    2     |  prototype   | 1 |         0         |    60    |         3.8         |  2  | 316_high_2_327 |
+|   316   |  high  |    2     |     old      | 9 |        0.7        |    60    |         3.8         |  2  | 316_high_2_327 |
+|   316   |  high  |    2     |   new_low    | 3 |        0.7        |    60    |         3.8         |  2  | 316_high_2_327 |
+|   316   |  high  |    2     |   new_med    | 6 |        0.2        |    60    |         3.8         |  2  | 316_high_2_327 |
+|   316   |  high  |    2     |   new_high   | 9 |        0.2        |    60    |         3.8         |  2  | 316_high_2_327 |
+|   316   |  high  |    3     |  prototype   | 1 |         0         |    60    |         5.2         | 2.4 | 316_high_3_287 |
+|   316   |  high  |    3     |     old      | 9 |        0.1        |    60    |         5.2         | 2.4 | 316_high_3_287 |
+|   316   |  high  |    3     |   new_low    | 3 |        0.7        |    60    |         5.2         | 2.4 | 316_high_3_287 |
+|   316   |  high  |    3     |   new_med    | 6 |         0         |    60    |         5.2         | 2.4 | 316_high_3_287 |
+|   316   |  high  |    3     |   new_high   | 9 |        0.3        |    60    |         5.2         | 2.4 | 316_high_3_287 |
+
+Example of how data is structure after combining similarity ratings with CatLearn accuracy. 5 Pattern types * 3 Categories = 15 rows per subject in the 2024 study
+{.striped .hover .sm}
+::: 
+
+
+
+```{r}
+#| label: tbl-htw-modelError-e1
+#| tbl-cap: "Example of how data is structure after combining similarity ratings with CatLearn accuracy. 5 Pattern types * 3 Categories = 15 rows per subject in the 2024 study"
+#| eval: true
+
+cat_sim_test %>% # round all numerics except sbjCode to 2 decimal places
+ mutate(across(where(is.numeric), ~round(., 1))) |> select(-id,-sim_group,-item_label) |> 
+  relocate(item,file, .after=sd) |>
+  select(-Phase,-Block) |> 
+  rename("Category Similarity" = resp, "CatLearn Accuracy" = Corr) |>
+   DT::datatable(options = list(pageLength = 6))
+
+# cat_sim_test %>% # round all numerics except sbjCode to 2 decimal places
+#      mutate(across(where(is.numeric), ~round(., 1))) |> select(-id,-sim_group,-item_label) |> 
+#      filter(sbjCode==316) |> 
+#       relocate(item,file, .after=sd) |>
+#       select(-Phase,-Block, -file) |> 
+#       rename("Category Similarity" = resp, "CatLearn Accuracy" = Corr) |> pander::pandoc.table(style="rmarkdown",split.table=Inf)
+```

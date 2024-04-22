@@ -39,8 +39,12 @@ website:
             href:  dp_24.qmd
       - text: "Dot Patterns"
         href:  Stimulii/plotDots.qmd
-      - text: "Dot Similarity"
-        href:  dotSim_Analysis.qmd
+      - text: "Similarity Ratings"
+        menu: 
+          - text: "Data Checks"
+            href: dotSim_Analysis.qmd
+          - text: "Group Comparison"
+            href:  dotSim_compare.qmd
       - text: "Task"
         href:  Task/Task.qmd
         #href:  Task/index.html
