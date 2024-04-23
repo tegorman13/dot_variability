@@ -72,10 +72,13 @@ cat_sim <- sbj_cat |>
   mutate(sim_group = ifelse(resp>6.0,"Very Similar",ifelse(resp<3.5,"Very Dissimilar","Medium"))) |> 
   mutate(sim_group=factor(sim_group,levels=c("Very Dissimilar","Medium","Very Similar"))) 
 
-
-
 cat_sim_test <- cat_sim |> 
-  filter(Phase==2) 
+  filter(Phase==2) |> group_by(condit) |>
+  mutate(quartile=ntile(Corr,4))
+
+
+
+
 
 
 #cor(cat_sim$resp,cat_sim$Corr)

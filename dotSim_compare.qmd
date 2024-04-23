@@ -21,7 +21,7 @@ walk(c("dplyr", "lmerTest"), conflict_prefer_all, quiet = TRUE)
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
 mc24_proto <- read.csv(here("Stimulii","mc24_prototypes.csv")) |> mutate(set=paste0(sbjCode,"_",condit)) 
-sbj_cat <- read.csv(here("data","mc24_sbj_cat.csv"))
+sbj_cat <- read.csv(here("data","mc24_sbj_cat.csv")) |> mutate(condit=factor(condit,levels=c("low","medium","mixed","high") ))
 
 dfiles <- list(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
 
@@ -62,14 +62,16 @@ cat_sim <- sbj_cat |>
   left_join(patternAvg,by=c("file","item"))  |> arrange(desc(n_rating)) |>
   #remove rows where n_rating is NA, or less than 4
   filter(!is.na(n_rating),n_rating>=12) |> 
-  mutate(sim_group = ifelse(resp>6.0,"Very Similar",ifelse(resp<3.5,"Very Dissimilar","Medium"))) |> 
+  mutate(sim_group = ifelse(resp>5.5,"Very Similar",ifelse(resp<3.9,"Very Dissimilar","Medium"))) |> 
   mutate(sim_group=factor(sim_group,levels=c("Very Dissimilar","Medium","Very Similar"))) 
 
 cat_sim_test <- cat_sim |> 
-  filter(Phase==2) 
-
-
-
+  filter(Phase==2) |> 
+  mutate(rate_quartile = as.factor(ntile(resp, 4))) |>
+  group_by(id,condit) |>
+  mutate(agg_corr=mean(Corr)) |>
+  group_by(condit) |> 
+  mutate(quartile=ntile(agg_corr,4),ms=ntile(agg_corr,2))
 
 
 ```
@@ -77,6 +79,45 @@ cat_sim_test <- cat_sim |>
 
 
 
+```{r}
+
+
+# cat_sim_test |> 
+#   group_by(condit,quartile) |> 
+#   summarize(mean_resp=mean(resp),mean_corr=mean(Corr),n=n_distinct(file), .groups="drop") 
+
+# cat_sim_test |> 
+#   group_by(sbjCode,condit,quartile,rate_quartile) |>
+#   summarize(resp=mean(resp),corr=mean(Corr)) |> 
+#   mutate(quartile=factor(quartile,levels=c(1,2,3,4))) |> 
+#   ggplot(aes(x=quartile,y=corr,fill=condit)) + 
+#   stat_bar+
+#  # geom_boxplot() +
+#   facet_wrap(~rate_quartile) +
+#   labs(y="Similarity Rating",x="Performance Quartile")
+
+
+cat_sim_test |> 
+  group_by(sbjCode,condit,quartile,rate_quartile) |>
+  summarize(resp=mean(resp),corr=mean(Corr)) |> 
+  mutate(quartile=factor(quartile,levels=c(1,2,3,4))) |> 
+  ggplot(aes(x=condit,y=corr,fill=rate_quartile)) + 
+  stat_bar +
+ # geom_boxplot() +
+#   facet_wrap(~condit) +
+  labs(y="CatLearn Accuracy",x="Training Condition")
+
+
+cat_sim_test |> 
+  group_by(sbjCode,condit,ms,sim_group) |>
+  summarize(resp=mean(resp),corr=mean(Corr)) |> 
+  mutate(ms=factor(ms,levels=c(1,2))) |> 
+  ggplot(aes(x=condit,y=corr,fill=sim_group)) + 
+  stat_bar +
+  facet_wrap(~ms) +
+  labs(y="CatLearn Accuracy",x="Training Condition")
+
+```
 
 
 
@@ -112,11 +153,47 @@ t3 |> kbl(caption="Extreme Groups")
 
 
 ```{r}
+#| fig-width: 12
+#| fig-height: 11
+#| 
+g1 <- cat_sim_test |> 
+  group_by(sbjCode,condit) |>
+  summarize(resp=mean(resp)) |> 
+  ggplot(aes(x=condit,y=resp)) + 
+  #stat_bar + 
+  geom_boxplot() +
+  labs(y="Similarity Rating",x="2024 - Training Condition")
 
 
-cat_sim_test |> 
-  ggplot(aes(x=condit,y=resp,fill=Pattern.Type)) + 
-  stat_bar + labs(y="Similarity Rating",x="2024 - Training Condition")
+g2 <- cat_sim_test |> 
+  group_by(sbjCode,condit,Category) |>
+  summarize(resp=mean(resp)) |> 
+  mutate(Category=as.factor(Category)) |> 
+  ggplot(aes(x=condit,y=resp,fill=Category)) + 
+  geom_boxplot() +
+  labs(y="Similarity Rating",x="2024 - Training Condition")
+
+
+
+g3 <- cat_sim_test |> 
+  group_by(sbjCode,condit,Category,quartile) |>
+  summarize(resp=mean(resp)) |> 
+  mutate(Category=as.factor(Category),quartile=factor(quartile,levels=c(1,2,3,4))) |> 
+  ggplot(aes(x=quartile,y=resp,fill=quartile)) + 
+  stat_bar+
+ # geom_boxplot() +
+  facet_wrap(~condit) +
+  labs(y="Similarity Rating",x="Performance Quartile")
+
+(g1/g2/g3) + plot_annotation(title="Similarity Rating breakdowns") +
+  plot_layout(heights = c(1,1,2))
+
+
+
+
+
+
+
 ```
 
 
