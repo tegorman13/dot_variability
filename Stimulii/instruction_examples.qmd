@@ -28,6 +28,7 @@ pat_themes <- list(theme_minimal(),xlim(-25, 25),ylim(-25, 25),
 
 
 
+
 ### View large set of  protypes from Hu & Nosofsky 2022
 ```{r}
 #| fig-cap: Prototypes and their distortions
