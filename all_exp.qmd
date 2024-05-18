@@ -1,0 +1,26 @@
+---
+title: Combined Experiments
+date: last-modified
+lightbox: true
+toc: true
+page-layout: full
+toc-depth: 3
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: true
+---
+
+
+
+```{r}
+
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, data.table,readr,here, patchwork, conflicted)
+conflict_prefer_all("dplyr", quiet = TRUE)
+
+lmc22 <- readRDS(here("data","lmc22.rds"))
+mc24 <- readRDS(here("data","mc24.rds"))
+
+```
+
