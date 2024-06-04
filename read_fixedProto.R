@@ -40,6 +40,11 @@ nFiles=length(mFiles)
 # read in each of the txt files in mFiles - into a single tibble
 
 
+library(R.matlab)
+mat_files <- list.files(path=pathString,pattern = "dot_.*\\.mat$", recursive = FALSE,full.names = TRUE)
+m <- readMat(mat_files[1])
+
+
 #mFiles <- mFiles[1]
 
 d <- purrr::map2_dfr(mFiles, mFiles, ~ read.table(paste0(pathString, .x, sep = "")) %>%

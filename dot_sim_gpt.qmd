@@ -187,6 +187,7 @@ list.files(here("Stimulii/pair_images/"))
 # https://community.openai.com/t/how-to-load-a-local-image-to-gpt4-vision-using-api/533090/5
 # https://platform.openai.com/docs/guides/batch/getting-started
 #https://cookbook.openai.com/examples/batch_processing
+# https://github.com/samterfa/openai/blob/b865cd81f1caaeba6264d4e197a82046739023c1/README.md?plain=1#L109
 
 library(httr)
 library(dplyr)
@@ -212,15 +213,15 @@ image_path <- "/Users/thomasgorman/Library/CloudStorage/GoogleDrive-tegorman13@g
 
 img_data <- base64enc::dataURI(file = image_path, mime = "image/png")
 
-img_data=encode_image(image_path)
 
 
 encode_image <- function(image_path) {
   image_data <- readBin(image_path, what = "raw", n = file.info(image_path)$size)
-  base64_encoded <- base64enc::base64encode(image_data)
+  base64_encoded <- base64enc::base64encode(image_path)
   return(base64_encoded)
 }
-
+img_data=encode_image(image_path)
+image_url = glue::glue("data:image/jpeg;base64,{img_data}")
 
 
 response <- openai::create_chat_completion(
@@ -235,7 +236,7 @@ response <- openai::create_chat_completion(
       ),
       list(
         role = "user",
-        content = paste("Rate the similarity of the dot patterns in this image:", img_data)
+        content = paste("Rate the similarity of the dot patterns in this image:", image_url)
       )
     )
   )
@@ -244,6 +245,60 @@ response <- openai::create_chat_completion(
 response$choices$message.content
 
 
+
+
+response <- openai::create_chat_completion(
+  model = "gpt-4o", # or "gpt-4o"
+  temperature = .4, 
+  top_p = 1,
+  frequency_penalty = 0,
+  messages = list(
+    list(
+      role = "system",
+      content = system_prompt
+    ),
+    list(
+      role = "user",
+      content = paste("Rate the similarity of the dot patterns in this image:", "https://github.com/tegorman13/dot_variability/blob/main/Stimulii/pair_images/237_low_2_274_237_low_3_307.png?raw=true")
+    )
+  )
+)
+
+
+image_url <- "https://raw.githubusercontent.com/tegorman13/dot_variability/main/Stimulii/pair_images/237_low_2_274_237_low_3_307.png"
+system_prompt <- "You are acting as a human research participant in a psychology study. Your task is to rate the similarity of dot pattern pairs, with 1 being  very dissimilar, and 9 being very similar."
+text_message <- "describe the dot patterns"
+
+# Create the chat completion request with OpenAI
+response <- openai::create_chat_completion(
+  model = "gpt-4o", # or "gpt-4o"
+  temperature = 0.0, 
+  top_p = 1,
+  frequency_penalty = 0,
+  messages = list(
+    list(
+      role = "system",
+      content = system_prompt
+    ),
+    list(role = 'user', 
+         content = list(
+           list(
+             type = 'text',
+             text = text_message
+           ),
+           list(
+             type = 'image_url',
+             image_url = list(
+               url = image_url, detail="low"
+             )
+           )
+         )
+    )
+  )
+)
+
+
+response$choices$message.content
 
 
 
