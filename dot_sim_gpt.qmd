@@ -1,0 +1,273 @@
+---
+title: Dot Pattern Ratings - data checks
+date: last-modified
+lightbox: true
+toc: true
+page-layout: full
+toc-depth: 3
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: true
+---
+
+
+
+
+
+
+```{r}
+
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, 
+  conflicted, jsonlite,stringr, gt, knitr, kableExtra, 
+  lubridate,ggh4x, lmerTest)
+walk(c("dplyr", "lmerTest"), conflict_prefer_all, quiet = TRUE)
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
+mc24_proto <- read.csv(here("Stimulii","mc24_prototypes.csv")) |> mutate(set=paste0(sbjCode,"_",condit)) 
+sbj_cat <- read.csv(here("data","mc24_sbj_cat.csv"))
+
+dfiles <- list(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
+
+d <- map_dfr(dfiles$path, ~read.csv(.x))
+
+d <- map_dfr(dfiles$path, ~{read.csv(.x) |> 
+    mutate(sfile=tools::file_path_sans_ext(basename(.x)))}) |> 
+  select(-trial_index, -internal_node_id,-trial_type) |>
+   mutate(set = paste(str_extract(item_label_1, "^\\d+"),
+                     str_extract(item_label_1, "[a-z]+"), sep = "_")) |>
+  mutate(pair_label = paste0(item_label_1,"_",item_label_2)) |>
+  relocate(sbjCode,date,set,pair_label,trial,item_label_1,item_label_2,response,rt)
+
+setCounts <- d |> 
+  pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(set) |> summarise(n=n_distinct(sbjCode),resp=mean(response),sd=sd(response)) |> arrange(desc(n))
+
+# length(unique(mc_proto$set)) # 304
+setCounts2 <- mc24_proto |> group_by(set) |> 
+  slice_head(n=1) |> 
+  select(id,file,set) |> 
+  left_join(setCounts,by="set") |> 
+  mutate(n = ifelse(is.na(n), 0, n), .groups="drop") |> 
+  arrange(n) |> ungroup()
+
+pairCounts <- d |> 
+  group_by(pair_label,set) |> 
+  summarise(n=n(),mean_resp=mean(response),sd=sd(response)) |> arrange(desc(n)) |> ungroup()
+
+
+
+patternAvg <- d |> 
+  pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(item,file) |> 
+  summarise(n_rating=n(),resp=mean(response),sd=sd(response)) |> 
+  arrange(desc(n_rating))
+
+cat_sim <- sbj_cat |> 
+  mutate(item=item_label) |> 
+  left_join(patternAvg,by=c("file","item"))  |> arrange(desc(n_rating)) |>
+  #remove rows where n_rating is NA, or less than 4
+  filter(!is.na(n_rating),n_rating>=12) |> 
+  mutate(sim_group = ifelse(resp>6.0,"Very Similar",ifelse(resp<3.5,"Very Dissimilar","Medium"))) |> 
+  mutate(sim_group=factor(sim_group,levels=c("Very Dissimilar","Medium","Very Similar"))) 
+
+cat_sim_test <- cat_sim |> 
+  filter(Phase==2) |> group_by(condit) |>
+  mutate(quartile=ntile(Corr,4))
+```
+
+
+
+```{r}
+
+
+
+plot_hist_pair <- function(Pair) {
+  d |> filter(pair_label==Pair) |>
+    ggplot(aes(x = response)) +
+    geom_histogram(binwidth=1,fill = 'dodgerblue4') +
+    scale_x_continuous(breaks=seq(1, 9, by = 1)) +
+    coord_cartesian(xlim = c(1, 9)) +
+    theme_minimal() +
+    theme(axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          axis.text.x=element_text(size=26))  
+}
+
+
+
+pat_table_plot <- function(Pair){
+
+  df <- d |> filter(pair_label==Pair) |> slice_head(n=1) 
+  dim1=35
+  x_limits <- c(-dim1, dim1)  # Set fixed x-axis limits
+  y_limits <- c(-dim1, dim1)  # Set fixed y-axis limits
+
+    pat1 <- df %>%
+          mutate(pattern_1 = purrr::map(pattern_1, jsonlite::fromJSON)) %>%
+          unnest(pattern_1) %>%
+          mutate(y=-y, pat=item_label_1) |> select(pair_label,x,y,pat)
+
+    pat2 <- df %>%
+          mutate(pattern_2 = purrr::map(pattern_2, jsonlite::fromJSON)) %>%
+          unnest(pattern_2) %>%
+          mutate(y=-y, pat=item_label_2) |> select(pair_label,x,y,pat)
+
+    pat <- rbind(pat1,pat2)
+    pat |> 
+    ggplot(aes(x = x, y = y #,fill=pat,col=pat
+               )) +
+          geom_point(alpha=2,size=.8) +
+          coord_cartesian(xlim = x_limits, ylim =y_limits) +
+          theme_minimal() +
+          facet_wrap(~pat,ncol=2,scales = "fixed") + #axes="all"
+          #theme_blank +
+          theme_void() + 
+          theme(strip.text = element_text(size = 7,hjust=.5),
+                #panel.spacing.x=unit(-8.5, "lines"), 
+                #strip.background = element_rect(colour = "black", linewidth = 2),
+               # strip.text.x  = element_blank(), # remove pattern labels
+                panel.border = element_blank(),  # Remove borders around facets
+                legend.position = "none",
+                plot.background = element_rect(fill = "white"),
+                panel.background = element_rect(fill = "white"),
+        #axis.line.y = element_line(colour = "black", linewidth = .1)
+        ) +
+       xlim(x_limits[1], x_limits[2]) +  # Set x-axis limits explicitly
+    ylim(y_limits[1], y_limits[2])    # Set y-axis limits explicitly
+}
+
+
+
+p5 <- pairCounts |> filter(n>=29) 
+
+p5 |> slice_head() |> pull(pair_label) |>  pat_table_plot()
+
+
+
+
+library(ggplot2)
+
+# Function to create the plot for each pair
+plot_pair <- function(Pair) {
+  p <- pat_table_plot(Pair)
+  ggsave(filename = paste0(here("Stimulii/pair_images/"),Pair, ".png"), plot = p,width = 4, height = 3, dpi = 200)
+}
+
+# Iterate over each pair in p5 and save the plot as PNG
+p5 |> 
+  #slice_head() |> 
+  pull(pair_label) |> walk(plot_pair)
+
+```
+
+
+
+
+
+
+```{r}
+
+
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, 
+  conflicted, jsonlite,stringr, gt, knitr, kableExtra, 
+  lubridate,ggh4x, lmerTest)
+
+api_key <- Sys.getenv("OPENAI_API_KEY")
+
+
+
+system_prompt <- "You are acting as a human research participant in a psychology study. Your task is to rate the similarity of dot pattern pairs, with 1 being  very dissimilar, and 9 being very similar. Respond only with the integer corresponding to your rating"
+
+list.files(here("Stimulii/pair_images/"))
+
+
+# https://cookbook.openai.com/examples/gpt4o/introduction_to_gpt4o
+# https://community.openai.com/t/how-to-load-a-local-image-to-gpt4-vision-using-api/533090/5
+# https://platform.openai.com/docs/guides/batch/getting-started
+#https://cookbook.openai.com/examples/batch_processing
+
+library(httr)
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(jsonlite)
+library(here)
+library(openai)
+
+
+
+# 104_high_1_290_104_high_2_316.png - 5
+# 376_high_1_326_376_high_3_324 - 1=8
+# 237_low_2_274_237_low_3_307
+
+
+image_path <- "/Users/thomasgorman/Library/CloudStorage/GoogleDrive-tegorman13@gmail.com/My Drive/Learning_Models/Hu_Nosofsky/Stimulii/pair_images/376_high_1_326_376_high_3_324.png"
+
+
+image_path <- "/Users/thomasgorman/Library/CloudStorage/GoogleDrive-tegorman13@gmail.com/My Drive/Learning_Models/Hu_Nosofsky/Stimulii/pair_images/237_low_2_274_237_low_3_307.png"
+
+
+
+img_data <- base64enc::dataURI(file = image_path, mime = "image/png")
+
+img_data=encode_image(image_path)
+
+
+encode_image <- function(image_path) {
+  image_data <- readBin(image_path, what = "raw", n = file.info(image_path)$size)
+  base64_encoded <- base64enc::base64encode(image_data)
+  return(base64_encoded)
+}
+
+
+
+response <- openai::create_chat_completion(
+    model =  "gpt-4o",# "gpt-4-turbo
+    temperature = 1, 
+    top_p=1,
+    frequency_penalty=0,
+    messages = list(
+      list(
+        role = "system",
+        content = system_prompt
+      ),
+      list(
+        role = "user",
+        content = paste("Rate the similarity of the dot patterns in this image:", img_data)
+      )
+    )
+  )
+
+
+response$choices$message.content
+
+
+
+
+
+# Get list of image pairs
+image_pairs <- list.files(here("Stimulii/pair_images/"), full.names = TRUE)[1:5]
+
+# Create a dataframe with pair labels and similarity ratings
+results <- tibble(pair_label = image_pairs) %>%
+  mutate(
+    image_path = here("Stimulii/pair_images", pair_label),
+    similarity_rating = map_int(image_path, get_similarity_rating)
+  ) %>%
+  select(pair_label, similarity_rating)
+
+# Display the results
+results %>%
+  gt() %>%
+  tab_header(
+    title = "Similarity Ratings of Dot Pattern Pairs",
+    subtitle = "Obtained using GPT-4 API"
+  )
+
+
+```
+
+
+

@@ -142,7 +142,7 @@ dCat <- dCat |> mutate(exp="mc24",
   
 
 #write out aggregated trial level data
-#write_rds(dCat, "data/mc24.rds")
+#saveRDS(dCat, "data/mc24.rds")
 
 
 

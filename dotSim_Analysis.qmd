@@ -370,6 +370,7 @@ d %>% filter(pair_label %in% {pairCounts |> filter(n>=min_resp) |>
 ```{r}
 
 
+# could try formatting table environment with #| column: page
 
 plot_hist_pair <- function(Pair) {
   d |> filter(pair_label==Pair) |>
@@ -422,38 +423,38 @@ pat_table_plot <- function(Pair){
 p5 <- pairCounts |> filter(n>=34) 
 
 p5 |> 
-arrange(mean_resp) |>
-relocate(pair_label,.after=sd) |>
-rename("Pair"=pair_label, "N"=n, "Mean Rating"=mean_resp, "SD"=sd) |>
-mutate(Rating_Dist=Pair) |> 
-#group_by(Pair) |> 
-gt() |> 
-tab_options(table.font.size = px(8L)) |>
-  cols_width(
-    set ~ px(116),
-    Pair ~ px(415),
-    `N` ~ px(50),
-    `Mean Rating` ~ px(90),
-    SD ~ px(55)
-  ) |>  
-  fmt_number(decimals = 1) |> #fmt_integer() |>
-  cols_align('left', columns = set) |> 
-  text_transform(
-    locations = cells_body(columns = Pair),
-    fn = function(column) {
-      map(column, pat_table_plot) |>
-        ggplot_image(height = px(230), aspect_ratio = 1.8)
-    }
-  ) |>
-  text_transform(
-    locations = cells_body(columns = Rating_Dist),
-    fn = function(column) {
-      map(column, plot_hist_pair) |>
-        ggplot_image(height = px(150), aspect_ratio = 1)
-    }
-  ) |>  
-   opt_interactive(page_size_default=5, 
-     use_page_size_select= TRUE, use_search=TRUE, use_resizers=TRUE,use_filters=TRUE, page_size_values = c(5, 10, 25, 50, 100)) 
+  arrange(mean_resp) |>
+  relocate(pair_label,.after=sd) |>
+  rename("Pair"=pair_label, "N"=n, "Mean Rating"=mean_resp, "SD"=sd) |>
+  mutate(Rating_Dist=Pair) |> 
+  #group_by(Pair) |> 
+  gt() |> 
+  tab_options(table.font.size = px(8L)) |>
+    cols_width(
+      set ~ px(116),
+      Pair ~ px(415),
+      `N` ~ px(50),
+      `Mean Rating` ~ px(90),
+      SD ~ px(55)
+    ) |>  
+    fmt_number(decimals = 1) |> #fmt_integer() |>
+    cols_align('left', columns = set) |> 
+    text_transform(
+      locations = cells_body(columns = Pair),
+      fn = function(column) {
+        map(column, pat_table_plot) |>
+          ggplot_image(height = px(230), aspect_ratio = 1.8)
+      }
+    ) |>
+    text_transform(
+      locations = cells_body(columns = Rating_Dist),
+      fn = function(column) {
+        map(column, plot_hist_pair) |>
+          ggplot_image(height = px(150), aspect_ratio = 1)
+      }
+    ) |>  
+     opt_interactive(page_size_default=5, 
+       use_page_size_select= TRUE, use_search=TRUE, use_resizers=TRUE,use_filters=TRUE, page_size_values = c(5, 10, 25, 50, 100)) 
     
 
 ```

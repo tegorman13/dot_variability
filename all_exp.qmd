@@ -21,6 +21,34 @@ conflict_prefer_all("dplyr", quiet = TRUE)
 
 lmc22 <- readRDS(here("data","lmc22.rds"))
 mc24 <- readRDS(here("data","mc24.rds"))
+fp24 <- readRDS(here("data","fixed_proto24.rds"))
 
 ```
+
+
+
+
+```{r}
+
+
+
+fp24 |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, fill=condit, group=condit)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+
+
+
+fp24 |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=condit, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+```
+
 
