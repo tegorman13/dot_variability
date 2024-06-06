@@ -40,9 +40,9 @@ nFiles=length(mFiles)
 # read in each of the txt files in mFiles - into a single tibble
 
 
-library(R.matlab)
-mat_files <- list.files(path=pathString,pattern = "dot_.*\\.mat$", recursive = FALSE,full.names = TRUE)
-m <- readMat(mat_files[1])
+# library(R.matlab)
+# mat_files <- list.files(path=pathString,pattern = "dot_.*\\.mat$", recursive = FALSE,full.names = TRUE)
+# m <- readMat(mat_files[1])
 
 
 #mFiles <- mFiles[1]
@@ -160,9 +160,9 @@ dPattern <- dCat |> filter(Phase==2) |>
   arrange(x1,y1)
 
 
-#saveRDS(dCat, "data/fixed_proto24.rds")
+# saveRDS(dCat,"data/fixed_proto24.rds")
 
-#write.csv(dPattern, "dPattern_fixed_proto24.csv", row.names=FALSE)
+# write.csv(dPattern, "dPattern_fixed_proto24.csv", row.names=FALSE)
 
 # length(unique(dCat$Pattern.Token))
 

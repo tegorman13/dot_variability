@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.30">
+<meta name="generator" content="quarto-1.5.40">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="dcterms.date" content="2024-04-23">
+<meta name="dcterms.date" content="2024-05-01">
 <title>Dot Pattern Variability – Dot Pattern Similarity Analysis</title>
 <style>
 code{white-space: pre-wrap;}
@@ -115,13 +115,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prior-work" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-prior-work" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Prior Work</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-prior-work">
@@ -133,6 +133,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./dp_24.html">
  <span class="dropdown-text">Hu_Nosofsky24</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./all_exp.html">
+ <span class="dropdown-text">Combo</span></a>
+  </li>  
     </ul>
 </li>
   <li class="nav-item">
@@ -140,7 +144,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Dot Patterns</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-similarity-ratings" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-similarity-ratings" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Similarity Ratings</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-similarity-ratings">
@@ -199,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 23, 2024</p>
+      <p class="date">May 1, 2024</p>
     </div>
   </div>
   
@@ -336,8 +340,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span></span>
 <span><span class="va">t1</span> <span class="op">|&gt;</span> <span class="fu">kbl</span><span class="op">(</span>caption<span class="op">=</span><span class="st">"Quartiles"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Quartiles</caption>
 <thead><tr class="header">
 <th style="text-align: right;" data-quarto-table-cell-role="th">Quartile</th>
@@ -373,11 +376,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-</div>
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t2</span> <span class="op">|&gt;</span> <span class="fu">kbl</span><span class="op">(</span>caption<span class="op">=</span><span class="st">"Deciles"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Deciles</caption>
 <thead><tr class="header">
 <th style="text-align: right;" data-quarto-table-cell-role="th">Decile</th>
@@ -449,11 +450,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-</div>
 <details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t3</span> <span class="op">|&gt;</span> <span class="fu">kbl</span><span class="op">(</span>caption<span class="op">=</span><span class="st">"Extreme Groups"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Extreme Groups</caption>
 <thead><tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">sim_group</th>
@@ -482,7 +481,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-</div>
 </div>
 </div>
 <div class="cell">
@@ -570,7 +568,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">p5</span> <span class="op">+</span> <span class="va">p6</span></span>
 <span><span class="va">p7</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div id="fig-sim-acc-test-1" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-sim-acc-test-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sim-acc-test-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="dotSim_compare_files/figure-html/fig-sim-acc-test-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;1: 2024 CatLearn accuracy by different similarity rating groups"><img src="dotSim_compare_files/figure-html/fig-sim-acc-test-1.png" class="img-fluid figure-img" width="1152"></a>
 </div>
@@ -580,7 +578,7 @@ Figure&nbsp;1: 2024 CatLearn accuracy by different similarity rating groups
 </div>
 </div>
 <div class="cell-output-display">
-<div id="fig-sim-acc-test-2" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-sim-acc-test-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sim-acc-test-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="dotSim_compare_files/figure-html/fig-sim-acc-test-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;2: 2024 CatLearn accuracy by different similarity rating groups"><img src="dotSim_compare_files/figure-html/fig-sim-acc-test-2.png" class="img-fluid figure-img" width="1152"></a>
 </div>
@@ -590,7 +588,7 @@ Figure&nbsp;2: 2024 CatLearn accuracy by different similarity rating groups
 </div>
 </div>
 <div class="cell-output-display">
-<div id="fig-sim-acc-test-3" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-sim-acc-test-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sim-acc-test-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="dotSim_compare_files/figure-html/fig-sim-acc-test-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3: 2024 CatLearn accuracy by different similarity rating groups"><img src="dotSim_compare_files/figure-html/fig-sim-acc-test-3.png" class="img-fluid figure-img" width="1152"></a>
 </div>
@@ -621,7 +619,7 @@ Figure&nbsp;3: 2024 CatLearn accuracy by different similarity rating groups
 <span> <span class="op">(</span><span class="va">p9</span> <span class="op">/</span> <span class="va">p10</span><span class="op">)</span><span class="op">/</span><span class="va">p11</span> <span class="op">+</span> <span class="fu">plot_annotation</span><span class="op">(</span>title<span class="op">=</span><span class="st">"CatLearn accuracy by extreme similarity rating groups"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">plot_layout</span><span class="op">(</span>heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div id="fig-sim-acc-test2" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-sim-acc-test2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sim-acc-test2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="dotSim_compare_files/figure-html/fig-sim-acc-test2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;4: 2024 CatLearn accuracy by different similarity rating groups"><img src="dotSim_compare_files/figure-html/fig-sim-acc-test2-1.png" class="img-fluid figure-img" width="1248"></a>
 </div>
@@ -676,7 +674,7 @@ Figure&nbsp;4: 2024 CatLearn accuracy by different similarity rating groups
 <span></span>
 <span><span class="va">trSim1</span><span class="op">/</span><span class="va">trSim2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div id="fig-train-sim" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-train-sim" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-train-sim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="dotSim_compare_files/figure-html/fig-train-sim-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5: Training accuracy by block and similarity rating"><img src="dotSim_compare_files/figure-html/fig-train-sim-1.png" class="img-fluid figure-img" width="960"></a>
 </div>
@@ -708,7 +706,7 @@ Figure&nbsp;5: Training accuracy by block and similarity rating
 <span><span class="co">#   stat_summary(geom="line",fun="mean")+ </span></span>
 <span><span class="co">#    facet_wrap2(~condit+sbjCode)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div id="fig-train-sim-indv" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-train-sim-indv" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-train-sim-indv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="dotSim_compare_files/figure-html/fig-train-sim-indv-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;6: Training accuracy by block and similarity rating"><img src="dotSim_compare_files/figure-html/fig-train-sim-indv-1.png" class="img-fluid figure-img" width="1152"></a>
 </div>
@@ -752,7 +750,7 @@ Figure&nbsp;6: Training accuracy by block and similarity rating
 <span></span>
 <span><span class="op">(</span><span class="va">p1</span><span class="op">+</span><span class="va">p2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">p3</span><span class="op">+</span><span class="va">p4</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div id="fig-sim-acc-corr" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-sim-acc-corr" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sim-acc-corr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="dotSim_compare_files/figure-html/fig-sim-acc-corr-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;7: Correlations between similarity ratings and CatLearn accuracy"><img src="dotSim_compare_files/figure-html/fig-sim-acc-corr-1.png" class="img-fluid figure-img" width="1056"></a>
 </div>
@@ -2025,30 +2023,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </ul>
 </div>
   </div>
-</footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom"});
-window.onload = () => {
-  lightboxQuarto.on('slide_before_load', (data) => {
-    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-    const href = trigger.getAttribute('href');
-    if (href !== null) {
-      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-      if (imgEl !== null) {
-        const srcAttr = imgEl.getAttribute("src");
-        if (srcAttr && srcAttr.startsWith("data:")) {
-          slideConfig.href = srcAttr;
-        }
-      }
-    } 
-  });
-
-  lightboxQuarto.on('slide_after_load', (data) => {
-    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-    if (window.Quarto?.typesetMath) {
-      window.Quarto.typesetMath(slideNode);
+</footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","selector":".lightbox","loop":false});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
     }
-  });
-
-};
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
           </script>
 
 

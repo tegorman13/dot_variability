@@ -8,6 +8,7 @@ project:
     - "!_*" # ignore any file that starts with a _
     - "read_24.R"
     - "read_22.R"
+    - "!dot_sim_gpt.qmd"
     
   resources: 
       - "Task/index.html"
@@ -37,6 +38,8 @@ website:
             href: dp_22.qmd
           - text: "Hu_Nosofsky24"
             href:  dp_24.qmd
+          - text: "Combo"
+            href: all_exp.qmd
       - text: "Dot Patterns"
         href:  Stimulii/plotDots.qmd
       - text: "Similarity Ratings"
