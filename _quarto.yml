@@ -11,10 +11,12 @@ project:
     - "!dot_sim_gpt.qmd"
     
   resources: 
-      - "Task/index.html"
-      - "Task/debug.html"
-      - "Task/mc_patterns.json"
-      - "Task/assets/*"
+    - "Task/index.html"
+    - "Task/debug.html"
+    - "Task/mc_patterns.json"
+    - "Task/assets/*"
+    - "assets/*"
+    - "assets/grateful-refs.bib"
 
 
 website:
@@ -24,33 +26,38 @@ website:
   repo-actions: [source, edit, issue]
   reader-mode: true
   page-navigation: true
-  navbar:
-    background: primary
-    search: true
-    collapse-below: sm
-    tools:
-      - icon: github
-        href: https://github.com/tegorman13/dot_variability
-    left:
-      - text: "Prior Work"
-        menu: 
-          - text: "2022_Paper"
-            href: dp_22.qmd
-          - text: "Hu_Nosofsky24"
-            href:  dp_24.qmd
-          - text: "Combo"
-            href: all_exp.qmd
-      - text: "Dot Patterns"
-        href:  Stimulii/plotDots.qmd
-      - text: "Similarity Ratings"
-        menu: 
-          - text: "Data Checks"
-            href: dotSim_Analysis.qmd
-          - text: "Group Comparison"
-            href:  dotSim_compare.qmd
-      - text: "Task"
-        href:  Task/Task.qmd
-        #href:  Task/index.html
+  sidebar:
+    style: docked 
+    background: light
+    contents:
+      - href: index.qmd
+        text: Home
+      - section: "Learning Analysis"
+        contents:
+          - href: Analysis/dp_22.qmd
+            text: Hu & Nosofsky 2022
+          - href: Analysis/dp_24.qmd
+            text: Hu & Nosofsky 2024
+          - href: Analysis/all_exp.qmd
+            text: Combo
+      - section: "Dot Patterns"
+        contents:
+          - href: Analysis/dotSim_Analysis.qmd
+            text: Similarity Ratings
+          - href: Analysis/dotSim_compare.qmd
+            text: Group Comparison
+      - section: "Dot Patterns"
+        contents:
+          - href: Stimulii/plotDots.qmd
+            text: Dot Patterns
+          - href: Stimulii/instruction_examples.qmd
+            text: Instructions
+          - href: Stimulii/check_dots.qmd
+            text: basic
+      - section: "Task"
+        contents:
+          - href: Task/Task.qmd
+            text: Task
   page-footer:
     left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
     center: "site created with [R](https://cran.r-project.org/) and [quarto](https://quarto.org)"
@@ -59,20 +66,22 @@ website:
         aria-label: GitHub
         target: _blank
         href: https://github.com/tegorman13/dot_variability
-        
+
+
+
 execute:
   freeze: auto
   
-bibliography: [assets/dot_bib.bib] #, assets/grateful-refs.bib
+bibliography: [assets/dot_bib.bib, assets/grateful-refs.bib] #, assets/grateful-refs.bib
 csl: assets/apa7.csl
 
 format:
   html:
-    theme:
-      light: spacelab #[default]
-      dark: cyborg
+    # theme:
+    #   light: spacelab #[default]
+    #   dark: cyborg
     #theme: Assets/Style/lux-modified.scss 
-    #css: ["Assets/Style/lux-modified.scss", "Assets/Style/calloutTG.css"]
+    css: "assets/style_qt.css"
     page-layout: full
     tbl-cap-location: top
     fig-cap-location: bottom
@@ -93,3 +102,44 @@ format:
     html-math-method: mathjax
     link-external-newwindow: true
     link-external-filter: '^(?:http:|https:)\/\/www\.tegorman13.github.io/dot_variability\/custom'
+
+
+
+
+
+
+  # navbar:
+  #   background: primary
+  #   search: true
+  #   collapse-below: sm
+  #   tools:
+  #     - icon: github
+  #       href: https://github.com/tegorman13/dot_variability
+  #   left:
+  #     - text: "Prior Work"
+  #       menu: 
+  #         - text: "2022_Paper"
+  #           href: dp_22.qmd
+  #         - text: "Hu_Nosofsky24"
+  #           href:  dp_24.qmd
+  #         - text: "Combo"
+  #           href: all_exp.qmd
+  #     - text: "Dot Patterns"
+  #       href:  Stimulii/plotDots.qmd
+  #     - text: "Similarity Ratings"
+  #       menu: 
+  #         - text: "Data Checks"
+  #           href: dotSim_Analysis.qmd
+  #         - text: "Group Comparison"
+  #           href:  dotSim_compare.qmd
+  #     - text: "Task"
+  #       href:  Task/Task.qmd
+  #       #href:  Task/index.html
+  # page-footer:
+  #   left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
+  #   center: "site created with [R](https://cran.r-project.org/) and [quarto](https://quarto.org)"
+  #   right: 
+  #     - text: "{{< fa brands github size=2.0x >}}"
+  #       aria-label: GitHub
+  #       target: _blank
+  #       href: https://github.com/tegorman13/dot_variability

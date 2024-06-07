@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tegorman13.github.io/dot_variability/dp_24.html</loc>
-    <lastmod>2024-01-30T05:58:35.863Z</lastmod>
+    <loc>https://tegorman13.github.io/dot_variability/Analysis/dp_24.html</loc>
+    <lastmod>2024-06-07T21:46:25.295Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/dot_variability/dotSim_Analysis.html</loc>
-    <lastmod>2024-06-04T05:54:06.052Z</lastmod>
+    <loc>https://tegorman13.github.io/dot_variability/Analysis/dotSim_Analysis.html</loc>
+    <lastmod>2024-06-07T21:48:23.531Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/dot_variability/dotSim_compare.html</loc>
-    <lastmod>2024-05-02T02:25:06.874Z</lastmod>
+    <loc>https://tegorman13.github.io/dot_variability/Analysis/dotSim_compare.html</loc>
+    <lastmod>2024-06-07T21:48:45.883Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/dot_variability/Simulation/dp_24_model.html</loc>
-    <lastmod>2024-01-19T07:59:21.475Z</lastmod>
+    <lastmod>2024-06-07T04:28:28.092Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/dot_variability/index.html</loc>
-    <lastmod>2024-04-23T03:51:02.690Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/dot_variability/read_24.html</loc>
-    <lastmod>2024-06-04T05:01:42.281Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/dot_variability/read_22.html</loc>
-    <lastmod>2024-02-16T18:13:16.997Z</lastmod>
+    <loc>https://tegorman13.github.io/dot_variability/Analysis/all_exp.html</loc>
+    <lastmod>2024-06-06T04:29:59.010Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/dot_variability/Task/Task.html</loc>
-    <lastmod>2024-02-23T22:08:39.301Z</lastmod>
+    <lastmod>2024-06-07T21:38:36.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/dot_variability/index.html</loc>
+    <lastmod>2024-06-07T20:33:53.569Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/dot_variability/Stimulii/check_dots.html</loc>
@@ -38,18 +34,14 @@
   </url>
   <url>
     <loc>https://tegorman13.github.io/dot_variability/Stimulii/instruction_examples.html</loc>
-    <lastmod>2024-02-27T01:11:59.807Z</lastmod>
+    <lastmod>2024-04-24T18:49:07.950Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/dot_variability/Stimulii/plotDots.html</loc>
     <lastmod>2024-02-27T05:41:06.564Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/dot_variability/dp_22.html</loc>
-    <lastmod>2024-01-18T21:46:53.027Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/dot_variability/all_exp.html</loc>
-    <lastmod>2024-06-06T04:29:59.010Z</lastmod>
+    <loc>https://tegorman13.github.io/dot_variability/Analysis/dp_22.html</loc>
+    <lastmod>2024-06-07T21:46:24.038Z</lastmod>
   </url>
 </urlset>

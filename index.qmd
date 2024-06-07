@@ -2,11 +2,11 @@
 title: "Dot Pattern Similarity Project"
 listing:
   contents:
-    - dotSim_compare.qmd
-    - dotSim_Analysis.qmd
+    - Analysis/dotSim_compare.qmd
+    - Analysis/dotSim_Analysis.qmd
     - Stimulii/plotDots.qmd
-    - dp_24.qmd
-    - dp_22.qmd
+    - Analysis/dp_24.qmd
+    - Analysis/dp_22.qmd
     - Task/Task.qmd
     # - "reports/*.qmd"
     # - "lab-notes/*reports.qmd"

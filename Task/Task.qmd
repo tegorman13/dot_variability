@@ -13,8 +13,10 @@ A preview of the judgement task is included below. The task can be restarted by 
 
 Click here to open the task in a new window: [dot_task](/Task/index.html)
 
+<br><br>
+
 ## Pattern Judgement Task
-::: column-screen
+::: column-screen-right
 
 
 ![dot_task](/Task/index.html){width="600" height="550"}

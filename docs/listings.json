@@ -3,10 +3,10 @@
     "listing": "/index.html",
     "items": [
       "/Stimulii/plotDots.html",
-      "/dotSim_Analysis.html",
-      "/dotSim_compare.html",
-      "/dp_22.html",
-      "/dp_24.html",
+      "/Analysis/dotSim_Analysis.html",
+      "/Analysis/dotSim_compare.html",
+      "/Analysis/dp_22.html",
+      "/Analysis/dp_24.html",
       "/Task/Task.html"
     ]
   }
