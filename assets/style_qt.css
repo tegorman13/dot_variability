@@ -88,10 +88,10 @@
   /* Figures */
   
   /* Overwrites bootstrap setting */
-  .img-fluid {
+  /* .img-fluid {
     max-width: 75%;
   }
-  
+   */
   .quarto-cover-image {
     max-width: 35%;
   }

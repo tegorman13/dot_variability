@@ -23,7 +23,7 @@ website:
   title: "Dot Pattern Variability"
   repo-url: https://github.com/tegorman13/dot_variability
   site-url: "https://tegorman13.github.io/dot_variability"
-  repo-actions: [source, edit, issue]
+  repo-actions: [source, issue]
   reader-mode: true
   page-navigation: true
   sidebar:
@@ -71,6 +71,7 @@ website:
 
 execute:
   freeze: auto
+  tidy: true
   
 bibliography: [assets/dot_bib.bib, assets/grateful-refs.bib] #, assets/grateful-refs.bib
 csl: assets/apa7.csl
@@ -92,6 +93,7 @@ format:
     cold-tools: true
     code-link: true
     code-line-numbers: false
+    code-summary: "Display code"
     citations-hover: true
     #code-overflow: wrap
     code-copy: true

@@ -1,7 +1,12 @@
 ---
 title: Hu & Nosofsky 2024
 date: last-modified
-toc-depth: 4
+#page-layout: full
+html:
+  grid:
+    margin-width: 150px
+#toc-depth: 4
+toc: false
 code-fold: true
 code-tools: true
 lightbox: true
