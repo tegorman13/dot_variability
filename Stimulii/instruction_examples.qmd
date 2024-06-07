@@ -1,7 +1,14 @@
 ---
 title: Dot Pattern Plots
 date: last-modified
-page-layout: full
+#page-layout: full
+format:
+  html: 
+    grid:
+      sidebar-width: 300px
+      body-width: 1000px
+      margin-width: 200px
+      gutter-width: 1.5rem
 code-fold: true
 code-tools: true
 execute: 

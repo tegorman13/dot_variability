@@ -5,8 +5,9 @@ date: last-modified
 html:
   grid:
     margin-width: 150px
+toc: true
+toc-location: body
 #toc-depth: 4
-toc: false
 code-fold: true
 code-tools: true
 lightbox: true
