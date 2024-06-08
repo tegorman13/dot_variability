@@ -4,7 +4,14 @@ date: last-modified
 lightbox: true
 aliases: 
   - /dotSim_Analysis.html
-toc: true
+format:
+  html: 
+    grid:
+      sidebar-width: 220px
+      body-width: 1200px
+      margin-width: 170px
+      gutter-width: 1.0rem
+toc: false
 page-layout: full
 toc-depth: 3
 code-fold: true
@@ -371,7 +378,7 @@ d %>% filter(pair_label %in% {pairCounts |> filter(n>=min_resp) |>
 ::: column-page-right
 
 ```{r}
-
+#| cache: true
 
 # could try formatting table environment with #| column: page
 
@@ -423,7 +430,7 @@ pat_table_plot <- function(Pair){
 
 
 
-p5 <- pairCounts |> filter(n>=40) 
+p5 <- pairCounts |> filter(n>=34) 
 
 p5 |> 
   arrange(mean_resp) |>

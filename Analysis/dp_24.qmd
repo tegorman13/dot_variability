@@ -2,12 +2,16 @@
 title: Hu & Nosofsky 2024
 date: last-modified
 #page-layout: full
-html:
-  grid:
-    margin-width: 150px
+format:
+  html: 
+    grid:
+      sidebar-width: 220px
+      body-width: 1200px
+      margin-width: 170px
+      gutter-width: 1.0rem
 toc: true
-toc-location: body
-#toc-depth: 4
+#toc-location: right
+toc-depth: 4
 code-fold: true
 code-tools: true
 lightbox: true
@@ -156,6 +160,8 @@ In the full data-set, the high distortion group has the worst performance for al
 #| fig-cap: "test_strong_learners- top"
 #| fig-width: 11
 #| fig-height: 15
+#| column: page-inset-right
+
 trainRanks <- dCat |> group_by(sbjCode,condit) |> 
   select(finalTrain) |> slice(1) |> arrange(-finalTrain)
 
@@ -439,7 +445,7 @@ Worth comparing the RT's to the accuracy. In many cases the RT's show the invers
 ### Facet by Training Condition
 ```{r fig.width=11, fig.height=9}
 #| fig-cap: "Reaction Times"
-#| fig-width: 11
+#| fig-width: 12
 #| fig-height: 13
 
 tx1 <- theme(axis.title.x=element_blank(), axis.text.x=element_blank())
@@ -579,7 +585,7 @@ test_learn1 / test_learn2 + # make upper half of plot half as wide as lower half
 ### Training Accuracy
 ```{r}
 #| fig-cap: "Learning Curves"
-#| fig-width: 12
+#| fig-width: 14
 #| fig-height: 12
 
 
@@ -678,7 +684,7 @@ lte_l50h <- dCat |> filter(Phase==1, test_high<.50) |>
 ### Training Reaction Times
 ```{r}
 #| fig-cap: "Training Reaction Times"
-#| fig-width: 12
+#| fig-width: 14
 #| fig-height: 12
 
 

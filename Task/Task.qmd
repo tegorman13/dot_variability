@@ -4,6 +4,7 @@ date: last-modified
 page-layout: full
 code-fold: true
 code-tools: true
+image: /assets/task_pic.png
 ---
 
 
@@ -16,7 +17,7 @@ Click here to open the task in a new window: [dot_task](/Task/index.html)
 <br><br>
 
 ## Pattern Judgement Task
-::: column-screen-right
+::: column-page-right
 
 
 ![dot_task](/Task/index.html){width="600" height="550"}

@@ -29,6 +29,9 @@ website:
   sidebar:
     style: docked 
     background: light
+    tools:
+    - icon: github
+      href: https://github.com/tegorman13/dot_variability
     contents:
       - href: index.qmd
         text: Home
@@ -43,9 +46,9 @@ website:
       - section: "Dot Patterns"
         contents:
           - href: Analysis/dotSim_Analysis.qmd
-            text: Similarity Ratings
+            text: Rating Data Check
           - href: Analysis/dotSim_compare.qmd
-            text: Group Comparison
+            text: Similarity Comparisons
       - section: "Dot Patterns"
         contents:
           - href: Stimulii/plotDots.qmd

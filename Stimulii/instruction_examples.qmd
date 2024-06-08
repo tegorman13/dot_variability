@@ -5,12 +5,13 @@ date: last-modified
 format:
   html: 
     grid:
-      sidebar-width: 300px
-      body-width: 1000px
-      margin-width: 200px
-      gutter-width: 1.5rem
+      sidebar-width: 230px
+      body-width: 1200px
+      margin-width: 150px
+      gutter-width: 1.0rem
 code-fold: true
 code-tools: true
+fig.width: 14
 execute: 
   warning: false
   eval: true
@@ -116,7 +117,7 @@ proto_long |>
 ```{r}
 #| fig-cap: Prototype pairs with different similarity levels
 #| fig-width: 11
-#| fig-height: 10
+#| fig-height: 14
 
 
 hsim1 <- circle[2:3]

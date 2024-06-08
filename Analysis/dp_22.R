@@ -232,6 +232,8 @@ plot_grid(title,NULL,gg.ac1,ep1,gg.ac2,ep2,gg.ac3,ep3,ncol=2,rel_heights=c(.1,1,
 
 
 
+###| column: screen-inset-right
+
 
 dCatTrainAvg %>% filter(condit=="rep") %>% ggplot(aes(x=Block,y=propCor,col=condit))+
   stat_summary(shape=0,geom="point",fun="mean")+
@@ -248,6 +250,8 @@ dCatTrainAvg %>% filter(condit=="nrep") %>% ggplot(aes(x=Block,y=propCor,col=con
   xlab("Training Block")+ylab("Proportion Correct")+scale_x_continuous(breaks=seq(1,15))
 
 
+##| column: screen-inset-right
+ 
 dCatTrainAvg2 %>% filter(condit=="rep") %>% ggplot(aes(x=Block,y=propCor,col=Category,shape=Category))+
   stat_summary(geom="point",fun="mean")+
   stat_summary(geom="line",fun="mean")+facet_wrap(~id)+ylim(c(0,1))+
