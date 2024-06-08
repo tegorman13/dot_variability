@@ -7,9 +7,9 @@ page-layout: full
 format:
   html: 
     grid:
-      sidebar-width: 220px
-      body-width: 1200px
-      margin-width: 170px
+      sidebar-width: 200px
+      body-width: 1250px
+      margin-width: 140px
       gutter-width: 1.0rem
 toc-depth: 3
 code-fold: true
@@ -37,7 +37,8 @@ mc24 <- readRDS(here("data","mc24.rds"))
 fp24 <- readRDS(here("data","fixed_proto24.rds"))
 
 all_data <- fp24 |> select(-pool_index) |> rbind(mc24) |> rbind(lmc22)
-
+all_data$Pattern_Token = factor(all_data$Pattern_Token,levels=c("old","prototype","new_low","new_med","new_high","special")) 
+all_data$condit = factor(all_data$condit,levels=c("low","medium","mixed","high","nrep","rep"))
 
 theme_nice <- function() {
   theme_minimal(base_family = "Manrope") +
@@ -51,11 +52,35 @@ theme_nice <- function() {
       axis.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.8)),
       strip.text = element_text(
         family = "Manrope", face = "bold",
-        size = rel(.75), hjust = 0
+        size = rel(.95), hjust = 0
       ),
+      legend.position = "top",
+      legend.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.95)),
       strip.background = element_rect(fill = "grey90", color = NA)
     )
 }
+
+theme_nice_b <- function() {
+  theme_minimal(base_family = "Manrope") +
+    theme(
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.55)),
+      plot.subtitle = element_text(family = "Manrope Medium", face = "plain", size = rel(1.2)),
+      axis.title = element_text(family = "Manrope SemiBold", face = "plain", size = rel(1)),
+      axis.title.x = element_text(hjust = .5),
+      axis.title.y = element_text(hjust = .5),
+      axis.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.9)),
+      strip.text = element_text(
+        family = "Manrope", face = "bold",
+        size = rel(1.2), hjust = 0
+      ),
+      legend.position = "top",
+      legend.text = element_text(family = "Manrope Light", face = "plain", size = rel(1.3)),
+      strip.background = element_rect(fill = "grey90", color = NA)
+    )
+}
+
+
 
 
 theme_set(theme_nice())
@@ -73,9 +98,14 @@ eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
 ## Comparison
 
 ```{r}
-#| fig-cap: "comparison"
 #| fig-width: 11
 #| fig-height: 13
+#| layout-ncol: 2 
+#| fig-cap: 
+#|   - "Line Plot 1"
+#|   - "Line Plot 2"
+#|   - "Line Plot 4"
+#|   - "Line Plot 5"
 
 all_data |> filter(Phase==2) |>
   group_by(sbjCode, condit, Pattern_Token) |>
@@ -112,19 +142,67 @@ all_data |> filter(Phase==2) |>
   facet_wrap(~Pattern_Token,scales="free_x") +
   labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
+```
+
+
+## Compare Experiments
+
+```{r}
+#| fig-width: 13
+#| fig-height: 11
+#| layout-ncol: 2 
+
+
+theme_set(theme_nice_b())
+
+all_data |> filter(Phase==2, Pattern_Token != "special") |>
+  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  summarize(Corr=mean(Corr)) |>
+  group_by(condit,Pattern_Token,exp) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr)/sqrt(length(Corr)),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem) |>
+  mutate(method = "standard error") |> 
+  ggplot(aes(x=Pattern_Token, y=empirical_stat, col=condit, group=condit)) +  
+  geom_point() +
+  geom_line(aes(group = condit)) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper)
+                ) +
+  facet_wrap(~exp)
 
 
 
+all_data |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=condit, y=Corr, col=exp, group=exp)) +  
+  stat_summary(geom="line",fun=mean)+
+  stat_summary(geom="errorbar", fun.data=mean_se) +
+  facet_wrap(~Pattern_Token,scales="free_x") +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+
+
+all_data |> filter(Phase==2, Pattern_Token != "special") |>
+  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=Pattern_Token, y=Corr, col=condit, group=condit)) +  
+  stat_summary(geom="line",fun=mean)+
+  stat_summary(geom="errorbar", fun.data=mean_se) +
+  facet_wrap(~exp,scales="free_x") +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
 
 ```
+
 
 ## Training Comparison
 
 
 ```{r}
-
-
+#| fig-width: 12
+#| fig-height: 10
+#| layout-ncol: 2 
 all_data |> filter(Phase==1) |>
   group_by(sbjCode, condit, Pattern_Token,Block,exp) |>
   summarize(Corr=mean(Corr),.groups="keep") |>
@@ -156,7 +234,7 @@ all_data |> filter(Phase==1) |>
 
 
 ```{r}
-
+#| layout-ncol: 2 
 
 
 fp24 |> filter(Phase==2) |>
