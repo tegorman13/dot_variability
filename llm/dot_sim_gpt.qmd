@@ -1,0 +1,1042 @@
+---
+title: Comparing Human and LLMV Similarity Ratings
+date: last-modified
+lightbox: true
+toc: true
+page-layout: full
+toc-depth: 3
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: false
+---
+
+```{r}
+
+pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, 
+  conflicted,stringr, gt, knitr, kableExtra, 
+  lubridate,ggh4x,jsonlite,httr, openai)
+walk(c("dplyr"), conflict_prefer_all, quiet = TRUE)
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+
+#walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
+
+mc24_proto <- read.csv(here("Stimulii","mc24_prototypes.csv")) |> mutate(set=paste0(sbjCode,"_",condit)) 
+sbj_cat <- read.csv(here("data","mc24_sbj_cat.csv"))
+
+dfiles <- list(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
+
+d <- map_dfr(dfiles$path, ~read.csv(.x))
+
+d <- map_dfr(dfiles$path, ~{read.csv(.x) |> 
+    mutate(sfile=tools::file_path_sans_ext(basename(.x)))}) |> 
+  select(-trial_index, -internal_node_id,-trial_type) |>
+   mutate(set = paste(str_extract(item_label_1, "^\\d+"),
+                     str_extract(item_label_1, "[a-z]+"), sep = "_")) |>
+  mutate(pair_label = paste0(item_label_1,"_",item_label_2)) |>
+  relocate(sbjCode,date,set,pair_label,trial,item_label_1,item_label_2,response,rt)
+
+setCounts <- d |> 
+  pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(set) |> summarise(n=n_distinct(sbjCode),resp=mean(response),sd=sd(response)) |> arrange(desc(n))
+
+# length(unique(mc_proto$set)) # 304
+setCounts2 <- mc24_proto |> group_by(set) |> 
+  slice_head(n=1) |> 
+  select(id,file,set) |> 
+  left_join(setCounts,by="set") |> 
+  mutate(n = ifelse(is.na(n), 0, n), .groups="drop") |> 
+  arrange(n) |> ungroup()
+
+pairCounts <- d |> 
+  group_by(pair_label,set) |> 
+  summarise(n=n(),mean_resp=mean(response),sd=sd(response)) |> 
+  arrange(mean_resp) |> # arrange(desc(n)) |> 
+  ungroup()
+
+# saveRDS(pairCounts,here::here("data","pairCounts.rds"))
+#pairCounts <- readRDS(here("data/pairCounts.rds")) |> arrange(mean_resp)
+
+```
+
+
+
+```{r}
+
+pair_plot <- function(Pair,item_labels=FALSE){
+  df <- d |> filter(pair_label==Pair) |> slice_head(n=1) 
+  dim1=35
+  x_limits <- c(-dim1, dim1)  # Set fixed x-axis limits
+  y_limits <- c(-dim1, dim1)  # Set fixed y-axis limits
+
+    pat1 <- df %>%
+          mutate(pattern_1 = purrr::map(pattern_1, jsonlite::fromJSON)) %>%
+          unnest(pattern_1) %>%
+          mutate(y=-y, pat=item_label_1) |> select(pair_label,x,y,pat)
+
+    pat2 <- df %>%
+          mutate(pattern_2 = purrr::map(pattern_2, jsonlite::fromJSON)) %>%
+          unnest(pattern_2) %>%
+          mutate(y=-y, pat=item_label_2) |> select(pair_label,x,y,pat)
+
+    pat <- rbind(pat1,pat2)
+    pat |> 
+    ggplot(aes(x = x, y = y #,fill=pat,col=pat
+              )) +
+          geom_point(alpha=2,size=.8) +
+          coord_cartesian(xlim = x_limits, ylim =y_limits) +
+          theme_minimal() +
+          facet_wrap(~pat,ncol=2,scales = "fixed") + #axes="all"
+          #theme_blank +
+          theme_void() + 
+          theme(strip.text = element_text(size = 7,hjust=.5),
+                #panel.spacing.x=unit(-8.5, "lines"), 
+                #strip.background = element_rect(colour = "black", linewidth = 2),
+              strip.text.x  = if(item_labels) element_text() else element_blank(), # remove pattern labels
+                panel.border = element_blank(),  # Remove borders around facets
+                legend.position = "none",
+                plot.background = element_rect(fill = "white"),
+                panel.background = element_rect(fill = "white"),
+        #axis.line.y = element_line(colour = "black", linewidth = .1)
+        ) +
+      xlim(x_limits[1], x_limits[2]) +  # Set x-axis limits explicitly
+    ylim(y_limits[1], y_limits[2])    # Set y-axis limits explicitly
+}
+
+save_pair <- function(Pair) {
+  p <- pair_plot(Pair)
+  ggsave(filename = paste0(here("Stimulii/pair_images/"),Pair, ".png"), plot = p,width = 4, height = 3, dpi = 200)
+}
+
+```
+
+
+
+```{r}
+
+pairCounts |> 
+  slice_tail(n = 3) |> 
+  arrange(desc(mean_resp)) |> 
+  pull(pair_label) |> 
+  map(~pair_plot(.x, item_labels = TRUE)) |> 
+  wrap_plots(ncol = 1) + 
+  plot_annotation(title = "Highest Rated Pairs")
+
+pairCounts |> 
+  slice_head(n = 3) |> 
+  pull(pair_label) |> 
+  map(~pair_plot(.x, item_labels = TRUE)) |> 
+  wrap_plots(ncol = 1) + 
+  plot_annotation(title = "Lowest Rated Pairs")
+
+# plot 3 pairs from the middle of pairCounts
+pairCounts |> 
+  slice(ceiling(n()/2)-1:3) |> 
+  pull(pair_label) |> 
+  map(~pair_plot(.x, item_labels = TRUE)) |> 
+  wrap_plots(ncol = 1) + 
+  plot_annotation(title = "Middle Rated Pairs")
+
+
+
+# 
+# combined_df |> 
+#   pull(pair_label) |> 
+#   walk(~ {
+#     p <- pair_plot(.x, item_labels = TRUE)
+#     ggsave(filename = paste0(here("llm/ex_images/"), .x, ".png"), plot = p, width = 4, height = 3, dpi = 200)
+#   })
+
+```
+
+
+```{r}
+
+
+# save full sized images
+combined_df |> 
+  pull(pair_label) |> 
+  walk(~ {
+    p <- pair_plot(.x, item_labels = FALSE)
+    ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 3, height = 2, dpi = 200)
+  })
+
+
+combined_df <- bind_rows(
+  pairCounts |> slice_tail(n = 3) |> mutate(type = "Highest"),
+  pairCounts |> slice_head(n = 3) |> mutate(type = "Lowest"),
+  pairCounts |> slice(ceiling(n() / 2) - 1:3) |> mutate(type = "Middle")
+) |> mutate(path = paste0(here("llm/images/"),pair_label,"_sm.png"))
+combined_df$path
+
+
+
+
+
+# save smaller images
+# combined_df |> 
+#   pull(pair_label) |> 
+#   walk(~ {
+#     p <- pair_plot(.x, item_labels = FALSE)
+#     ggsave(filename = paste0(here("llm/images/"), .x, "_sq.png"), plot = p, width = 3, height = 3, dpi = 100)
+#   })
+
+list.files("llm/images")
+#  [1] "123_medium_1_315_123_medium_2_308_sq.png" "123_medium_1_315_123_medium_2_308.png"   
+#  [3] "215_high_2_289_215_high_3_302_sq.png"     "215_high_2_289_215_high_3_302.png"       
+#  [5] "237_low_2_274_237_low_3_307_sq.png"       "237_low_2_274_237_low_3_307.png"         
+#  [7] "245_low_1_273_245_low_3_341_sq.png"       "245_low_1_273_245_low_3_341.png"         
+#  [9] "279_medium_1_321_279_medium_2_336_sq.png" "279_medium_1_321_279_medium_2_336.png"   
+# [11] "304_high_2_277_304_high_3_315_sq.png"     "304_high_2_277_304_high_3_315.png"       
+# [13] "376_high_1_326_376_high_3_324_sq.png"     "376_high_1_326_376_high_3_324.png"       
+# [15] "393_mixed_1_349_393_mixed_3_292_sq.png"   "393_mixed_1_349_393_mixed_3_292.png"     
+# [17] "82_low_1_334_82_low_3_343_sq.png"         "82_low_1_334_82_low_3_343.png" 
+
+
+#paste0(here("llm/images/"),combined_df$pair_label,".png")
+
+```
+
+```{r}
+
+
+# Encode the image
+image_encoded <- combined_df |> slice_tail(n = 1) |> pull(path) |> encode_image()
+combined_df |> slice_tail(n = 1)
+# Decode the base64 encoded image
+image_raw <- base64enc::base64decode(image_encoded)
+# Convert the raw image data to a rasterGrob object
+raster <- grid::rasterGrob(png::readPNG(image_raw), interpolate = TRUE)
+ggplot() + 
+  annotation_custom(raster, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) + 
+  theme_void() + 
+  theme(plot.margin = margin(0, 0, 0, 0, "cm"))
+
+
+image_encoded <- combined_df |> filter(type=="Highest") |>  slice_tail(n = 1) |> pull(path) |> encode_image()
+combined_df |> filter(type=="Highest") |>  slice_tail(n = 1)
+image_raw <- base64enc::base64decode(image_encoded)
+raster <- grid::rasterGrob(png::readPNG(image_raw), interpolate = TRUE)
+ggplot() + 
+  annotation_custom(raster, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) + 
+  theme_void() + 
+  theme(plot.margin = margin(0, 0, 0, 0, "cm"))
+
+```
+
+
+
+
+### Test on 3 of high, low, middle
+```{r}
+
+
+# Function to encode the image
+encode_image <- function(image_path) {
+  image_data <- readBin(image_path, what = "raw", n = file.info(image_path)$size)
+  base64_encoded <- base64enc::base64encode(image_data)
+  encoded_image <- glue::glue("data:image/jpeg;base64,{base64_encoded}")
+  return(encoded_image)
+}
+
+image_path <- combined_df[1,]$path
+
+# Function to send the encoded image to GPT-4o for a rating
+get_gpt4_rating <- function(image_path) {
+
+  encoded_image <- encode_image(image_path)
+  
+  system_prompt <- "You are acting as a human research participant in a psychology study. You will be presented with an image that contains two dot patterns (one on the left, and the other on the right). Your task is to rate the similarity of dot pattern pairs, with 1 being very dissimilar, and 9 being very similar. Respond only with the integer corresponding to your rating."
+    
+  trial_instruction <- "Rate the similarity of the dot patterns in this image:"
+    
+  response <- openai::create_chat_completion(
+    model = "gpt-4o", # or "gpt-4o"
+    temperature = 1.0, 
+    top_p = 1,
+    frequency_penalty = 0,
+    messages = list(
+      list(
+        role = "system",
+        content = system_prompt
+      ),
+      list(role = 'user', 
+          content = list(
+            list(
+              type = 'text',
+              text = trial_instruction
+            ),
+            list(
+              type = 'image_url',
+              image_url = list(
+                url = encoded_image #, detail="low"
+              )
+            )
+          )
+      )
+    )
+  )
+  return(response)
+}
+
+# list.files(here("llm"),full.names=TRUE)[1:2]
+# t <- list.files(here("llm"),pattern="*.png",full.names=TRUE)[1:2] |> map(~get_gpt4_rating(.x))
+
+combined_df_with_ratings <- combined_df[1:9,] %>% mutate(response = map(path, get_gpt4_rating))
+
+combined_df2 <- combined_df_with_ratings %>%
+  mutate(gpt4o_rating = map_dbl(response, ~ as.integer(str_extract(.x$choices$message.content, "\\d"))))
+combined_df2 |> select(-path)
+
+```
+
+
+
+temp = 0
+ggsave(filename = paste0(here("llm/ex_images/"), .x, ".png"), plot = p, width = 4, height = 3, dpi = 200)
+# A tibble: 9 × 8
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            8
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            8
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            4
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            7
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            4
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            7
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            7
+
+
+
+
+temp = 1
+ggsave(filename = paste0(here("llm/ex_images/"), .x, ".png"), plot = p, width = 4, height = 3, dpi = 200)
+A tibble: 9 × 8
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            7
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            8
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            5
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            8
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            5
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            8
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            7
+
+
+
+smaller
+temp = 1
+ggsave(filename = paste0(here("llm/images/"), .x, "_sq.png"), plot = p, width = 3, height = 3, dpi = 100)
+A tibble: 9 × 8
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            7
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            7
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            7
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            6
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            4
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            7
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            7
+[[1]]$usage$total_tokens
+[1] 353
+
+
+smaller
+temp = 1
+ggsave(filename = paste0(here("llm/images/"), .x, "_sq.png"), plot = p, width = 3, height = 3, dpi = 100)
+# A tibble: 9 × 8
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            8
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            8
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            8
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            4
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            4
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            4
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            8
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            5
+[[1]]$usage$total_tokens
+[1] 353
+
+
+even smaller (but same # of tokens)
+temp = 1
+ ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 4, height = 3, dpi = 50)
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            8
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            7
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            3
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            6
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            7
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            4
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            3
+
+combined_df2[1,]$response
+[[1]]$usage$total_tokens
+[1] 353
+
+
+even smaller (but same # of tokens)
+temp = 1
+ ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 4, height = 3, dpi = 30)
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            7
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            8
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            6
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            7
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            5
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            6
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            7
+combined_df2[1,]$response
+[[1]]$usage$total_tokens
+[1] 353
+
+
+smaller - 4x3 with 100 dpi
+temp = 1
+ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 4, height = 3, dpi = 100)
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            7
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            7
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            3
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            5
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            4
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            6
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            6
+combined_df2[1,]$response
+[[1]]$usage$total_tokens
+[1] 353
+
+
+
+small - removed labels
+ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 3, height = 2, dpi = 100)
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            8
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            8
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            4
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            5
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            3
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            8
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            6
+
+[[1]]$usage$total_tokens
+[1] 353
+
+
+smaller still - no labels
+ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 2, height = 2, dpi = 100)
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            8
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            7
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            7
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            6
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            5
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            5
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            3
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            2
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            7
+combined_df2[1,]$response
+[1] 353
+
+
+## Version with error catching
+
+```{r}
+
+get_gpt4_rating <- function(image_path) {
+  tryCatch({
+    encoded_image <- encode_image(image_path)
+
+    system_prompt <- "You are acting as a human research participant in a psychology study. You will be presented with an image that contains two dot patterns (one on the left, and the other on the right). Your task is to rate the similarity of dot pattern pairs, with 1 being very dissimilar, and 9 being very similar. Respond only with the integer corresponding to your rating."
+
+    trial_instruction <- "Rate the similarity of the dot patterns in this image:"
+
+    response <- openai::create_chat_completion(
+      model = "gpt-4o",
+      temperature = 1.0,
+      top_p = 1,
+      frequency_penalty = 0,
+      messages = list(
+        list(
+          role = "system",
+          content = system_prompt
+        ),
+        list(role = 'user',
+            content = list(
+              list(
+                type = 'text',
+                text = trial_instruction
+              ),
+              list(
+                type = 'image_url',
+                image_url = list(
+                  url = encoded_image #, detail="low"
+                )
+              )
+            )
+      )
+      )
+    )
+    return(response)
+  }, error = function(e) {
+    warning(paste("Error occurred while sending request to OpenAI API for image:", image_path, ":", e$message))
+    return(NULL)
+  })
+}
+
+
+
+
+
+combined_df_with_ratings <- combined_df %>%
+  mutate(response = map(path, get_gpt4_rating))
+
+
+
+
+combined_df2 <- combined_df_with_ratings %>%
+  mutate(gpt4o_rating = map_dbl(response, ~ {
+    if (is.null(.x) || identical(.x, "NULL")) {
+      return(NA_real_)
+    } else {
+      # Extract the integer rating
+      rating <- tryCatch(
+        {
+          rating_value <- as.integer(str_extract(.x$choices$message.content, "\\d"))
+          if (is.na(rating_value)) {
+            NA_real_
+          } else {
+            rating_value
+          }
+        },
+        error = function(e) NA_real_
+      )
+      return(rating)
+    }
+  }))
+
+
+combined_df2 %>% select(-path)
+
+```
+
+
+small - no labels - temp =1
+ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 3, height = 2, dpi = 100)
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            8
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            7
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            8
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            3
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            2
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            3
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            6
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            8
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            5
+
+ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 3, height = 2, dpi = 200)
+
+
+detail="low"
+ggsave(filename = paste0(here("llm/images/"), .x, "_sm.png"), plot = p, width = 3, height = 2, dpi = 100)
+combined_df2 %>% select(-path)
+# A tibble: 9 × 8
+  pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            7
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            5
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            5
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            3
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            2
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <NULL>                     NA
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            6
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            3
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            7
+
+2nd run with details="low" - didn't get error this time
+pair_label                        set            n mean_resp    sd type    response         gpt4o_rating
+  <chr>                             <chr>      <int>     <dbl> <dbl> <chr>   <list>                  <dbl>
+1 82_low_1_334_82_low_3_343         82_low        33      7.61  1.50 Highest <named list [7]>            2
+2 279_medium_1_321_279_medium_2_336 279_medium    27      7.81  1.42 Highest <named list [7]>            7
+3 376_high_1_326_376_high_3_324     376_high      35      8     1.64 Highest <named list [7]>            7
+4 304_high_2_277_304_high_3_315     304_high      33      1.55  1.20 Lowest  <named list [7]>            4
+5 237_low_2_274_237_low_3_307       237_low       30      1.7   1.37 Lowest  <named list [7]>            3
+6 393_mixed_1_349_393_mixed_3_292   393_mixed     24      1.79  1.14 Lowest  <named list [7]>            7
+7 215_high_2_289_215_high_3_302     215_high      38      4.84  2.34 Middle  <named list [7]>            6
+8 245_low_1_273_245_low_3_341       245_low       25      4.84  2.30 Middle  <named list [7]>            4
+9 123_medium_1_315_123_medium_2_308 123_medium    25      4.84  1.72 Middle  <named list [7]>            4
+combined_df2[1,]$response
+[[1]]$usage$total_tokens
+[1] 183
+
+
+
+
+## Full run
+
+```{r}
+
+pairCounts |> 
+  pull(pair_label) |> 
+  walk(~ {
+    p <- pair_plot(.x, item_labels = FALSE)
+    ggsave(filename = paste0(here("llm/all_pairs/"), .x, "_sm.png"), plot = p, width = 3, height = 2, dpi = 200)
+  })
+
+pAll <- pairCounts |> mutate(path = paste0(here("llm/all_pairs/"),pair_label,"_sm.png"))
+
+
+
+p_ratings <- pAll %>% mutate(response = map(path, get_gpt4_rating))
+
+combined_df2 <- p_ratings %>%
+  mutate(gpt4o_rating = map_dbl(response, ~ {
+    if (is.null(.x) || identical(.x, "NULL")) {
+      return(NA_real_)
+    } else {
+      # Extract the integer rating
+      rating <- tryCatch(
+        {
+          rating_value <- as.integer(str_extract(.x$choices$message.content, "\\d"))
+          if (is.na(rating_value)) {
+            NA_real_
+          } else {
+            rating_value
+          }
+        },
+        error = function(e) NA_real_
+      )
+      return(rating)
+    }
+  }))
+
+
+
+saveRDS(combined_df2, here("llm/first_full_run.rds"))
+
+
+sl <- tibble::lst(combined_df2,gpt_fun=get_gpt4_rating,encode_image=encode_image, 
+image_def='pairCounts |> 
+  pull(pair_label) |> 
+  walk(~ {
+    p <- pair_plot(.x, item_labels = FALSE)
+    ggsave(filename = paste0(here("llm/all_pairs/"), .x, "_sm.png"), plot = p, width = 3, height = 2, dpi = 200)
+  })
+
+pAll <- pairCounts |> mutate(path = paste0(here("llm/all_pairs/"),pair_label,"_sm.png"))')
+saveRDS(sl, here("llm/first_full_run_script_list.rds"))
+
+
+
+
+
+```
+
+Warning message:
+There was 1 warning in `mutate()`.
+ℹ In argument: `response = map(path, get_gpt4_rating)`.
+Caused by warning in `value[[3L]]()`:
+! Error occurred while sending request to OpenAI API for image: /Users/thomasgorman/Library/CloudStorage/GoogleDrive-tegorman13@gmail.com/My Drive/Learning_Models/Hu_Nosofsky/llm/all_pairs/290_low_1_301_290_low_2_334_sm.png : OpenAI API request failed [400]:
+
+You uploaded an unsupported image. Please make sure your image is below 20 MB in size and is of one the following formats: ['png', 'jpeg', 'gif', 'webp']. 
+
+
+
+
+```{r}
+
+
+combined_df2 |> 
+  ggplot(aes(x=mean_resp))+geom_histogram(binwidth=1) + 
+      scale_x_continuous(breaks=seq(1, 9, by = 1)) +
+    coord_cartesian(xlim = c(1, 9)) + labs(title="Aggregate Rating Distribution", x="Rating", y="Count") 
+
+combined_df2 |> 
+  ggplot(aes(x=gpt4o_rating))+geom_histogram(binwidth=1) + 
+      scale_x_continuous(breaks=seq(1, 9, by = 1)) +
+    coord_cartesian(xlim = c(1, 9)) + labs(title="Aggregate Rating Distribution", x="Rating", y="Count") 
+
+
+
+
+
+
+combined_df2 |> ggplot(aes(mean_resp, gpt4o_rating)) + geom_point() + geom_smooth(method = "lm") + theme_minimal() + labs(title = "Human Ratings vs. GPT-4 Ratings", x = "Human Ratings", y = "GPT-4 Ratings")
+
+cor(combined_df2$mean_resp, combined_df2$gpt4o_rating, use = "complete.obs")
+
+
+# additional plot comparing human ratings to GPT-4 ratings in more detail
+
+# filter out mean_resp values between 4 and 6
+combined_df2 |> filter(mean_resp < 4 | mean_resp > 6) |> ggplot(aes(mean_resp, gpt4o_rating)) + geom_point() + geom_smooth(method = "lm") + theme_minimal() + labs(title = "Human Ratings vs. GPT-4 Ratings", x = "Human Ratings", y = "GPT-4 Ratings")
+
+# for human (mean_resp) value of 1,2,3,4,5,6,7,8,9, create a plot of the distribution of gpt ratings
+
+# bin human mean_resp ratings
+combined_df2 |> mutate(mean_resp_bin = cut(mean_resp, breaks = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))) |> 
+  ggplot(aes(gpt4o_rating, fill = mean_resp_bin)) + geom_bar(position = "dodge") + theme_minimal() + labs(title = "Distribution of GPT-4 Ratings by Human Ratings", x = "GPT-4 Ratings", y = "Count") + scale_fill_viridis_d()
+
+# alternate plot
+
+combined_df2 |> mutate(mean_resp_bin = cut(mean_resp, breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9))) |> 
+  ggplot(aes(gpt4o_rating, fill = mean_resp_bin)) + geom_bar(position = "fill") + theme_minimal() + labs(title = "Distribution of GPT-4 Ratings by Human Ratings", x = "GPT-4 Ratings", y = "Proportion") + scale_fill_viridis_d()
+
+
+
+# Correlation analysis
+correlation <- cor(combined_df2$mean_resp, combined_df2$gpt4o_rating, use = "complete.obs")
+print(paste("Correlation: ", correlation))
+
+combined_df2 %>%
+  ggplot(aes(mean_resp, gpt4o_rating)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(title = "Human Ratings vs. GPT-4 Ratings",
+       subtitle = paste("Correlation: ", round(correlation, 2)),
+       x = "Human Ratings", y = "GPT-4 Ratings")
+
+
+library(viridis)
+
+# Density plots of GPT-4 ratings for each human rating bin
+combined_df2 %>%
+  mutate(mean_resp_bin = cut(mean_resp, breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), include.lowest = TRUE)) %>%
+  ggplot(aes(gpt4o_rating, fill = mean_resp_bin)) +
+  geom_density(alpha = 0.6) +
+  theme_minimal() +
+  labs(title = "Density of GPT-4 Ratings by Human Ratings",
+       x = "GPT-4 Ratings", y = "Density") +
+  scale_fill_viridis_d(name = "Human Ratings")
+
+
+# Boxplots of GPT-4 ratings for each human rating bin
+combined_df2 %>%
+  mutate(mean_resp_bin = cut(mean_resp, breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), include.lowest = TRUE)) %>%
+  ggplot(aes(mean_resp_bin, gpt4o_rating)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Boxplot of GPT-4 Ratings by Human Ratings",
+       x = "Human Ratings Bin", y = "GPT-4 Ratings") +
+  scale_x_discrete(name = "Human Ratings", labels = 1:9)
+
+
+# Bland-Altman plot
+mean_diff <- combined_df2 %>%
+  filter(!is.na(gpt4o_rating)) %>%
+  summarise(mean_diff = mean(mean_resp - gpt4o_rating))
+
+combined_df2 %>%
+  filter(!is.na(gpt4o_rating)) %>%
+  ggplot(aes(x = (mean_resp + gpt4o_rating) / 2, y = mean_resp - gpt4o_rating)) +
+  geom_point() +
+  geom_hline(yintercept = mean_diff$mean_diff, color = "red") +
+  geom_hline(yintercept = mean_diff$mean_diff + 1.96 * sd(combined_df2$mean_resp - combined_df2$gpt4o_rating, na.rm = TRUE), linetype = "dashed") +
+  geom_hline(yintercept = mean_diff$mean_diff - 1.96 * sd(combined_df2$mean_resp - combined_df2$gpt4o_rating, na.rm = TRUE), linetype = "dashed") +
+  theme_minimal() +
+  labs(title = "Bland-Altman Plot",
+       x = "Mean of Human and GPT-4 Ratings",
+       y = "Difference between Human and GPT-4 Ratings")
+
+
+# Paired t-test
+t_test_results <- t.test(combined_df2$mean_resp, combined_df2$gpt4o_rating, paired = TRUE, na.action = na.omit)
+print(t_test_results)
+
+
+
+
+# Boxplots of GPT-4 ratings for each human rating bin
+combined_df2 %>% filter(sd<2.3) |> 
+  mutate(mean_resp_bin = cut(mean_resp, breaks = c(1,2, 3, 4, 5, 6, 7, 8), include.lowest = TRUE)) %>%
+  ggplot(aes(mean_resp_bin, gpt4o_rating)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Boxplot of GPT-4 Ratings by Human Ratings",
+       x = "Human Ratings Bin", y = "GPT-4 Ratings") +
+  scale_x_discrete(name = "Human Ratings", labels = 1:9)
+
+
+
+library(mgcv)
+combined_df2 <- combined_df2 %>% filter(!is.na(mean_resp) & !is.na(gpt4o_rating))
+gam_model <- mgcv::gam(gpt4o_rating ~ s(mean_resp), data = combined_df2)
+
+summary(gam_model)
+
+# Predict values using the GAM model
+combined_df2 <- combined_df2 %>%
+  mutate(predicted_mean_resp = predict(gam_model, newdata = combined_df2))
+
+# Plot the results
+ggplot(combined_df2, aes(x = gpt4o_rating, y = mean_resp)) +
+  geom_point(alpha = 0.5) +
+  geom_line(aes(y = predicted_mean_resp), color = "blue", size = 1) +
+  theme_minimal() +
+  labs(title = "GAM: Human Ratings vs. GPT-4 Ratings",
+       x = "GPT-4 Ratings",
+       y = "Human Ratings") +
+  geom_smooth(method = "gam", formula = y ~ s(x), se = TRUE, color = "red")
+
+
+
+# Diagnostic plots
+par(mfrow = c(2, 2))
+plot(gam_model)
+
+# Residual plot
+combined_df2 <- combined_df2 %>%
+  mutate(residuals = residuals(gam_model))
+
+ggplot(combined_df2, aes(x = gpt4o_rating, y = residuals)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Residuals of the GAM Model",
+       x = "GPT-4 Ratings",
+       y = "Residuals")
+
+
+combined_df2 <- combined_df2 %>%
+  mutate(residuals = residuals(gam_model))
+
+ggplot(combined_df2, aes(x = gpt4o_rating, y = residuals)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Residuals of the GAM Model",
+       x = "GPT-4 Ratings",
+       y = "Residuals")
+
+# Linear regression model
+lm_model <- lm(gpt4o_rating ~ mean_resp, data = combined_df2)
+summary(lm_model)
+
+# Compare with a polynomial regression model
+poly_model <- lm(gpt4o_rating ~ poly(mean_resp, 2), data = combined_df2)
+summary(poly_model)
+
+# Compare model performances
+anova(lm_model, poly_model, gam_model)
+
+
+# Check for interactions (assuming another predictor variable 'other_predictor')
+interaction_model <- gam(gpt4o_rating ~ s(mean_resp) + s(sd) + ti(mean_resp, sd), data = combined_df2)
+summary(interaction_model)
+
+
+
+
+# Predicted values from each model
+combined_df2 <- combined_df2 %>%
+  mutate(lm_pred = predict(lm_model, newdata = combined_df2),
+         poly_pred = predict(poly_model, newdata = combined_df2),
+         gam_pred = predict(gam_model, newdata = combined_df2),
+         interaction_pred = predict(interaction_model, newdata = combined_df2))
+
+# Plot predictions from each model
+ggplot(combined_df2, aes(x = mean_resp)) +
+  geom_point(aes(y = gpt4o_rating), alpha = 0.3) +
+  geom_line(aes(y = lm_pred), color = "blue", size = 1) +
+  geom_line(aes(y = poly_pred), color = "red", size = 1, linetype = "dashed") +
+  geom_line(aes(y = gam_pred), color = "green", size = 1) +
+  geom_line(aes(y = interaction_pred), color = "purple", size = 1, linetype = "dotdash") +
+  theme_minimal() +
+  labs(title = "Comparison of Model Predictions",
+       x = "Human Ratings",
+       y = "GPT-4 Ratings") +
+  scale_color_manual(values = c("blue", "red", "green", "purple"),
+                     labels = c("Linear Model", "Polynomial Model", "GAM Model", "Interaction Model"))
+
+
+
+
+combined_df2 <- combined_df2 |> mutate(diff=mean_resp-gpt4o_rating)
+
+# distribution of diff
+combined_df2 |> ggplot(aes(diff)) + geom_histogram(binwidth = 1) + theme_minimal() + labs(title="Distribution of Differences", x="Difference", y="Count")
+
+# distribution of diff, for each bin of mean_resp
+combined_df2 |> mutate(mean_resp_bin=cut(mean_resp, breaks=c(1, 2, 3, 4, 5, 6, 7, 8, 9))) |> 
+  ggplot(aes(diff)) + 
+  geom_histogram(binwidth = 1, position="dodge") + 
+  facet_wrap(~mean_resp_bin) +
+  theme_minimal() + labs(title="Distribution of Differences by Human Ratings", x="Difference", y="Count") + scale_fill_viridis_d()
+
+```
+
+## Old
+
+```{r}
+
+
+img_data=encode_image(image_path)
+image_url = glue::glue("data:image/jpeg;base64,{img_data}")
+
+
+encode_image <- function(image_path) {
+  image_data <- readBin(image_path, what = "raw", n = file.info(image_path)$size)
+  base64_encoded <- base64enc::base64encode(image_path)
+  return(base64_encoded)
+}
+
+
+image_url <- combined_df |> filter(type=="Highest") |>  slice_tail(n = 1) |> pull(path) |> encode_image()
+image_url <- combined_df |> filter(type=="Lowest") |>  slice_tail(n = 1) |> pull(path) |> encode_image()
+
+
+
+
+response$choices$message.content
+
+
+```
+
+
+
+
+
+
+```{r}
+
+
+api_key <- Sys.getenv("OPENAI_API_KEY")
+
+system_prompt <- "You are acting as a human research participant in a psychology study. Your task is to rate the similarity of dot pattern pairs, with 1 being  very dissimilar, and 9 being very similar. Respond only with the integer corresponding to your rating"
+
+list.files(here("Stimulii/pair_images/"))
+
+
+
+# 104_high_1_290_104_high_2_316.png - 5
+# 376_high_1_326_376_high_3_324 - 1=8
+# 237_low_2_274_237_low_3_307
+
+
+image_path <- "/Users/thomasgorman/Library/CloudStorage/GoogleDrive-tegorman13@gmail.com/My Drive/Learning_Models/Hu_Nosofsky/Stimulii/pair_images/376_high_1_326_376_high_3_324.png"
+
+
+image_path <- "/Users/thomasgorman/Library/CloudStorage/GoogleDrive-tegorman13@gmail.com/My Drive/Learning_Models/Hu_Nosofsky/Stimulii/pair_images/237_low_2_274_237_low_3_307.png"
+
+
+
+img_data <- base64enc::dataURI(file = image_path, mime = "image/png")
+
+
+
+encode_image <- function(image_path) {
+  image_data <- readBin(image_path, what = "raw", n = file.info(image_path)$size)
+  base64_encoded <- base64enc::base64encode(image_path)
+  return(base64_encoded)
+}
+
+img_data=encode_image(image_path)
+image_url = glue::glue("data:image/jpeg;base64,{img_data}")
+
+
+
+response$choices$message.content
+
+
+
+
+response <- openai::create_chat_completion(
+  model = "gpt-4o", # or "gpt-4o"
+  temperature = .4, 
+  top_p = 1,
+  frequency_penalty = 0,
+  messages = list(
+    list(
+      role = "system",
+      content = system_prompt
+    ),
+    list(
+      role = "user",
+      content = paste("Rate the similarity of the dot patterns in this image:", "https://github.com/tegorman13/dot_variability/blob/main/Stimulii/pair_images/237_low_2_274_237_low_3_307.png?raw=true")
+    )
+  )
+)
+
+
+image_url <- "https://raw.githubusercontent.com/tegorman13/dot_variability/main/Stimulii/pair_images/237_low_2_274_237_low_3_307.png"
+system_prompt <- "You are acting as a human research participant in a psychology study. Your task is to rate the similarity of dot pattern pairs, with 1 being  very dissimilar, and 9 being very similar."
+text_message <- "describe the dot patterns"
+
+# Create the chat completion request with OpenAI
+response <- openai::create_chat_completion(
+  model = "gpt-4o", # or "gpt-4o"
+  temperature = 0.0, 
+  top_p = 1,
+  frequency_penalty = 0,
+  messages = list(
+    list(
+      role = "system",
+      content = system_prompt
+    ),
+    list(role = 'user', 
+         content = list(
+           list(
+             type = 'text',
+             text = text_message
+           ),
+           list(
+             type = 'image_url',
+             image_url = list(
+               url = image_url, detail="low"
+             )
+           )
+         )
+    )
+  )
+)
+
+
+response$choices$message.content
+
+
+
+# Get list of image pairs
+image_pairs <- list.files(here("Stimulii/pair_images/"), full.names = TRUE)[1:5]
+
+# Create a dataframe with pair labels and similarity ratings
+results <- tibble(pair_label = image_pairs) %>%
+  mutate(
+    image_path = here("Stimulii/pair_images", pair_label),
+    similarity_rating = map_int(image_path, get_similarity_rating)
+  ) %>%
+  select(pair_label, similarity_rating)
+
+# Display the results
+results %>%
+  gt() %>%
+  tab_header(
+    title = "Similarity Ratings of Dot Pattern Pairs",
+    subtitle = "Obtained using GPT-4 API"
+  )
+
+
+```
+
+
+
