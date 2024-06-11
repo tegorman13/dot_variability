@@ -54,6 +54,9 @@ dc2 <- dc %>% group_by(id,condit,Condition,cq) %>% summarise(End.Training=mean(E
 ```
 
 
+-  the learning phase consisted of 15 blocks, each of which had 15 trials (225 trials total). 
+
+
 
 
 # Experiment 2

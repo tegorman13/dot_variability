@@ -41,6 +41,8 @@ website:
             text: Hu & Nosofsky 2022
           - href: Analysis/dp_24.qmd
             text: Hu & Nosofsky 2024
+          - href: Analysis/fixed_proto_pilot.qmd
+            text: Fixed Prototype Pilot
           - href: Analysis/all_exp.qmd
             text: Combo
       - section: "Dot Patterns"
