@@ -36,42 +36,6 @@ theme_set(theme_nice())
 
 
 
-# Paper Figures
-
-Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabilityTrainingDoes2024] Included for easy reference.
-
-Note that the quartile binning done in the paper figure is done with testing performance, whereas my figures do quartiles by performance at the end of training. 
-
-*click on image to enlarge*
-
-::: {.panel-tabset}
-
-### 2024 Paper
-::: {layout-nrow=2}
-![2024 Learning Curves](/assets/2024_learning_curves.png)
-
-![2024 Test Accuracy](/assets/2024_testAvg.png)
-
-![2024 Test Accuracy - Quartile](/assets/2024_testQ.png)
-
-![2024 Model Predictions](/assets/2024_testModel.png)
-:::
-
-
-### 2022 Paper
-
-::: {layout-nrow=2}
-![2022 Learning Curves](/assets/2022_learning_curves.png)
-
-![2022 Test Accuracy](/assets/2022_testAvg.png)
-
-
-![2022 Model Predictions](/assets/2022_testModel.png)
-:::
-
-
-:::
-
 
 # Procedure
 
