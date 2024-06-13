@@ -28,6 +28,49 @@ execute:
 {{< include /assets/setup.qmd >}}
 
 
+
+# Hu & Nosofsky 2022 (exp 2)
+
+#### Subjects
+- 89 undergraduates from Indiana University.
+- Participation as partial fulfillment of an introductory psychology course requirement.
+- Random assignment to conditions: 43 in REP, 46 in NREP.
+- Normal or corrected-to-normal vision.
+
+#### Procedure
+
+##### Learning Phase
+- **Task**: Classify dot patterns into three categories: A, B, and C.
+- **Trial Structure**:
+  - Pattern presented on screen.
+  - Subject classifies pattern by pressing a corresponding button.
+  - Immediate feedback provided.
+- **Conditions**:
+  - **Repeating Condition (REP)**:
+    - 15 unique learning patterns (5 per category).
+    - Patterns repeated across 15 blocks (225 trials total).
+  - **Nonrepeating Condition (NREP)**:
+    - 75 unique learning patterns (5 per category per block).
+    - No repetitions (225 trials total).
+
+##### Transfer Phase
+- **Task**: Continue classifying patterns into the same three categories.
+- **Transfer Patterns**:
+  - 15 old distortions (5 per category).
+  - 3 prototypes (one per category).
+  - 15 low-level distortions (5 per category).
+  - 15 new medium-level distortions (5 per category).
+  - 15 high-level distortions (5 per category).
+- **Trial Structure**:
+  - Each pattern presented once (63 trials total).
+  - Random order of presentation for each subject.
+
+
+Posner (1967) procedure used to create distortions
+
+
+Homa et al. (2019, p. 398) report these values to be _low_ = 1.20, _medium_ = 2.80, and _high_ = 4.60.
+
 ```{r load}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted, viridis, gghalves,grateful)
 conflict_prefer_all("dplyr", quiet = TRUE)

@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-06-13">
+
+<title>Dot Pattern Variability – tables</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../assets/style_qt.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      Dot Pattern Variability
+      </li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Dot Pattern Variability</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/tegorman13/dot_variability" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Learning Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Analysis/dp_22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hu &amp; Nosofsky 2022</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Analysis/dp_24.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hu &amp; Nosofsky 2024</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Analysis/fixed_proto_pilot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fixed Prototype Pilot</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Analysis/all_exp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Combo</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Dot Patterns</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Analysis/dotSim_Analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rating Data Check</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Analysis/dotSim_compare.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Similarity Comparisons</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Dot Patterns</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Stimulii/plotDots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dot Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Stimulii/instruction_examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Instructions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Stimulii/check_dots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">basic</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Task</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Task/Task.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Task</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#comparison-of-dot-pattern-classification-studies" id="toc-comparison-of-dot-pattern-classification-studies" class="nav-link active" data-scroll-target="#comparison-of-dot-pattern-classification-studies">Comparison of Dot-Pattern Classification Studies</a></li>
+  <li><a href="#comparison-of-dot-pattern-categorization-studies" id="toc-comparison-of-dot-pattern-categorization-studies" class="nav-link" data-scroll-target="#comparison-of-dot-pattern-categorization-studies">Comparison of Dot Pattern Categorization Studies</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Analysis/tables.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-body" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">tables</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta column-body">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 13, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="comparison-of-dot-pattern-classification-studies" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-of-dot-pattern-classification-studies">Comparison of Dot-Pattern Classification Studies</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Study</th>
+<th><strong>Hu &amp; Nosofsky (2022)</strong></th>
+<th><strong>Hu &amp; Nosofsky (2024)</strong></th>
+<th><strong>Fixed Prototype Pilot Study</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Publication</strong></td>
+<td><em>JEP: Learning, Memory, and Cognition</em></td>
+<td><em>Memory &amp; Cognition</em></td>
+<td><em>(unpublished pilot study)</em></td>
+</tr>
+<tr class="even">
+<td><strong>Participants</strong></td>
+<td>- 89 Indiana University undergraduates<br>- Course credit participation<br>- Random assignment to conditions (REP or NREP)<br>- Normal or corrected vision</td>
+<td>- 304 Indiana University students<br>- Random assignment to conditions (low, medium, high, or mixed distortion)</td>
+<td>Not specified</td>
+</tr>
+<tr class="odd">
+<td><strong>Training Stage</strong></td>
+<td><strong>Training Stage</strong></td>
+<td><strong>Training Stage</strong></td>
+<td><strong>Training Stage</strong></td>
+</tr>
+<tr class="even">
+<td>• <strong>Procedure</strong></td>
+<td>- <strong>REP Condition:</strong> 15 unique patterns (5 per category), repeated across 15 blocks (<strong>225 trials total</strong>)<br>- <strong>NREP Condition:</strong> 75 unique patterns (5 per category per block), no repetitions (<strong>225 trials total</strong>)</td>
+<td>- 10 blocks, 27 trials each (<strong>270 trials total</strong>)<br>- Different set of training patterns in each block<br>- Corrective feedback for 2 seconds after each response</td>
+<td>- Training patterns repeated across 10 blocks with randomized presentation order within each block<br>- Four between-subject conditions: low, medium, high, and mixed distortion levels</td>
+</tr>
+<tr class="odd">
+<td>• <strong>Stimuli</strong></td>
+<td>- 15 or 75 unique dot patterns (depending on condition)<br>- Created using Posner (1967) procedure</td>
+<td>- Variable number of unique dot patterns<br></td>
+<td>- 27 unique dot patterns (9 per category)<br></td>
+</tr>
+<tr class="even">
+<td><strong>Testing Stage</strong></td>
+<td><strong>Transfer Phase</strong></td>
+<td><strong>Testing Stage</strong></td>
+<td><strong>Testing Stage</strong></td>
+</tr>
+<tr class="odd">
+<td>• <strong>Objective</strong></td>
+<td>Continue classifying patterns into the same three categories</td>
+<td>Test classification of novel patterns and a subset of training patterns</td>
+<td>Test classification of novel patterns and a subset of training patterns</td>
+</tr>
+<tr class="even">
+<td>• <strong>Procedure</strong></td>
+<td>- 63 trials total<br>- Random order of presentation</td>
+<td>- 84 trials total<br>- Random order of presentation</td>
+<td>- 87 trials total<br>- Random order of presentation</td>
+</tr>
+<tr class="odd">
+<td>• <strong>Stimuli</strong></td>
+<td>- 15 old distortions (5 per category)<br>- 3 prototypes (one per category)<br>- 15 low-level distortions (5 per category)<br>- 15 new medium-level distortions (5 per category)<br>- 15 high-level distortions (5 per category)</td>
+<td>- 27 old patterns from the training phase (9 per category)<br>- 3 prototypes (one per category)<br>- 9 new low-level distortions (3 per category)<br>- 18 new medium-level distortions (6 per category)<br>- 27 new high-level distortions (9 per category)</td>
+<td>- 27 old distortions (9 per category)<br>- 3 prototypes (1 per category)<br>- 9 new low-level distortions (3 per category)<br>- 18</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes:</strong></p>
+<ul>
+<li><strong>REP:</strong> Repeating Protocol</li>
+<li><strong>NREP:</strong> Nonrepeating Protocol</li>
+<li><strong>Hu &amp; Nosofsky (2022)</strong> investigated the effects of repeating vs.&nbsp;nonrepeating training patterns on category learning and generalization.</li>
+<li><strong>Hu &amp; Nosofsky (2024)</strong> examined the impact of different training distortion levels on category learning and generalization.</li>
+<li>The <strong>Fixed Prototype Pilot Study</strong> aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes.</li>
+<li>All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.</li>
+<li>Dot pattern distortions were created using a modified Posner-Keele (1968) procedure. Low, medium and high distortions displaced the dots by an average of 4, 6, and 7.7 Posner-levels respectively.</li>
+</ul>
+<hr>
+<p><br><br><br><br><br><br></p>
+<p><br><br><br><br><br><br></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Study</strong></th>
+<th><strong>Detail</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Hu &amp; Nosofsky 2022 (Exp 2)</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Subjects</strong></td>
+<td>- 89 undergraduates from Indiana University.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- Random assignment: 43 in REP, 46 in NREP.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Normal or corrected-to-normal vision.</td>
+</tr>
+<tr class="odd">
+<td><strong>Procedure</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Learning Phase</strong></td>
+<td>- <strong>Task</strong>: Classify dot patterns into three categories.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Conditions</strong>:</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Repeating Condition (REP)</strong>: 15 unique patterns (5 per category), repeated across 15 blocks (225 trials total).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Nonrepeating Condition (NREP)</strong>: 75 unique patterns (5 per category per block), no repetitions (225 trials total).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Trial Structure</strong>:</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- Pattern presented on screen, classify with a button press, immediate feedback.</td>
+</tr>
+<tr class="even">
+<td><strong>Transfer Phase</strong></td>
+<td>- <strong>Task</strong>: Continue classifying patterns into the same three categories.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Transfer Patterns</strong>:</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 15 old distortions (5 per category).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 3 prototypes (one per category).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 15 low-level distortions (5 per category).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 15 new medium-level distortions (5 per category).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 15 high-level distortions (5 per category).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Trial Structure</strong>: Each pattern presented once (63 trials total), random order.</td>
+</tr>
+<tr class="even">
+<td><strong>Hu &amp; Nosofsky 2024</strong></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Training Stage</strong></td>
+<td>- <strong>Participants</strong>: 304 students from Indiana University.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Conditions</strong>: Four training conditions (low, medium, high, mixed distortions).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Training Blocks</strong>: 10 blocks, 27 trials each (270 trials total).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Training Patterns</strong>: Different set randomly generated in each block.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Feedback</strong>: Corrective feedback for 2 seconds after each response.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Training Instances</strong>: No repetitions of individual items.</td>
+</tr>
+<tr class="odd">
+<td><strong>Testing Stage</strong></td>
+<td>- <strong>Test Patterns</strong>: 84 trials including:</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 27 old patterns from training.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 3 prototypes (one per category).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 9 new low-level distortions (3 per category).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 18 new medium-level distortions (6 per category).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 27 new high-level distortions (9 per category).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Procedure</strong>: Each pattern presented once in random order.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Response Requirement</strong>: Classify into one of three categories.</td>
+</tr>
+<tr class="odd">
+<td><strong>Distortion Levels</strong></td>
+<td>- <strong>Prototype Generation</strong>: 9 dots at random grid positions in a 30x30 area of a 50x50 grid.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Low Distortion</strong>: Dots displaced by an average of 4 Posner-levels.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Medium Distortion</strong>: Dots displaced by an average of 6 Posner-levels.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>High Distortion</strong>: Dots displaced by an average of 7.7 Posner-levels.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Pattern Generation</strong>: Displaced by random direction and distance based on distortion level.</td>
+</tr>
+<tr class="even">
+<td><strong>Fixed Prototype Pilot Study</strong></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Objective</strong></td>
+<td>Study the effect of training-pattern variability on classification learning and generalization.</td>
+</tr>
+<tr class="even">
+<td><strong>Procedure</strong></td>
+<td>Subjects trained to classify patterns into three categories.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Training patterns repeated across 10 blocks; presentation randomized within each block.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Four conditions: low, medium, high, mixed distortions.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>27 training patterns (9 per category) generated using Posner-Keele (1968) algorithm.</td>
+</tr>
+<tr class="even">
+<td><strong>Feedback</strong></td>
+<td>Corrective feedback for 2 seconds in the learning phase.</td>
+</tr>
+<tr class="odd">
+<td><strong>Testing Stage</strong></td>
+<td>- <strong>Test Patterns</strong>: 87 trials including:</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 27 old distortions from training.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 3 prototypes (one per category).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 9 new low-level distortions (3 per category).</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 18 new medium-level distortions (6 per category).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><br><br><br><br><br><br></p>
+<hr>
+<p><br><br><br><br><br><br></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 29%">
+<col style="width: 29%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Study</th>
+<th>Hu &amp; Nosofsky 2022 (exp 2)</th>
+<th>Hu &amp; Nosofsky 2024</th>
+<th>Fixed Prototype Pilot Study</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Subjects</strong></td>
+<td>- 89 undergraduates from Indiana University</td>
+<td>- 304 students from Indiana University</td>
+<td>- Not specified</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Participation as partial fulfillment of course requirement</td>
+<td>- No specific details provided</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- Random assignment to conditions: 43 in REP, 46 in NREP</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Normal or corrected-to-normal vision</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Learning/Training Phase</strong></td>
+<td>- <strong>Task</strong>: Classify dot patterns into three categories (A, B, C)</td>
+<td>- <strong>Conditions</strong>: Four training conditions (low, medium, high, mixed-distortion)</td>
+<td>- Subjects trained to classify patterns into three categories</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Trial Structure</strong>:</td>
+<td>- <strong>Training Blocks</strong>: 10 blocks, each with 27 trials (270 trials total)</td>
+<td>- Training patterns repeated across 10 blocks with randomized order</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- Pattern presented on screen</td>
+<td>- <strong>Training Patterns</strong>: Different set of training patterns randomly generated in each block</td>
+<td>- Four between-subject conditions varying by training pattern distortion levels</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Subject classifies pattern by pressing a button</td>
+<td>- <strong>Feedback</strong>: Corrective feedback provided for 2 seconds after each response</td>
+<td>- Each condition involved 27 training patterns (9 per category)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- Immediate feedback provided</td>
+<td>- <strong>Training Instances</strong>: No individual training item was ever repeated</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Conditions</strong>:</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <em>Repeating Condition (REP)</em>: 15 unique learning patterns, repeated across 15 blocks</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <em>Nonrepeating Condition (NREP)</em>: 75 unique learning patterns, no repetitions</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Transfer/Testing Phase</strong></td>
+<td>- <strong>Task</strong>: Continue classifying patterns into the same categories</td>
+<td>- <strong>Test Patterns</strong>: 84 test trials including old patterns, prototypes, and new distortions</td>
+<td>- Test classification of novel patterns and a subset of training patterns</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Transfer Patterns</strong>:</td>
+<td>- <strong>Procedure</strong>: Each pattern presented once in a random order</td>
+<td>- Test patterns included old distortions, prototypes, and new distortions across levels</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 15 old distortions (5 per category)</td>
+<td>- <strong>Response Requirement</strong>: Participants classified all test patterns into one of the three candidate categories</td>
+<td>- Each pattern presented once in a random order, totaling 87 trials per subject</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 3 prototypes (one per category)</td>
+<td></td>
+<td>- Patterns displayed at the center of the screen until a key press</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 15 low-level distortions (5 per category)</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 15 new medium-level distortions (5 per category)</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 15 high-level distortions (5 per category)</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Trial Structure</strong>: Each pattern presented once (63 trials total)</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Distortion Levels</strong></td>
+<td>- Posner (1967) procedure used to create distortions</td>
+<td>- <strong>Prototype Generation</strong>: Prototypes generated by placing dots randomly in a grid</td>
+<td>- Category prototypes distorted using the Posner-Keele (1968) algorithm</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>- <strong>Distortion Levels</strong>:</td>
+<td>- Training patterns generated with varying levels of distortion: low, medium, high, mixed</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>- <em>Low Distortion</em>: Dots displaced by an average of 4 Posner-levels</td>
+<td>- Test patterns consisted of distortions across levels, with additional hard-to-classify distortions</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>- <em>Medium Distortion</em>: Dots displaced by an average of 6 Posner-levels</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>- <em>High Distortion</em>: Dots displaced by an average of 7.7 Posner-levels</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>- <strong>Pattern Generation</strong>: Each pattern constructed by displacing dots according to the specified distortion level</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><br><br><br><br><br><br></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 9%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Study</th>
+<th>Stage</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Hu &amp; Nosofsky 2022 (Exp 2)</strong></td>
+<td><strong>Subjects</strong></td>
+<td>89 undergraduates from Indiana University.<br>Participation as partial fulfillment of an introductory psychology course requirement.<br>Random assignment to conditions: 43 in REP, 46 in NREP.<br>Normal or corrected-to-normal vision.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Procedure</strong></td>
+<td><strong>Learning Phase</strong>:<br><strong>Task</strong>: Classify dot patterns into three categories: A, B, and C.<br><strong>Trial Structure</strong>: Pattern presented on screen, subject classifies pattern by pressing a corresponding button, immediate feedback provided.<br><strong>Conditions</strong>: <strong>Repeating Condition (REP)</strong>: 15 unique learning patterns (5 per category), patterns repeated across 15 blocks (225 trials total). <strong>Nonrepeating Condition (NREP)</strong>: 75 unique learning patterns (5 per category per block), no repetitions (225 trials total).<br><strong>Transfer Phase</strong>:<br><strong>Task</strong>: Continue classifying patterns into the same three categories.<br><strong>Transfer Patterns</strong>: 15 old distortions (5 per category), 3 prototypes (one per category), 15 low-level distortions (5 per category), 15 new medium-level distortions (5 per category), 15 high-level distortions (5 per category).<br><strong>Trial Structure</strong>: Each pattern presented once (63 trials total), random order of presentation for each subject.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Procedure</strong></td>
+<td>Posner (1967) procedure used to create distortions.</td>
+</tr>
+<tr class="even">
+<td><strong>Hu &amp; Nosofsky 2024</strong></td>
+<td><strong>Training Stage</strong></td>
+<td><strong>Participants</strong>: 304 students from Indiana University.<br><strong>Conditions</strong>: Four training conditions (low-distortion, medium-distortion, high-distortion, mixed-distortion).<br><strong>Training Blocks</strong>: 10 blocks, each with 27 trials (270 trials total).<br><strong>Training Patterns</strong>: Different set of training patterns randomly generated in each block.<br><strong>Feedback</strong>: Corrective feedback provided for 2 seconds after each response.<br><strong>Training Instances</strong>: No individual training item was ever repeated.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Testing Stage</strong></td>
+<td><strong>Test Patterns</strong>: 84 test trials including 27 old patterns from the training phase, 3 prototypes (one per category), 9 new low-level distortions (three per category), 18 new medium-level distortions (six per category), 27 new high-level distortions (nine per category).<br><strong>Procedure</strong>: Each pattern presented once in a random order.<br><strong>Response Requirement</strong>: Participants classified all test patterns into one of the three candidate categories (no “None” response allowed).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Procedure for Creating Different Distortion Levels</strong></td>
+<td><strong>Prototype Generation</strong>: For each subject, prototypes for three categories generated by placing nine dots at random grid positions in a 30x30 area of a 50x50 grid.<br><strong>Distortion Levels</strong>: <strong>Low Distortion</strong>: Dots displaced by an average of 4 Posner-levels. <strong>Medium Distortion</strong>: Dots displaced by an average of 6 Posner-levels. <strong>High Distortion</strong>: Dots displaced by an average of 7.7 Posner-levels.<br><strong>Pattern Generation</strong>: Each pattern constructed by displacing each dot by a random direction and distance according to the specified distortion level.</td>
+</tr>
+<tr class="odd">
+<td><strong>Fixed Prototype Pilot Study</strong></td>
+<td><strong>Training Stage</strong></td>
+<td><strong>Objective</strong>: Study the effect of training-pattern variability on classification learning and generalization in the dot-pattern paradigm.<br><strong>Procedure</strong>: Subjects trained to classify a set of training patterns into three categories.<br>Training patterns repeated across 10 training blocks with randomized presentation order within each block.<br>Four between-subject conditions varying by training pattern distortion levels: low, medium, high, and mixed distortions.<br>Each condition involved 27 training patterns (9 per category), generated by distorting category prototypes using the Posner-Keele (1968) statistical-distortion algorithm.<br><strong>Feedback</strong>: Corrective feedback provided for 2 seconds below the presented pattern in the learning phase.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>Testing Stage</strong></td>
+<td><strong>Objective</strong>: Test classification of novel patterns and a subset of training patterns.<br><strong>Procedure</strong>: Test patterns included 27 old distortions, 3 prototypes, 9 new low-level distortions, 18 new medium-level distortions, 27 new high-level distortions, and 3 additional high-level distortions.<br>Each pattern presented once in a random order, totaling 87 trials per subject.<br>Patterns displayed at the center of the screen and remained visible until a key press.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Distortion Levels</strong></td>
+<td><strong>Generation</strong>: Category prototypes distorted using the Posner-Keele (1968) statistical-distortion algorithm.<br>Training patterns for four conditions generated with varying levels of distortion: low, medium, high, and mixed distortions.<br>Test patterns consisted of distortions across low, medium, and high levels, with additional hard-to-classify distortions.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><br><br><br><br><br><br></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Study/Stage</th>
+<th>Subjects</th>
+<th>Conditions</th>
+<th>Trials per Condition</th>
+<th>Total Trials</th>
+<th>Trial Structure</th>
+<th>Feedback</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hu &amp; Nosofsky 2022 (Learning Phase)</td>
+<td>89 undergraduates from Indiana University</td>
+<td>REP: 15 unique learning patterns (5 per category)<br>NREP: 75 unique learning patterns (5 per category per block)</td>
+<td>REP: 225 trials<br>NREP: 225 trials</td>
+<td>450 trials</td>
+<td>Pattern presented on screen<br>Subject classifies pattern by pressing a corresponding button<br>Immediate feedback provided</td>
+<td>Immediate feedback provided</td>
+</tr>
+<tr class="even">
+<td>Hu &amp; Nosofsky 2022 (Transfer Phase)</td>
+<td>Same as Learning Phase</td>
+<td>15 old distortions (5 per category)<br>3 prototypes (one per category)<br>15 low-level distortions (5 per category)<br>15 new medium-level distortions (5 per category)<br>15 high-level distortions (5 per category)</td>
+<td>63 trials</td>
+<td>63 trials</td>
+<td>Each pattern presented once<br>Random order of presentation for each subject</td>
+<td>No feedback mentioned</td>
+</tr>
+<tr class="odd">
+<td>Hu &amp; Nosofsky 2024 (Training Stage)</td>
+<td>304 students from Indiana University</td>
+<td>Four training conditions:<br>- Low-distortion<br>- Medium-distortion<br>- High-distortion<br>- Mixed-distortion</td>
+<td>10 blocks, each with 27 trials (270 trials total)</td>
+<td>1080 trials</td>
+<td>Different set of training patterns randomly generated in each block<br>Corrective feedback provided for 2 seconds after each response<br>No individual training item was ever repeated</td>
+<td>Corrective feedback provided for 2 seconds after each response</td>
+</tr>
+<tr class="even">
+<td>Hu &amp; Nosofsky 2024 (Testing Stage)</td>
+<td>Same as Training Stage</td>
+<td>27 old patterns from the training phase<br>3 prototypes (one per category)<br>9 new low-level distortions (three per category)<br>18 new medium-level distortions (six per category)<br>27 new high-level distortions (nine per category)</td>
+<td>84 trials</td>
+<td>84 trials</td>
+<td>Each pattern presented once in a random order<br>Participants classified all test patterns into one of the three candidate categories (no “None” response allowed)</td>
+<td>No feedback mentioned</td>
+</tr>
+<tr class="odd">
+<td>Fixed Prototype pilot study (Training Stage)</td>
+<td>Not specified</td>
+<td>Four between-subject conditions varying by training pattern distortion levels:<br>- Low<br>- Medium<br>- High<br>- Mixed distortions</td>
+<td>Training patterns repeated across 10 training blocks with randomized presentation order within each block</td>
+<td>Not specified</td>
+<td>Training patterns repeated across 10 training blocks with randomized presentation order within each block<br>Corrective feedback provided for 2 seconds below the presented pattern in the learning phase</td>
+<td>Corrective feedback provided for 2 seconds below the presented pattern in the learning phase</td>
+</tr>
+<tr class="even">
+<td>Fixed Prototype pilot study (Testing Stage)</td>
+<td>Same as Training Stage</td>
+<td>27 old distortions<br>3 prototypes<br>9 new low-level distortions<br>18 new medium-level distortions<br>27 new high-level distortions<br>3 additional high-level distortions</td>
+<td>87 trials per subject</td>
+<td>87 trials per subject</td>
+<td>Each pattern presented once in a random order<br>Patterns displayed at the center of the screen and remained visible until a key press</td>
+<td>No feedback mentioned</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><br><br><br><br><br><br></p>
+</section>
+<section id="comparison-of-dot-pattern-categorization-studies" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-of-dot-pattern-categorization-studies">Comparison of Dot Pattern Categorization Studies</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 28%">
+<col style="width: 23%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Hu &amp; Nosofsky (2022) Exp. 2</th>
+<th>Hu &amp; Nosofsky (2024)</th>
+<th>Fixed Prototype Pilot Study</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Subjects</strong></td>
+<td>89 Undergraduates</td>
+<td>304 Students</td>
+<td>Not specified</td>
+</tr>
+<tr class="even">
+<td><strong>Conditions</strong></td>
+<td>2 (Repeating, Nonrepeating)</td>
+<td>4 (Low, Medium, High, Mixed Distortion)</td>
+<td>4 (Low, Medium, High, Mixed Distortion)</td>
+</tr>
+<tr class="odd">
+<td><strong>Training Stage</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>- Objective</strong></td>
+<td>Category Learning</td>
+<td>Category Learning</td>
+<td>Category Learning</td>
+</tr>
+<tr class="odd">
+<td><strong>- Procedure</strong></td>
+<td>15 blocks, 225 trials</td>
+<td>10 blocks, 270 trials</td>
+<td>10 blocks, 270 trials</td>
+</tr>
+<tr class="even">
+<td><strong>- Training Patterns</strong></td>
+<td>15 unique (REP) or 75 unique (NREP)</td>
+<td>Novel in each block</td>
+<td>27 unique per condition</td>
+</tr>
+<tr class="odd">
+<td><strong>- Feedback</strong></td>
+<td>Immediate</td>
+<td>After each response</td>
+<td>After each response</td>
+</tr>
+<tr class="even">
+<td><strong>Testing Stage</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>- Objective</strong></td>
+<td>Generalization</td>
+<td>Generalization</td>
+<td>Generalization</td>
+</tr>
+<tr class="even">
+<td><strong>- Procedure</strong></td>
+<td>63 trials, random order</td>
+<td>84 trials, random order</td>
+<td>87 trials, random order</td>
+</tr>
+<tr class="odd">
+<td><strong>- Test Patterns</strong></td>
+<td>Old distortions, prototypes, new distortions</td>
+<td>Old patterns, prototypes, new distortions</td>
+<td>Old distortions, prototypes, new distortions</td>
+</tr>
+<tr class="even">
+<td><strong>Distortion Levels</strong></td>
+<td>Posner (1967) procedure</td>
+<td>Low, Medium, High (Posner-based)</td>
+<td>Low, Medium, High (Posner-based)</td>
+</tr>
+<tr class="odd">
+<td><strong>Prototype Generation</strong></td>
+<td>Not specified</td>
+<td>Randomly generated for each subject</td>
+<td>Fixed for all subjects</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes:</strong></p>
+<ul>
+<li><strong>Hu &amp; Nosofsky (2022)</strong> investigated the effects of repeating vs.&nbsp;nonrepeating training patterns on category learning and generalization.</li>
+<li><strong>Hu &amp; Nosofsky (2024)</strong> examined the impact of different training distortion levels on category learning and generalization.</li>
+<li>The <strong>Fixed Prototype Pilot Study</strong> aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes.</li>
+<li>All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.</li>
+<li>“Posner” refers to the Posner &amp; Keele (1968) statistical distortion algorithm used to create variations of prototype patterns.</li>
+</ul>
+<hr>
+<p><br><br><br><br><br><br></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 29%">
+<col style="width: 29%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Study</th>
+<th>Hu &amp; Nosofsky 2022 (exp 2)</th>
+<th>Hu &amp; Nosofsky 2024</th>
+<th>Fixed Prototype Pilot Study</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Subjects</strong></td>
+<td>- 89 undergraduates from Indiana University</td>
+<td>- 304 students from Indiana University</td>
+<td>- Information not provided</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Participation for course requirement</td>
+<td>- Information not provided</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- Random assignment to conditions: 43 in REP, 46 in NREP</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Normal or corrected-to-normal vision</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Learning/Training Phase</strong></td>
+<td>- Classify dot patterns into three categories: A, B, and C</td>
+<td>- 10 training blocks, each with 27 trials (270 trials total)</td>
+<td>- Subjects trained to classify patterns into three categories</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Immediate feedback provided</td>
+<td>- Different set of training patterns randomly generated in each block</td>
+<td>- Training patterns repeated across 10 blocks with randomized order</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Conditions</strong>:</td>
+<td>- Corrective feedback provided for 2 seconds after each response</td>
+<td>- Four between-subject conditions varying by training pattern distortion levels</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- <strong>Repeating Condition (REP)</strong>:</td>
+<td>- No individual training item was ever repeated</td>
+<td>- Each condition involved 27 training patterns (9 per category)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 15 unique learning patterns (5 per category)</td>
+<td></td>
+<td>- Corrective feedback provided for 2 seconds</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- Patterns repeated across 15 blocks (225 trials total)</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Nonrepeating Condition (NREP)</strong>:</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 75 unique learning patterns (5 per category per block)</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- No repetitions (225 trials total)</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Transfer/Testing Phase</strong></td>
+<td>- Continue classifying patterns into the same three categories</td>
+<td>- 84 test trials including:</td>
+<td>- Test classification of novel patterns and a subset of training patterns</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- <strong>Transfer Patterns</strong>:</td>
+<td>- 27 old patterns from the training phase</td>
+<td>- Test patterns included various distortion levels and additional hard-to-classify distortions</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 15 old distortions (5 per category)</td>
+<td>- 3 prototypes (one per category)</td>
+<td>- Each pattern presented once in a random order, totaling 87 trials per subject</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 3 prototypes (one per category)</td>
+<td>- 9 new low-level distortions (three per category)</td>
+<td>- Patterns displayed at the center of the screen until a key press</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 15 low-level distortions (5 per category)</td>
+<td>- 18 new medium-level distortions (six per category)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- 15 new medium-level distortions (5 per category)</td>
+<td>- 27 new high-level distortions (nine per category)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>- 15 high-level distortions (5 per category)</td>
+<td>- Each pattern presented once in a random order</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>- Each pattern presented once (63 trials total)</td>
+<td>- Participants classified all test patterns into one of the three candidate categories (no “None” response allowed)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Distortion Levels</strong></td>
+<td>Posner (1967) procedure used to create distortions</td>
+<td>- <strong>Prototype Generation</strong>: Prototypes generated by placing nine dots at random grid positions in a 30x30 area of a 50x50 grid</td>
+<td>- Category prototypes distorted using the Posner-Keele (1968) statistical-distortion algorithm</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>- <strong>Distortion Levels</strong>:</td>
+<td>- Training patterns generated with varying levels of distortion: low, medium, high, and mixed distortions</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>- <strong>Low Distortion</strong>: Dots displaced by an average of 4 Posner-levels</td>
+<td>- Test patterns consisted of distortions across low, medium, and high levels, with additional hard-to-classify distortions</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>- <strong>Medium Distortion</strong>: Dots displaced by an average of 6 Posner-levels</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>- <strong>High Distortion</strong>: Dots displaced by an average of 7.7 Posner-levels</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>- Each pattern constructed by displacing each dot by a random direction and distance according to the specified distortion level</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><br><br><br><br><br><br></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 26%">
+<col style="width: 27%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Aspect</strong></th>
+<th><strong>Hu &amp; Nosofsky 2022</strong></th>
+<th><strong>Hu &amp; Nosofsky 2024</strong></th>
+<th><strong>Fixed Prototype Pilot Study</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Participants</strong></td>
+<td>89 undergraduates from Indiana University</td>
+<td>304 students from Indiana University</td>
+<td>Not specified</td>
+</tr>
+<tr class="even">
+<td><strong>Conditions</strong></td>
+<td>Two conditions: Repeating (REP), Nonrepeating (NREP)</td>
+<td>Four conditions: Low-distortion, Medium-distortion, High-distortion, Mixed-distortion</td>
+<td>Four conditions: Low, Medium, High, and Mixed distortions</td>
+</tr>
+<tr class="odd">
+<td><strong>Training Phase</strong></td>
+<td>- 15 unique or 75 unique patterns, repeated across 15 blocks for a total of 225 trials</td>
+<td>- No repetitions; different set of training patterns randomly generated in each block (270 trials total)</td>
+<td>- Repeated training patterns across 10 blocks with randomized order. 27 training patterns per condition</td>
+</tr>
+<tr class="even">
+<td><strong>Testing/Transfer Phase</strong></td>
+<td>- 63 trials including old and new distortions at various levels</td>
+<td>- 84 test trials including old patterns and new distortions</td>
+<td>- 87 trials including old distortions and new distortions at various levels</td>
+</tr>
+<tr class="odd">
+<td><strong>Feedback</strong></td>
+<td>Immediate feedback during learning phase</td>
+<td>Corrective feedback provided for 2 seconds after each response</td>
+<td>Corrective feedback provided for 2 seconds below the presented pattern in the learning phase</td>
+</tr>
+<tr class="even">
+<td><strong>Pattern Generation</strong></td>
+<td>Dot patterns classified into three categories</td>
+<td>Prototypes for three categories generated at random grid positions, distortions applied at specified levels</td>
+<td>Prototypes distorted using the Posner-Keele (1968) algorithm, training and test patterns generated with varying levels of distortions</td>
+</tr>
+<tr class="odd">
+<td><strong>Distortion Levels</strong></td>
+<td>Generated using Posner (1967) procedure</td>
+<td>Low (4 Posner-levels), Medium (6 Posner-levels), High (7.7 Posner-levels)</td>
+<td>Generated using Posner-Keele (1968) with varying distortion levels for training and testing patterns, including additional hard-to-classify distortions for testing phase</td>
+</tr>
+<tr class="even">
+<td><strong>Objectives</strong></td>
+<td>Examine the impact of repetition on classification learning and generalization</td>
+<td>Assess how distortion levels during training influence classification of new patterns</td>
+<td>Study the effect of training-pattern variability on classification learning and generalization</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("^(?:http:|https:)\/\/www\.tegorman13.github.io/dot_variability\/custom");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> tables</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">lightbox:</span><span class="co"> true</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="an">page-layout:</span><span class="co"> full</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">  html: </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    grid:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">      sidebar-width: 200px</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">      body-width: 1250px</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">      margin-width: 140px</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">      gutter-width: 1.0rem</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="an">toc-depth:</span><span class="co"> 3</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="an">code-fold:</span><span class="co"> true</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="an">code-tools:</span><span class="co"> true</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span><span class="co"> </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: true</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparison of Dot-Pattern Classification Studies</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>| Study                 | **Hu &amp; Nosofsky (2022)** | **Hu &amp; Nosofsky (2024)** | **Fixed Prototype Pilot Study** |</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>|-------------------------|---------------------------|---------------------------|----------------------------------|</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>| **Publication**         | *JEP: Learning, Memory, and Cognition*   | *Memory &amp; Cognition*        | *(unpublished pilot study)*      |</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>| **Participants**        | - 89 Indiana University undergraduates&lt;br&gt;- Course credit participation&lt;br&gt;- Random assignment to conditions (REP or NREP)&lt;br&gt;- Normal or corrected vision  | - 304 Indiana University students&lt;br&gt;- Random assignment to conditions (low, medium, high, or mixed distortion) | Not specified                    |</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>| **Training Stage**       | **Training Stage**        | **Training Stage**         | **Training Stage**                |</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>| • **Procedure**         | - **REP Condition:** 15 unique patterns (5 per category), repeated across 15 blocks (**225 trials total**)&lt;br&gt;- **NREP Condition:** 75 unique patterns (5 per category per block), no repetitions (**225 trials total**) | - 10 blocks, 27 trials each (**270 trials total**)&lt;br&gt;- Different set of training patterns in each block&lt;br&gt;- Corrective feedback for 2 seconds after each response | - Training patterns repeated across 10 blocks with randomized presentation order within each block&lt;br&gt;- Four between-subject conditions: low, medium, high, and mixed distortion levels |</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>| • **Stimuli**           | - 15 or 75 unique dot patterns (depending on condition)&lt;br&gt;- Created using Posner (1967) procedure | - Variable number of unique dot patterns&lt;br&gt;| - 27 unique dot patterns (9 per category)&lt;br&gt; |</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>| **Testing Stage**       | **Transfer Phase**        | **Testing Stage**         | **Testing Stage**                |</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>| • **Objective**         | Continue classifying patterns into the same three categories | Test classification of novel patterns and a subset of training patterns | Test classification of novel patterns and a subset of training patterns |</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>| • **Procedure**         | - 63 trials total&lt;br&gt;- Random order of presentation | - 84 trials total&lt;br&gt;- Random order of presentation | - 87 trials total&lt;br&gt;- Random order of presentation |</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>| • **Stimuli**           | - 15 old distortions (5 per category)&lt;br&gt;- 3 prototypes (one per category)&lt;br&gt;- 15 low-level distortions (5 per category)&lt;br&gt;- 15 new medium-level distortions (5 per category)&lt;br&gt;- 15 high-level distortions (5 per category) | - 27 old patterns from the training phase (9 per category)&lt;br&gt;- 3 prototypes (one per category)&lt;br&gt;- 9 new low-level distortions (3 per category)&lt;br&gt;- 18 new medium-level distortions (6 per category)&lt;br&gt;- 27 new high-level distortions (9 per category) | - 27 old distortions (9 per category)&lt;br&gt;- 3 prototypes (1 per category)&lt;br&gt;- 9 new low-level distortions (3 per category)&lt;br&gt;- 18 </span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>**Notes:**</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**REP:** Repeating Protocol</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**NREP:** Nonrepeating Protocol</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Hu &amp; Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training patterns on category learning and generalization.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Hu &amp; Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization.</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The **Fixed Prototype Pilot Study** aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes. </span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Dot pattern distortions were created using a modified Posner-Keele (1968) procedure. Low, medium and high distortions displaced the dots by an average of 4, 6, and 7.7 Posner-levels respectively.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>| **Study**                    | **Detail**                                                 |</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>|------------------------------|------------------------------------------------------------|</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>| **Hu &amp; Nosofsky 2022 (Exp 2)** |                                                            |</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>| **Subjects**                 | - 89 undergraduates from Indiana University.               |</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>|                              | - Random assignment: 43 in REP, 46 in NREP.                |</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>|                              | - Normal or corrected-to-normal vision.                    |</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>| **Procedure**                |                                                            |</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>| **Learning Phase**           | - **Task**: Classify dot patterns into three categories.   |</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>|                              | - **Conditions**:                                          |</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>|                              |   - **Repeating Condition (REP)**: 15 unique patterns (5 per category), repeated across 15 blocks (225 trials total). |</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>|                              |   - **Nonrepeating Condition (NREP)**: 75 unique patterns (5 per category per block), no repetitions (225 trials total). |</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>|                              | - **Trial Structure**:                                     |</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>|                              |   - Pattern presented on screen, classify with a button press, immediate feedback. |</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>| **Transfer Phase**           | - **Task**: Continue classifying patterns into the same three categories. |</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>|                              | - **Transfer Patterns**:                                   |</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>|                              |   - 15 old distortions (5 per category).                   |</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>|                              |   - 3 prototypes (one per category).                       |</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>|                              |   - 15 low-level distortions (5 per category).             |</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>|                              |   - 15 new medium-level distortions (5 per category).      |</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>|                              |   - 15 high-level distortions (5 per category).            |</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>|                              | - **Trial Structure**: Each pattern presented once (63 trials total), random order. |</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>| **Hu &amp; Nosofsky 2024**       |                                                            |</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>| **Training Stage**           | - **Participants**: 304 students from Indiana University.  |</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>|                              | - **Conditions**: Four training conditions (low, medium, high, mixed distortions). |</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>|                              | - **Training Blocks**: 10 blocks, 27 trials each (270 trials total). |</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>|                              | - **Training Patterns**: Different set randomly generated in each block. |</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>|                              | - **Feedback**: Corrective feedback for 2 seconds after each response. |</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>|                              | - **Training Instances**: No repetitions of individual items. |</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>| **Testing Stage**            | - **Test Patterns**: 84 trials including:                  |</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>|                              |   - 27 old patterns from training.                         |</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>|                              |   - 3 prototypes (one per category).                       |</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>|                              |   - 9 new low-level distortions (3 per category).          |</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>|                              |   - 18 new medium-level distortions (6 per category).      |</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>|                              |   - 27 new high-level distortions (9 per category).        |</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>|                              | - **Procedure**: Each pattern presented once in random order. |</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>|                              | - **Response Requirement**: Classify into one of three categories. |</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>| **Distortion Levels**        | - **Prototype Generation**: 9 dots at random grid positions in a 30x30 area of a 50x50 grid. |</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>|                              | - **Low Distortion**: Dots displaced by an average of 4 Posner-levels. |</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>|                              | - **Medium Distortion**: Dots displaced by an average of 6 Posner-levels. |</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>|                              | - **High Distortion**: Dots displaced by an average of 7.7 Posner-levels. |</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>|                              | - **Pattern Generation**: Displaced by random direction and distance based on distortion level. |</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>| **Fixed Prototype Pilot Study** |                                                        |</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>| **Objective**                | Study the effect of training-pattern variability on classification learning and generalization. |</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>| **Procedure**                | Subjects trained to classify patterns into three categories. |</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>|                              | Training patterns repeated across 10 blocks; presentation randomized within each block. |</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>|                              | Four conditions: low, medium, high, mixed distortions.     |</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>|                              | 27 training patterns (9 per category) generated using Posner-Keele (1968) algorithm. |</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>| **Feedback**                 | Corrective feedback for 2 seconds in the learning phase.   |</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>| **Testing Stage**            | - **Test Patterns**: 87 trials including:                  |</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>|                              |   - 27 old distortions from training.                      |</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>|                              |   - 3 prototypes (one per category).                       |</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>|                              |   - 9 new low-level distortions (3 per category).          |</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>|                              |   - 18 new medium-level distortions (6 per category).</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>| Study                     | Hu &amp; Nosofsky 2022 (exp 2)                                 | Hu &amp; Nosofsky 2024                                         | Fixed Prototype Pilot Study                                |</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>|---------------------------|------------------------------------------------------------|------------------------------------------------------------|-----------------------------------------------------------|</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>| **Subjects**              | - 89 undergraduates from Indiana University                | - 304 students from Indiana University                     | - Not specified                                           |</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>|                           | - Participation as partial fulfillment of course requirement | - No specific details provided                             |                                                           |</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>|                           | - Random assignment to conditions: 43 in REP, 46 in NREP   |                                                            |                                                           |</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>|                           | - Normal or corrected-to-normal vision                     |                                                            |                                                           |</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>| **Learning/Training Phase** | - **Task**: Classify dot patterns into three categories (A, B, C) | - **Conditions**: Four training conditions (low, medium, high, mixed-distortion) | - Subjects trained to classify patterns into three categories |</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>|                           | - **Trial Structure**:                                     | - **Training Blocks**: 10 blocks, each with 27 trials (270 trials total) | - Training patterns repeated across 10 blocks with randomized order |</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>|                           |   - Pattern presented on screen                            | - **Training Patterns**: Different set of training patterns randomly generated in each block | - Four between-subject conditions varying by training pattern distortion levels |</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>|                           |   - Subject classifies pattern by pressing a button        | - **Feedback**: Corrective feedback provided for 2 seconds after each response | - Each condition involved 27 training patterns (9 per category) |</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>|                           |   - Immediate feedback provided                            | - **Training Instances**: No individual training item was ever repeated |                                                           |</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>|                           | - **Conditions**:                                          |                                                            |                                                           |</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>|                           |   - *Repeating Condition (REP)*: 15 unique learning patterns, repeated across 15 blocks |                                 |                                                           |</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>|                           |   - *Nonrepeating Condition (NREP)*: 75 unique learning patterns, no repetitions |                                        |                                                           |</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>| **Transfer/Testing Phase** | - **Task**: Continue classifying patterns into the same categories | - **Test Patterns**: 84 test trials including old patterns, prototypes, and new distortions | - Test classification of novel patterns and a subset of training patterns |</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>|                           | - **Transfer Patterns**:                                   | - **Procedure**: Each pattern presented once in a random order | - Test patterns included old distortions, prototypes, and new distortions across levels |</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 old distortions (5 per category)                    | - **Response Requirement**: Participants classified all test patterns into one of the three candidate categories | - Each pattern presented once in a random order, totaling 87 trials per subject |</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>|                           |   - 3 prototypes (one per category)                        |                                                            | - Patterns displayed at the center of the screen until a key press |</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 low-level distortions (5 per category)              |                                                            |                                                           |</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 new medium-level distortions (5 per category)       |                                                            |                                                           |</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 high-level distortions (5 per category)             |                                                            |                                                           |</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>|                           | - **Trial Structure**: Each pattern presented once (63 trials total) |                                                    |                                                           |</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>| **Distortion Levels**     | - Posner (1967) procedure used to create distortions        | - **Prototype Generation**: Prototypes generated by placing dots randomly in a grid | - Category prototypes distorted using the Posner-Keele (1968) algorithm |</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>|                           |                                                            | - **Distortion Levels**:                                   | - Training patterns generated with varying levels of distortion: low, medium, high, mixed |</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>|                           |                                                            |   - *Low Distortion*: Dots displaced by an average of 4 Posner-levels | - Test patterns consisted of distortions across levels, with additional hard-to-classify distortions |</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>|                           |                                                            |   - *Medium Distortion*: Dots displaced by an average of 6 Posner-levels |                                                  |</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>|                           |                                                            |   - *High Distortion*: Dots displaced by an average of 7.7 Posner-levels |                                               |</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>|                           |                                                            | - **Pattern Generation**: Each pattern constructed by displacing dots according to the specified distortion level |   |</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>| Study                      | Stage         | Detail                                                                                                      |</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>|----------------------------|---------------|-------------------------------------------------------------------------------------------------------------|</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>| **Hu &amp; Nosofsky 2022 (Exp 2)** | **Subjects**  | 89 undergraduates from Indiana University.&lt;br&gt;Participation as partial fulfillment of an introductory psychology course requirement.&lt;br&gt;Random assignment to conditions: 43 in REP, 46 in NREP.&lt;br&gt;Normal or corrected-to-normal vision. |</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>|                            | **Procedure** | **Learning Phase**:&lt;br&gt;**Task**: Classify dot patterns into three categories: A, B, and C.&lt;br&gt;**Trial Structure**: Pattern presented on screen, subject classifies pattern by pressing a corresponding button, immediate feedback provided.&lt;br&gt;**Conditions**: **Repeating Condition (REP)**: 15 unique learning patterns (5 per category), patterns repeated across 15 blocks (225 trials total). **Nonrepeating Condition (NREP)**: 75 unique learning patterns (5 per category per block), no repetitions (225 trials total).&lt;br&gt;**Transfer Phase**:&lt;br&gt;**Task**: Continue classifying patterns into the same three categories.&lt;br&gt;**Transfer Patterns**: 15 old distortions (5 per category), 3 prototypes (one per category), 15 low-level distortions (5 per category), 15 new medium-level distortions (5 per category), 15 high-level distortions (5 per category).&lt;br&gt;**Trial Structure**: Each pattern presented once (63 trials total), random order of presentation for each subject. |</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>|                            | **Procedure** | Posner (1967) procedure used to create distortions.                                                           |</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>| **Hu &amp; Nosofsky 2024**     | **Training Stage** | **Participants**: 304 students from Indiana University.&lt;br&gt;**Conditions**: Four training conditions (low-distortion, medium-distortion, high-distortion, mixed-distortion).&lt;br&gt;**Training Blocks**: 10 blocks, each with 27 trials (270 trials total).&lt;br&gt;**Training Patterns**: Different set of training patterns randomly generated in each block.&lt;br&gt;**Feedback**: Corrective feedback provided for 2 seconds after each response.&lt;br&gt;**Training Instances**: No individual training item was ever repeated. |</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>|                            | **Testing Stage** | **Test Patterns**: 84 test trials including 27 old patterns from the training phase, 3 prototypes (one per category), 9 new low-level distortions (three per category), 18 new medium-level distortions (six per category), 27 new high-level distortions (nine per category).&lt;br&gt;**Procedure**: Each pattern presented once in a random order.&lt;br&gt;**Response Requirement**: Participants classified all test patterns into one of the three candidate categories (no "None" response allowed). |</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>|                            | **Procedure for Creating Different Distortion Levels** | **Prototype Generation**: For each subject, prototypes for three categories generated by placing nine dots at random grid positions in a 30x30 area of a 50x50 grid.&lt;br&gt;**Distortion Levels**: **Low Distortion**: Dots displaced by an average of 4 Posner-levels. **Medium Distortion**: Dots displaced by an average of 6 Posner-levels. **High Distortion**: Dots displaced by an average of 7.7 Posner-levels.&lt;br&gt;**Pattern Generation**: Each pattern constructed by displacing each dot by a random direction and distance according to the specified distortion level. |</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>| **Fixed Prototype Pilot Study** | **Training Stage** | **Objective**: Study the effect of training-pattern variability on classification learning and generalization in the dot-pattern paradigm.&lt;br&gt;**Procedure**: Subjects trained to classify a set of training patterns into three categories.&lt;br&gt;Training patterns repeated across 10 training blocks with randomized presentation order within each block.&lt;br&gt;Four between-subject conditions varying by training pattern distortion levels: low, medium, high, and mixed distortions.&lt;br&gt;Each condition involved 27 training patterns (9 per category), generated by distorting category prototypes using the Posner-Keele (1968) statistical-distortion algorithm.&lt;br&gt;**Feedback**: Corrective feedback provided for 2 seconds below the presented pattern in the learning phase. |</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>|                            | **Testing Stage** | **Objective**: Test classification of novel patterns and a subset of training patterns.&lt;br&gt;**Procedure**: Test patterns included 27 old distortions, 3 prototypes, 9 new low-level distortions, 18 new medium-level distortions, 27 new high-level distortions, and 3 additional high-level distortions.&lt;br&gt;Each pattern presented once in a random order, totaling 87 trials per subject.&lt;br&gt;Patterns displayed at the center of the screen and remained visible until a key press. |</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>|                            | **Distortion Levels** | **Generation**: Category prototypes distorted using the Posner-Keele (1968) statistical-distortion algorithm.&lt;br&gt;Training patterns for four conditions generated with varying levels of distortion: low, medium, high, and mixed distortions.&lt;br&gt;Test patterns consisted of distortions across low, medium, and high levels, with additional hard-to-classify distortions. |</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>| Study/Stage | Subjects | Conditions | Trials per Condition | Total Trials | Trial Structure | Feedback |</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>| --- | --- | --- | --- | --- | --- | --- |</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>| Hu &amp; Nosofsky 2022 (Learning Phase) | 89 undergraduates from Indiana University | REP: 15 unique learning patterns (5 per category)&lt;br&gt;NREP: 75 unique learning patterns (5 per category per block) | REP: 225 trials&lt;br&gt;NREP: 225 trials | 450 trials | Pattern presented on screen&lt;br&gt;Subject classifies pattern by pressing a corresponding button&lt;br&gt;Immediate feedback provided | Immediate feedback provided |</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>| Hu &amp; Nosofsky 2022 (Transfer Phase) | Same as Learning Phase | 15 old distortions (5 per category)&lt;br&gt;3 prototypes (one per category)&lt;br&gt;15 low-level distortions (5 per category)&lt;br&gt;15 new medium-level distortions (5 per category)&lt;br&gt;15 high-level distortions (5 per category) | 63 trials | 63 trials | Each pattern presented once&lt;br&gt;Random order of presentation for each subject | No feedback mentioned |</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>| Hu &amp; Nosofsky 2024 (Training Stage) | 304 students from Indiana University | Four training conditions:&lt;br&gt;- Low-distortion&lt;br&gt;- Medium-distortion&lt;br&gt;- High-distortion&lt;br&gt;- Mixed-distortion | 10 blocks, each with 27 trials (270 trials total) | 1080 trials | Different set of training patterns randomly generated in each block&lt;br&gt;Corrective feedback provided for 2 seconds after each response&lt;br&gt;No individual training item was ever repeated | Corrective feedback provided for 2 seconds after each response |</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>| Hu &amp; Nosofsky 2024 (Testing Stage) | Same as Training Stage | 27 old patterns from the training phase&lt;br&gt;3 prototypes (one per category)&lt;br&gt;9 new low-level distortions (three per category)&lt;br&gt;18 new medium-level distortions (six per category)&lt;br&gt;27 new high-level distortions (nine per category) | 84 trials | 84 trials | Each pattern presented once in a random order&lt;br&gt;Participants classified all test patterns into one of the three candidate categories (no "None" response allowed) | No feedback mentioned |</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>| Fixed Prototype pilot study (Training Stage) | Not specified | Four between-subject conditions varying by training pattern distortion levels:&lt;br&gt;- Low&lt;br&gt;- Medium&lt;br&gt;- High&lt;br&gt;- Mixed distortions | Training patterns repeated across 10 training blocks with randomized presentation order within each block | Not specified | Training patterns repeated across 10 training blocks with randomized presentation order within each block&lt;br&gt;Corrective feedback provided for 2 seconds below the presented pattern in the learning phase | Corrective feedback provided for 2 seconds below the presented pattern in the learning phase |</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>| Fixed Prototype pilot study (Testing Stage) | Same as Training Stage | 27 old distortions&lt;br&gt;3 prototypes&lt;br&gt;9 new low-level distortions&lt;br&gt;18 new medium-level distortions&lt;br&gt;27 new high-level distortions&lt;br&gt;3 additional high-level distortions | 87 trials per subject | 87 trials per subject | Each pattern presented once in a random order&lt;br&gt;Patterns displayed at the center of the screen and remained visible until a key press | No feedback mentioned |</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparison of Dot Pattern Categorization Studies</span></span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>| Feature             | Hu &amp; Nosofsky (2022) Exp. 2 | Hu &amp; Nosofsky (2024) | Fixed Prototype Pilot Study |</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>|-------------------|-----------------------------|------------------------|-------------------------------|</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>| **Subjects**        | 89 Undergraduates          | 304 Students          | Not specified                 |</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>| **Conditions**      | 2 (Repeating, Nonrepeating)| 4 (Low, Medium, High, Mixed Distortion) | 4 (Low, Medium, High, Mixed Distortion) |</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>| **Training Stage**  |                             |                        |                               |</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>| **- Objective**     | Category Learning         | Category Learning     | Category Learning             |</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>| **- Procedure**    | 15 blocks, 225 trials      | 10 blocks, 270 trials   | 10 blocks, 270 trials          |</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>| **- Training Patterns** | 15 unique (REP) or 75 unique (NREP) | Novel in each block | 27 unique per condition      |</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>| **- Feedback**      | Immediate                   | After each response     | After each response            |</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>| **Testing Stage**   |                             |                        |                               |</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>| **- Objective**     | Generalization           | Generalization        | Generalization                |</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>| **- Procedure**    | 63 trials, random order   | 84 trials, random order | 87 trials, random order       |</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>| **- Test Patterns** | Old distortions, prototypes, new distortions | Old patterns, prototypes, new distortions | Old distortions, prototypes, new distortions |</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>| **Distortion Levels** | Posner (1967) procedure  | Low, Medium, High (Posner-based) | Low, Medium, High (Posner-based) |</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>| **Prototype Generation** | Not specified             | Randomly generated for each subject | Fixed for all subjects       |</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>**Notes:**</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Hu &amp; Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training patterns on category learning and generalization.</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Hu &amp; Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization.</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The **Fixed Prototype Pilot Study** aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes. </span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>"Posner" refers to the Posner &amp; Keele (1968) statistical distortion algorithm used to create variations of prototype patterns.</span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>| Study                     | Hu &amp; Nosofsky 2022 (exp 2)                                 | Hu &amp; Nosofsky 2024                                         | Fixed Prototype Pilot Study                                |</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>|---------------------------|------------------------------------------------------------|------------------------------------------------------------|-----------------------------------------------------------|</span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>| **Subjects**              | - 89 undergraduates from Indiana University                | - 304 students from Indiana University                     | - Information not provided                               |</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>|                           | - Participation for course requirement                     | - Information not provided                                 |                                                          |</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>|                           | - Random assignment to conditions: 43 in REP, 46 in NREP   |                                                            |                                                          |</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>|                           | - Normal or corrected-to-normal vision                     |                                                            |                                                          |</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>| **Learning/Training Phase** | - Classify dot patterns into three categories: A, B, and C | - 10 training blocks, each with 27 trials (270 trials total) | - Subjects trained to classify patterns into three categories |</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>|                           | - Immediate feedback provided                              | - Different set of training patterns randomly generated in each block | - Training patterns repeated across 10 blocks with randomized order |</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>|                           | - **Conditions**:                                          | - Corrective feedback provided for 2 seconds after each response | - Four between-subject conditions varying by training pattern distortion levels |</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>|                           |   - **Repeating Condition (REP)**:                         | - No individual training item was ever repeated            | - Each condition involved 27 training patterns (9 per category) |</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>|                           |     - 15 unique learning patterns (5 per category)         |                                                            | - Corrective feedback provided for 2 seconds             |</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>|                           |     - Patterns repeated across 15 blocks (225 trials total) |                                                           |                                                          |</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>|                           |   - **Nonrepeating Condition (NREP)**:                     |                                                            |                                                          |</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>|                           |     - 75 unique learning patterns (5 per category per block) |                                                          |                                                          |</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>|                           |     - No repetitions (225 trials total)                    |                                                            |                                                          |</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>| **Transfer/Testing Phase** | - Continue classifying patterns into the same three categories | - 84 test trials including:                             | - Test classification of novel patterns and a subset of training patterns |</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>|                           | - **Transfer Patterns**:                                   |   - 27 old patterns from the training phase               | - Test patterns included various distortion levels and additional hard-to-classify distortions |</span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 old distortions (5 per category)                    |   - 3 prototypes (one per category)                       | - Each pattern presented once in a random order, totaling 87 trials per subject |</span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>|                           |   - 3 prototypes (one per category)                        |   - 9 new low-level distortions (three per category)      | - Patterns displayed at the center of the screen until a key press |</span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 low-level distortions (5 per category)              |   - 18 new medium-level distortions (six per category)    |                                                          |</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 new medium-level distortions (5 per category)       |   - 27 new high-level distortions (nine per category)     |                                                          |</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>|                           |   - 15 high-level distortions (5 per category)             | - Each pattern presented once in a random order           |                                                          |</span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>|                           | - Each pattern presented once (63 trials total)            | - Participants classified all test patterns into one of the three candidate categories (no "None" response allowed) | |</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>| **Distortion Levels**     | Posner (1967) procedure used to create distortions          | - **Prototype Generation**: Prototypes generated by placing nine dots at random grid positions in a 30x30 area of a 50x50 grid | - Category prototypes distorted using the Posner-Keele (1968) statistical-distortion algorithm |</span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a>|                           |                                                            | - **Distortion Levels**:                                   | - Training patterns generated with varying levels of distortion: low, medium, high, and mixed distortions |</span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>|                           |                                                            |   - **Low Distortion**: Dots displaced by an average of 4 Posner-levels | - Test patterns consisted of distortions across low, medium, and high levels, with additional hard-to-classify distortions |</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>|                           |                                                            |   - **Medium Distortion**: Dots displaced by an average of 6 Posner-levels | |</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>|                           |                                                            |   - **High Distortion**: Dots displaced by an average of 7.7 Posner-levels | |</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>|                           |                                                            | - Each pattern constructed by displacing each dot by a random direction and distance according to the specified distortion level | |</span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>-------</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>| **Aspect**                    | **Hu &amp; Nosofsky 2022**                                                                                             | **Hu &amp; Nosofsky 2024**                                                                                                    | **Fixed Prototype Pilot Study**                                                                                                                                           |</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>|-------------------------------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|</span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>| **Participants**              | 89 undergraduates from Indiana University                                                                           | 304 students from Indiana University                                                                                       | Not specified                                                                                                                                                           |</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>| **Conditions**                | Two conditions: Repeating (REP), Nonrepeating (NREP)                                                                | Four conditions: Low-distortion, Medium-distortion, High-distortion, Mixed-distortion                                      | Four conditions: Low, Medium, High, and Mixed distortions                                                                                                                |</span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>| **Training Phase**            | - 15 unique or 75 unique patterns, repeated across 15 blocks for a total of 225 trials                               | - No repetitions; different set of training patterns randomly generated in each block (270 trials total)                    | - Repeated training patterns across 10 blocks with randomized order. 27 training patterns per condition                                                                |</span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>| **Testing/Transfer Phase**    | - 63 trials including old and new distortions at various levels                                                      | - 84 test trials including old patterns and new distortions                                                                | - 87 trials including old distortions and new distortions at various levels                                                                                             |</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>| **Feedback**                  | Immediate feedback during learning phase                                                                            | Corrective feedback provided for 2 seconds after each response                                                             | Corrective feedback provided for 2 seconds below the presented pattern in the learning phase                                                                            |</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>| **Pattern Generation**        | Dot patterns classified into three categories                                                                       | Prototypes for three categories generated at random grid positions, distortions applied at specified levels                | Prototypes distorted using the Posner-Keele (1968) algorithm, training and test patterns generated with varying levels of distortions                                   |</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>| **Distortion Levels**         | Generated using Posner (1967) procedure                                                                             | Low (4 Posner-levels), Medium (6 Posner-levels), High (7.7 Posner-levels)                                                   | Generated using Posner-Keele (1968) with varying distortion levels for training and testing patterns, including additional hard-to-classify distortions for testing phase |</span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>| **Objectives**                | Examine the impact of repetition on classification learning and generalization                                        | Assess how distortion levels during training influence classification of new patterns                                      | Study the effect of training-pattern variability on classification learning and generalization                                                                           |</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2024 <a href="https://tegorman13.github.io">Thomas Gorman</a></p>
+</div>   
+    <div class="nav-footer-center">
+<p>site created with <a href="https://cran.r-project.org/">R</a> and <a href="https://quarto.org">quarto</a></p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Analysis/tables.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link active" href="https://github.com/tegorman13/dot_variability" target="_blank" aria-current="page">
+<p><i class="fa-brands fa-github fa-2.0x" aria-label="github"></i></p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

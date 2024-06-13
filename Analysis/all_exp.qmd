@@ -19,6 +19,41 @@ execute:
   eval: true
 ---
 
+<br><br>
+
+
+
+## Comparison of Dot-Pattern Classification Studies
+
+| Study                 | **Hu & Nosofsky (2022)** | **Hu & Nosofsky (2024)** | **Fixed Prototype Pilot Study** |
+|-------------------------|---------------------------|---------------------------|----------------------------------|
+| **Publication**         | *JEP: Learning, Memory, and Cognition*   | *Memory & Cognition*        | *(unpublished pilot study)*      |
+| **Participants**        | - 89 Indiana University undergraduates<br>- Course credit participation<br>- Random assignment to conditions (REP or NREP)<br>- Normal or corrected vision  | - 304 Indiana University students<br>- Random assignment to conditions (low, medium, high, or mixed distortion) | Not specified                    |
+| **Training Stage**       | **Training Stage**        | **Training Stage**         | **Training Stage**                |
+| • **Procedure**         | - **REP Condition:** 15 unique patterns (5 per category), repeated across 15 blocks (**225 trials total**)<br>- **NREP Condition:** 75 unique patterns (5 per category per block), no repetitions (**225 trials total**) | - 10 blocks, 27 trials each (**270 trials total**)<br>- Different set of training patterns in each block<br>- Corrective feedback for 2 seconds after each response | - Training patterns repeated across 10 blocks with randomized presentation order within each block<br>- Four between-subject conditions: low, medium, high, and mixed distortion levels |
+| • **Stimuli**           | - 15 or 75 unique dot patterns (depending on condition)<br>- Created using Posner (1967) procedure | - Variable number of unique dot patterns<br>| - 27 unique dot patterns (9 per category)<br> |
+| **Testing Stage**       | **Transfer Phase**        | **Testing Stage**         | **Testing Stage**                |
+| • **Objective**         | Continue classifying patterns into the same three categories | Test classification of novel patterns and a subset of training patterns | Test classification of novel patterns and a subset of training patterns |
+| • **Procedure**         | - 63 trials total<br>- Random order of presentation | - 84 trials total<br>- Random order of presentation | - 87 trials total<br>- Random order of presentation |
+| • **Stimuli**           | - 15 old distortions (5 per category)<br>- 3 prototypes (one per category)<br>- 15 low-level distortions (5 per category)<br>- 15 new medium-level distortions (5 per category)<br>- 15 high-level distortions (5 per category) | - 27 old patterns from the training phase (9 per category)<br>- 3 prototypes (one per category)<br>- 9 new low-level distortions (3 per category)<br>- 18 new medium-level distortions (6 per category)<br>- 27 new high-level distortions (9 per category) | - 27 old distortions (9 per category)<br>- 3 prototypes (1 per category)<br>- 9 new low-level distortions (3 per category)<br>- 18 
+
+**Notes:**
+
+- **REP:** Repeating Protocol
+- **NREP:** Nonrepeating Protocol
+- **Hu & Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training patterns on category learning and generalization.
+- **Hu & Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization.
+- The **Fixed Prototype Pilot Study** aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes. 
+- All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.
+- Dot pattern distortions were created using a modified Posner-Keele (1968) procedure. Low, medium and high distortions displaced the dots by an average of 4, 6, and 7.7 Posner-levels respectively.
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+
 
 
 ```{r}

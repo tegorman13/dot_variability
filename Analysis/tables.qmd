@@ -1,0 +1,289 @@
+---
+title: tables
+date: last-modified
+lightbox: true
+toc: true
+page-layout: full
+format:
+  html: 
+    grid:
+      sidebar-width: 200px
+      body-width: 1250px
+      margin-width: 140px
+      gutter-width: 1.0rem
+toc-depth: 3
+code-fold: true
+code-tools: true
+execute: 
+  warning: false
+  eval: true
+---
+
+
+
+## Comparison of Dot-Pattern Classification Studies
+
+| Study                 | **Hu & Nosofsky (2022)** | **Hu & Nosofsky (2024)** | **Fixed Prototype Pilot Study** |
+|-------------------------|---------------------------|---------------------------|----------------------------------|
+| **Publication**         | *JEP: Learning, Memory, and Cognition*   | *Memory & Cognition*        | *(unpublished pilot study)*      |
+| **Participants**        | - 89 Indiana University undergraduates<br>- Course credit participation<br>- Random assignment to conditions (REP or NREP)<br>- Normal or corrected vision  | - 304 Indiana University students<br>- Random assignment to conditions (low, medium, high, or mixed distortion) | Not specified                    |
+| **Training Stage**       | **Training Stage**        | **Training Stage**         | **Training Stage**                |
+| • **Procedure**         | - **REP Condition:** 15 unique patterns (5 per category), repeated across 15 blocks (**225 trials total**)<br>- **NREP Condition:** 75 unique patterns (5 per category per block), no repetitions (**225 trials total**) | - 10 blocks, 27 trials each (**270 trials total**)<br>- Different set of training patterns in each block<br>- Corrective feedback for 2 seconds after each response | - Training patterns repeated across 10 blocks with randomized presentation order within each block<br>- Four between-subject conditions: low, medium, high, and mixed distortion levels |
+| • **Stimuli**           | - 15 or 75 unique dot patterns (depending on condition)<br>- Created using Posner (1967) procedure | - Variable number of unique dot patterns<br>| - 27 unique dot patterns (9 per category)<br> |
+| **Testing Stage**       | **Transfer Phase**        | **Testing Stage**         | **Testing Stage**                |
+| • **Objective**         | Continue classifying patterns into the same three categories | Test classification of novel patterns and a subset of training patterns | Test classification of novel patterns and a subset of training patterns |
+| • **Procedure**         | - 63 trials total<br>- Random order of presentation | - 84 trials total<br>- Random order of presentation | - 87 trials total<br>- Random order of presentation |
+| • **Stimuli**           | - 15 old distortions (5 per category)<br>- 3 prototypes (one per category)<br>- 15 low-level distortions (5 per category)<br>- 15 new medium-level distortions (5 per category)<br>- 15 high-level distortions (5 per category) | - 27 old patterns from the training phase (9 per category)<br>- 3 prototypes (one per category)<br>- 9 new low-level distortions (3 per category)<br>- 18 new medium-level distortions (6 per category)<br>- 27 new high-level distortions (9 per category) | - 27 old distortions (9 per category)<br>- 3 prototypes (1 per category)<br>- 9 new low-level distortions (3 per category)<br>- 18 
+
+**Notes:**
+
+- **REP:** Repeating Protocol
+- **NREP:** Nonrepeating Protocol
+- **Hu & Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training patterns on category learning and generalization.
+- **Hu & Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization.
+- The **Fixed Prototype Pilot Study** aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes. 
+- All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.
+- Dot pattern distortions were created using a modified Posner-Keele (1968) procedure. Low, medium and high distortions displaced the dots by an average of 4, 6, and 7.7 Posner-levels respectively.
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+
+
+<br><br><br><br><br><br>
+
+
+| **Study**                    | **Detail**                                                 |
+|------------------------------|------------------------------------------------------------|
+| **Hu & Nosofsky 2022 (Exp 2)** |                                                            |
+| **Subjects**                 | - 89 undergraduates from Indiana University.               |
+|                              | - Random assignment: 43 in REP, 46 in NREP.                |
+|                              | - Normal or corrected-to-normal vision.                    |
+| **Procedure**                |                                                            |
+| **Learning Phase**           | - **Task**: Classify dot patterns into three categories.   |
+|                              | - **Conditions**:                                          |
+|                              |   - **Repeating Condition (REP)**: 15 unique patterns (5 per category), repeated across 15 blocks (225 trials total). |
+|                              |   - **Nonrepeating Condition (NREP)**: 75 unique patterns (5 per category per block), no repetitions (225 trials total). |
+|                              | - **Trial Structure**:                                     |
+|                              |   - Pattern presented on screen, classify with a button press, immediate feedback. |
+| **Transfer Phase**           | - **Task**: Continue classifying patterns into the same three categories. |
+|                              | - **Transfer Patterns**:                                   |
+|                              |   - 15 old distortions (5 per category).                   |
+|                              |   - 3 prototypes (one per category).                       |
+|                              |   - 15 low-level distortions (5 per category).             |
+|                              |   - 15 new medium-level distortions (5 per category).      |
+|                              |   - 15 high-level distortions (5 per category).            |
+|                              | - **Trial Structure**: Each pattern presented once (63 trials total), random order. |
+| **Hu & Nosofsky 2024**       |                                                            |
+| **Training Stage**           | - **Participants**: 304 students from Indiana University.  |
+|                              | - **Conditions**: Four training conditions (low, medium, high, mixed distortions). |
+|                              | - **Training Blocks**: 10 blocks, 27 trials each (270 trials total). |
+|                              | - **Training Patterns**: Different set randomly generated in each block. |
+|                              | - **Feedback**: Corrective feedback for 2 seconds after each response. |
+|                              | - **Training Instances**: No repetitions of individual items. |
+| **Testing Stage**            | - **Test Patterns**: 84 trials including:                  |
+|                              |   - 27 old patterns from training.                         |
+|                              |   - 3 prototypes (one per category).                       |
+|                              |   - 9 new low-level distortions (3 per category).          |
+|                              |   - 18 new medium-level distortions (6 per category).      |
+|                              |   - 27 new high-level distortions (9 per category).        |
+|                              | - **Procedure**: Each pattern presented once in random order. |
+|                              | - **Response Requirement**: Classify into one of three categories. |
+| **Distortion Levels**        | - **Prototype Generation**: 9 dots at random grid positions in a 30x30 area of a 50x50 grid. |
+|                              | - **Low Distortion**: Dots displaced by an average of 4 Posner-levels. |
+|                              | - **Medium Distortion**: Dots displaced by an average of 6 Posner-levels. |
+|                              | - **High Distortion**: Dots displaced by an average of 7.7 Posner-levels. |
+|                              | - **Pattern Generation**: Displaced by random direction and distance based on distortion level. |
+| **Fixed Prototype Pilot Study** |                                                        |
+| **Objective**                | Study the effect of training-pattern variability on classification learning and generalization. |
+| **Procedure**                | Subjects trained to classify patterns into three categories. |
+|                              | Training patterns repeated across 10 blocks; presentation randomized within each block. |
+|                              | Four conditions: low, medium, high, mixed distortions.     |
+|                              | 27 training patterns (9 per category) generated using Posner-Keele (1968) algorithm. |
+| **Feedback**                 | Corrective feedback for 2 seconds in the learning phase.   |
+| **Testing Stage**            | - **Test Patterns**: 87 trials including:                  |
+|                              |   - 27 old distortions from training.                      |
+|                              |   - 3 prototypes (one per category).                       |
+|                              |   - 9 new low-level distortions (3 per category).          |
+|                              |   - 18 new medium-level distortions (6 per category).
+
+-------
+
+
+
+
+<br><br><br><br><br><br>
+
+
+
+
+
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+
+| Study                     | Hu & Nosofsky 2022 (exp 2)                                 | Hu & Nosofsky 2024                                         | Fixed Prototype Pilot Study                                |
+|---------------------------|------------------------------------------------------------|------------------------------------------------------------|-----------------------------------------------------------|
+| **Subjects**              | - 89 undergraduates from Indiana University                | - 304 students from Indiana University                     | - Not specified                                           |
+|                           | - Participation as partial fulfillment of course requirement | - No specific details provided                             |                                                           |
+|                           | - Random assignment to conditions: 43 in REP, 46 in NREP   |                                                            |                                                           |
+|                           | - Normal or corrected-to-normal vision                     |                                                            |                                                           |
+| **Learning/Training Phase** | - **Task**: Classify dot patterns into three categories (A, B, C) | - **Conditions**: Four training conditions (low, medium, high, mixed-distortion) | - Subjects trained to classify patterns into three categories |
+|                           | - **Trial Structure**:                                     | - **Training Blocks**: 10 blocks, each with 27 trials (270 trials total) | - Training patterns repeated across 10 blocks with randomized order |
+|                           |   - Pattern presented on screen                            | - **Training Patterns**: Different set of training patterns randomly generated in each block | - Four between-subject conditions varying by training pattern distortion levels |
+|                           |   - Subject classifies pattern by pressing a button        | - **Feedback**: Corrective feedback provided for 2 seconds after each response | - Each condition involved 27 training patterns (9 per category) |
+|                           |   - Immediate feedback provided                            | - **Training Instances**: No individual training item was ever repeated |                                                           |
+|                           | - **Conditions**:                                          |                                                            |                                                           |
+|                           |   - *Repeating Condition (REP)*: 15 unique learning patterns, repeated across 15 blocks |                                 |                                                           |
+|                           |   - *Nonrepeating Condition (NREP)*: 75 unique learning patterns, no repetitions |                                        |                                                           |
+| **Transfer/Testing Phase** | - **Task**: Continue classifying patterns into the same categories | - **Test Patterns**: 84 test trials including old patterns, prototypes, and new distortions | - Test classification of novel patterns and a subset of training patterns |
+|                           | - **Transfer Patterns**:                                   | - **Procedure**: Each pattern presented once in a random order | - Test patterns included old distortions, prototypes, and new distortions across levels |
+|                           |   - 15 old distortions (5 per category)                    | - **Response Requirement**: Participants classified all test patterns into one of the three candidate categories | - Each pattern presented once in a random order, totaling 87 trials per subject |
+|                           |   - 3 prototypes (one per category)                        |                                                            | - Patterns displayed at the center of the screen until a key press |
+|                           |   - 15 low-level distortions (5 per category)              |                                                            |                                                           |
+|                           |   - 15 new medium-level distortions (5 per category)       |                                                            |                                                           |
+|                           |   - 15 high-level distortions (5 per category)             |                                                            |                                                           |
+|                           | - **Trial Structure**: Each pattern presented once (63 trials total) |                                                    |                                                           |
+| **Distortion Levels**     | - Posner (1967) procedure used to create distortions        | - **Prototype Generation**: Prototypes generated by placing dots randomly in a grid | - Category prototypes distorted using the Posner-Keele (1968) algorithm |
+|                           |                                                            | - **Distortion Levels**:                                   | - Training patterns generated with varying levels of distortion: low, medium, high, mixed |
+|                           |                                                            |   - *Low Distortion*: Dots displaced by an average of 4 Posner-levels | - Test patterns consisted of distortions across levels, with additional hard-to-classify distortions |
+|                           |                                                            |   - *Medium Distortion*: Dots displaced by an average of 6 Posner-levels |                                                  |
+|                           |                                                            |   - *High Distortion*: Dots displaced by an average of 7.7 Posner-levels |                                               |
+|                           |                                                            | - **Pattern Generation**: Each pattern constructed by displacing dots according to the specified distortion level |   |
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+
+| Study                      | Stage         | Detail                                                                                                      |
+|----------------------------|---------------|-------------------------------------------------------------------------------------------------------------|
+| **Hu & Nosofsky 2022 (Exp 2)** | **Subjects**  | 89 undergraduates from Indiana University.<br>Participation as partial fulfillment of an introductory psychology course requirement.<br>Random assignment to conditions: 43 in REP, 46 in NREP.<br>Normal or corrected-to-normal vision. |
+|                            | **Procedure** | **Learning Phase**:<br>**Task**: Classify dot patterns into three categories: A, B, and C.<br>**Trial Structure**: Pattern presented on screen, subject classifies pattern by pressing a corresponding button, immediate feedback provided.<br>**Conditions**: **Repeating Condition (REP)**: 15 unique learning patterns (5 per category), patterns repeated across 15 blocks (225 trials total). **Nonrepeating Condition (NREP)**: 75 unique learning patterns (5 per category per block), no repetitions (225 trials total).<br>**Transfer Phase**:<br>**Task**: Continue classifying patterns into the same three categories.<br>**Transfer Patterns**: 15 old distortions (5 per category), 3 prototypes (one per category), 15 low-level distortions (5 per category), 15 new medium-level distortions (5 per category), 15 high-level distortions (5 per category).<br>**Trial Structure**: Each pattern presented once (63 trials total), random order of presentation for each subject. |
+|                            | **Procedure** | Posner (1967) procedure used to create distortions.                                                           |
+| **Hu & Nosofsky 2024**     | **Training Stage** | **Participants**: 304 students from Indiana University.<br>**Conditions**: Four training conditions (low-distortion, medium-distortion, high-distortion, mixed-distortion).<br>**Training Blocks**: 10 blocks, each with 27 trials (270 trials total).<br>**Training Patterns**: Different set of training patterns randomly generated in each block.<br>**Feedback**: Corrective feedback provided for 2 seconds after each response.<br>**Training Instances**: No individual training item was ever repeated. |
+|                            | **Testing Stage** | **Test Patterns**: 84 test trials including 27 old patterns from the training phase, 3 prototypes (one per category), 9 new low-level distortions (three per category), 18 new medium-level distortions (six per category), 27 new high-level distortions (nine per category).<br>**Procedure**: Each pattern presented once in a random order.<br>**Response Requirement**: Participants classified all test patterns into one of the three candidate categories (no "None" response allowed). |
+|                            | **Procedure for Creating Different Distortion Levels** | **Prototype Generation**: For each subject, prototypes for three categories generated by placing nine dots at random grid positions in a 30x30 area of a 50x50 grid.<br>**Distortion Levels**: **Low Distortion**: Dots displaced by an average of 4 Posner-levels. **Medium Distortion**: Dots displaced by an average of 6 Posner-levels. **High Distortion**: Dots displaced by an average of 7.7 Posner-levels.<br>**Pattern Generation**: Each pattern constructed by displacing each dot by a random direction and distance according to the specified distortion level. |
+| **Fixed Prototype Pilot Study** | **Training Stage** | **Objective**: Study the effect of training-pattern variability on classification learning and generalization in the dot-pattern paradigm.<br>**Procedure**: Subjects trained to classify a set of training patterns into three categories.<br>Training patterns repeated across 10 training blocks with randomized presentation order within each block.<br>Four between-subject conditions varying by training pattern distortion levels: low, medium, high, and mixed distortions.<br>Each condition involved 27 training patterns (9 per category), generated by distorting category prototypes using the Posner-Keele (1968) statistical-distortion algorithm.<br>**Feedback**: Corrective feedback provided for 2 seconds below the presented pattern in the learning phase. |
+|                            | **Testing Stage** | **Objective**: Test classification of novel patterns and a subset of training patterns.<br>**Procedure**: Test patterns included 27 old distortions, 3 prototypes, 9 new low-level distortions, 18 new medium-level distortions, 27 new high-level distortions, and 3 additional high-level distortions.<br>Each pattern presented once in a random order, totaling 87 trials per subject.<br>Patterns displayed at the center of the screen and remained visible until a key press. |
+|                            | **Distortion Levels** | **Generation**: Category prototypes distorted using the Posner-Keele (1968) statistical-distortion algorithm.<br>Training patterns for four conditions generated with varying levels of distortion: low, medium, high, and mixed distortions.<br>Test patterns consisted of distortions across low, medium, and high levels, with additional hard-to-classify distortions. |
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+
+
+| Study/Stage | Subjects | Conditions | Trials per Condition | Total Trials | Trial Structure | Feedback |
+| --- | --- | --- | --- | --- | --- | --- |
+| Hu & Nosofsky 2022 (Learning Phase) | 89 undergraduates from Indiana University | REP: 15 unique learning patterns (5 per category)<br>NREP: 75 unique learning patterns (5 per category per block) | REP: 225 trials<br>NREP: 225 trials | 450 trials | Pattern presented on screen<br>Subject classifies pattern by pressing a corresponding button<br>Immediate feedback provided | Immediate feedback provided |
+| Hu & Nosofsky 2022 (Transfer Phase) | Same as Learning Phase | 15 old distortions (5 per category)<br>3 prototypes (one per category)<br>15 low-level distortions (5 per category)<br>15 new medium-level distortions (5 per category)<br>15 high-level distortions (5 per category) | 63 trials | 63 trials | Each pattern presented once<br>Random order of presentation for each subject | No feedback mentioned |
+| Hu & Nosofsky 2024 (Training Stage) | 304 students from Indiana University | Four training conditions:<br>- Low-distortion<br>- Medium-distortion<br>- High-distortion<br>- Mixed-distortion | 10 blocks, each with 27 trials (270 trials total) | 1080 trials | Different set of training patterns randomly generated in each block<br>Corrective feedback provided for 2 seconds after each response<br>No individual training item was ever repeated | Corrective feedback provided for 2 seconds after each response |
+| Hu & Nosofsky 2024 (Testing Stage) | Same as Training Stage | 27 old patterns from the training phase<br>3 prototypes (one per category)<br>9 new low-level distortions (three per category)<br>18 new medium-level distortions (six per category)<br>27 new high-level distortions (nine per category) | 84 trials | 84 trials | Each pattern presented once in a random order<br>Participants classified all test patterns into one of the three candidate categories (no "None" response allowed) | No feedback mentioned |
+| Fixed Prototype pilot study (Training Stage) | Not specified | Four between-subject conditions varying by training pattern distortion levels:<br>- Low<br>- Medium<br>- High<br>- Mixed distortions | Training patterns repeated across 10 training blocks with randomized presentation order within each block | Not specified | Training patterns repeated across 10 training blocks with randomized presentation order within each block<br>Corrective feedback provided for 2 seconds below the presented pattern in the learning phase | Corrective feedback provided for 2 seconds below the presented pattern in the learning phase |
+| Fixed Prototype pilot study (Testing Stage) | Same as Training Stage | 27 old distortions<br>3 prototypes<br>9 new low-level distortions<br>18 new medium-level distortions<br>27 new high-level distortions<br>3 additional high-level distortions | 87 trials per subject | 87 trials per subject | Each pattern presented once in a random order<br>Patterns displayed at the center of the screen and remained visible until a key press | No feedback mentioned |
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+
+## Comparison of Dot Pattern Categorization Studies
+
+| Feature             | Hu & Nosofsky (2022) Exp. 2 | Hu & Nosofsky (2024) | Fixed Prototype Pilot Study |
+|-------------------|-----------------------------|------------------------|-------------------------------|
+| **Subjects**        | 89 Undergraduates          | 304 Students          | Not specified                 |
+| **Conditions**      | 2 (Repeating, Nonrepeating)| 4 (Low, Medium, High, Mixed Distortion) | 4 (Low, Medium, High, Mixed Distortion) |
+| **Training Stage**  |                             |                        |                               |
+| **- Objective**     | Category Learning         | Category Learning     | Category Learning             |
+| **- Procedure**    | 15 blocks, 225 trials      | 10 blocks, 270 trials   | 10 blocks, 270 trials          |
+| **- Training Patterns** | 15 unique (REP) or 75 unique (NREP) | Novel in each block | 27 unique per condition      |
+| **- Feedback**      | Immediate                   | After each response     | After each response            |
+| **Testing Stage**   |                             |                        |                               |
+| **- Objective**     | Generalization           | Generalization        | Generalization                |
+| **- Procedure**    | 63 trials, random order   | 84 trials, random order | 87 trials, random order       |
+| **- Test Patterns** | Old distortions, prototypes, new distortions | Old patterns, prototypes, new distortions | Old distortions, prototypes, new distortions |
+| **Distortion Levels** | Posner (1967) procedure  | Low, Medium, High (Posner-based) | Low, Medium, High (Posner-based) |
+| **Prototype Generation** | Not specified             | Randomly generated for each subject | Fixed for all subjects       |
+
+**Notes:**
+
+* **Hu & Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training patterns on category learning and generalization.
+* **Hu & Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization.
+* The **Fixed Prototype Pilot Study** aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes. 
+* All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.
+* "Posner" refers to the Posner & Keele (1968) statistical distortion algorithm used to create variations of prototype patterns.
+
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+
+
+| Study                     | Hu & Nosofsky 2022 (exp 2)                                 | Hu & Nosofsky 2024                                         | Fixed Prototype Pilot Study                                |
+|---------------------------|------------------------------------------------------------|------------------------------------------------------------|-----------------------------------------------------------|
+| **Subjects**              | - 89 undergraduates from Indiana University                | - 304 students from Indiana University                     | - Information not provided                               |
+|                           | - Participation for course requirement                     | - Information not provided                                 |                                                          |
+|                           | - Random assignment to conditions: 43 in REP, 46 in NREP   |                                                            |                                                          |
+|                           | - Normal or corrected-to-normal vision                     |                                                            |                                                          |
+| **Learning/Training Phase** | - Classify dot patterns into three categories: A, B, and C | - 10 training blocks, each with 27 trials (270 trials total) | - Subjects trained to classify patterns into three categories |
+|                           | - Immediate feedback provided                              | - Different set of training patterns randomly generated in each block | - Training patterns repeated across 10 blocks with randomized order |
+|                           | - **Conditions**:                                          | - Corrective feedback provided for 2 seconds after each response | - Four between-subject conditions varying by training pattern distortion levels |
+|                           |   - **Repeating Condition (REP)**:                         | - No individual training item was ever repeated            | - Each condition involved 27 training patterns (9 per category) |
+|                           |     - 15 unique learning patterns (5 per category)         |                                                            | - Corrective feedback provided for 2 seconds             |
+|                           |     - Patterns repeated across 15 blocks (225 trials total) |                                                           |                                                          |
+|                           |   - **Nonrepeating Condition (NREP)**:                     |                                                            |                                                          |
+|                           |     - 75 unique learning patterns (5 per category per block) |                                                          |                                                          |
+|                           |     - No repetitions (225 trials total)                    |                                                            |                                                          |
+| **Transfer/Testing Phase** | - Continue classifying patterns into the same three categories | - 84 test trials including:                             | - Test classification of novel patterns and a subset of training patterns |
+|                           | - **Transfer Patterns**:                                   |   - 27 old patterns from the training phase               | - Test patterns included various distortion levels and additional hard-to-classify distortions |
+|                           |   - 15 old distortions (5 per category)                    |   - 3 prototypes (one per category)                       | - Each pattern presented once in a random order, totaling 87 trials per subject |
+|                           |   - 3 prototypes (one per category)                        |   - 9 new low-level distortions (three per category)      | - Patterns displayed at the center of the screen until a key press |
+|                           |   - 15 low-level distortions (5 per category)              |   - 18 new medium-level distortions (six per category)    |                                                          |
+|                           |   - 15 new medium-level distortions (5 per category)       |   - 27 new high-level distortions (nine per category)     |                                                          |
+|                           |   - 15 high-level distortions (5 per category)             | - Each pattern presented once in a random order           |                                                          |
+|                           | - Each pattern presented once (63 trials total)            | - Participants classified all test patterns into one of the three candidate categories (no "None" response allowed) | |
+| **Distortion Levels**     | Posner (1967) procedure used to create distortions          | - **Prototype Generation**: Prototypes generated by placing nine dots at random grid positions in a 30x30 area of a 50x50 grid | - Category prototypes distorted using the Posner-Keele (1968) statistical-distortion algorithm |
+|                           |                                                            | - **Distortion Levels**:                                   | - Training patterns generated with varying levels of distortion: low, medium, high, and mixed distortions |
+|                           |                                                            |   - **Low Distortion**: Dots displaced by an average of 4 Posner-levels | - Test patterns consisted of distortions across low, medium, and high levels, with additional hard-to-classify distortions |
+|                           |                                                            |   - **Medium Distortion**: Dots displaced by an average of 6 Posner-levels | |
+|                           |                                                            |   - **High Distortion**: Dots displaced by an average of 7.7 Posner-levels | |
+|                           |                                                            | - Each pattern constructed by displacing each dot by a random direction and distance according to the specified distortion level | |
+
+
+
+
+
+
+
+-------
+
+
+<br><br><br><br><br><br>
+
+| **Aspect**                    | **Hu & Nosofsky 2022**                                                                                             | **Hu & Nosofsky 2024**                                                                                                    | **Fixed Prototype Pilot Study**                                                                                                                                           |
+|-------------------------------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Participants**              | 89 undergraduates from Indiana University                                                                           | 304 students from Indiana University                                                                                       | Not specified                                                                                                                                                           |
+| **Conditions**                | Two conditions: Repeating (REP), Nonrepeating (NREP)                                                                | Four conditions: Low-distortion, Medium-distortion, High-distortion, Mixed-distortion                                      | Four conditions: Low, Medium, High, and Mixed distortions                                                                                                                |
+| **Training Phase**            | - 15 unique or 75 unique patterns, repeated across 15 blocks for a total of 225 trials                               | - No repetitions; different set of training patterns randomly generated in each block (270 trials total)                    | - Repeated training patterns across 10 blocks with randomized order. 27 training patterns per condition                                                                |
+| **Testing/Transfer Phase**    | - 63 trials including old and new distortions at various levels                                                      | - 84 test trials including old patterns and new distortions                                                                | - 87 trials including old distortions and new distortions at various levels                                                                                             |
+| **Feedback**                  | Immediate feedback during learning phase                                                                            | Corrective feedback provided for 2 seconds after each response                                                             | Corrective feedback provided for 2 seconds below the presented pattern in the learning phase                                                                            |
+| **Pattern Generation**        | Dot patterns classified into three categories                                                                       | Prototypes for three categories generated at random grid positions, distortions applied at specified levels                | Prototypes distorted using the Posner-Keele (1968) algorithm, training and test patterns generated with varying levels of distortions                                   |
+| **Distortion Levels**         | Generated using Posner (1967) procedure                                                                             | Low (4 Posner-levels), Medium (6 Posner-levels), High (7.7 Posner-levels)                                                   | Generated using Posner-Keele (1968) with varying distortion levels for training and testing patterns, including additional hard-to-classify distortions for testing phase |
+| **Objectives**                | Examine the impact of repetition on classification learning and generalization                                        | Assess how distortion levels during training influence classification of new patterns                                      | Study the effect of training-pattern variability on classification learning and generalization                                                                           |
