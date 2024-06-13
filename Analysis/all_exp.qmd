@@ -118,6 +118,8 @@ fp24 <- readRDS(here("data","fixed_proto24.rds"))
 all_data <- fp24 |> select(-pool_index) |> rbind(mc24) |> rbind(lmc22)
 all_data$Pattern_Token = factor(all_data$Pattern_Token,levels=c("old","prototype","new_low","new_med","new_high","special")) 
 all_data$condit = factor(all_data$condit,levels=c("low","medium","mixed","high","nrep","rep"))
+all_data$exp = factor(all_data$exp,levels=c("lmc22","mc24","fixed_proto"))
+
 
 theme_set(theme_nice())
 
