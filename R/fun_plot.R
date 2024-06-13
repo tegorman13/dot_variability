@@ -219,4 +219,47 @@ theme_nice_dist <- function() {
     )
 }
 
-theme_set(theme_nice())
+# theme_set(theme_nice())
+
+theme_nice <- function() {
+  theme_minimal(base_family = "Manrope") +
+    theme(
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.35)),
+      plot.subtitle = element_text(family = "Manrope Medium", face = "plain", size = rel(1.2)),
+      axis.title = element_text(family = "Manrope SemiBold", face = "plain", size = rel(1)),
+      axis.title.x = element_text(hjust = .5),
+      axis.title.y = element_text(hjust = .5),
+      axis.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.8)),
+      strip.text = element_text(
+        family = "Manrope", face = "bold",
+        size = rel(.95), hjust = 0
+      ),
+      legend.position = "top",
+      legend.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.95)),
+      strip.background = element_rect(fill = "grey90", color = NA)
+    )
+}
+
+theme_nice_b <- function() {
+  theme_minimal(base_family = "Manrope") +
+    theme(
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.55)),
+      plot.subtitle = element_text(family = "Manrope Medium", face = "plain", size = rel(1.2)),
+      axis.title = element_text(family = "Manrope SemiBold", face = "plain", size = rel(1)),
+      axis.title.x = element_text(hjust = .5),
+      axis.title.y = element_text(hjust = .5),
+      axis.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.9)),
+      strip.text = element_text(
+        family = "Manrope", face = "bold",
+        size = rel(1.2), hjust = 0
+      ),
+      legend.position = "top",
+      legend.text = element_text(family = "Manrope Light", face = "plain", size = rel(1.3)),
+      strip.background = element_rect(fill = "grey90", color = NA)
+    )
+}
+
+
+

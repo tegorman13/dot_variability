@@ -29,17 +29,17 @@ execute:
 
 
 
-# Hu & Nosofsky 2022 (exp 2)
+## Hu & Nosofsky 2022 (exp 2)
 
-#### Subjects
+### Subjects
 - 89 undergraduates from Indiana University.
 - Participation as partial fulfillment of an introductory psychology course requirement.
 - Random assignment to conditions: 43 in REP, 46 in NREP.
 - Normal or corrected-to-normal vision.
 
-#### Procedure
+### Procedure
 
-##### Learning Phase
+#### Learning Phase
 - **Task**: Classify dot patterns into three categories: A, B, and C.
 - **Trial Structure**:
   - Pattern presented on screen.
@@ -53,7 +53,7 @@ execute:
     - 75 unique learning patterns (5 per category per block).
     - No repetitions (225 trials total).
 
-##### Transfer Phase
+#### Transfer Phase
 - **Task**: Continue classifying patterns into the same three categories.
 - **Transfer Patterns**:
   - 15 old distortions (5 per category).
@@ -66,10 +66,7 @@ execute:
   - Random order of presentation for each subject.
 
 
-Posner (1967) procedure used to create distortions
 
-
-Homa et al. (2019, p. 398) report these values to be _low_ = 1.20, _medium_ = 2.80, and _high_ = 4.60.
 
 ```{r load}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted, viridis, gghalves,grateful)
@@ -77,6 +74,7 @@ conflict_prefer_all("dplyr", quiet = TRUE)
 
 
 source(here::here("R/read_22.R"))
+source(here::here("R/fun_plot.R"))
 #lmc22 <- readRDS(here("data","lmc22.rds"))
 
 #theme_set(theme_bw())

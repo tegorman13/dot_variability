@@ -94,6 +94,7 @@ conflict_prefer_all("dplyr", quiet = TRUE)
 
 
 source(here::here("R/read_22.R"))
+source(here::here("R/fun_plot.R"))
 #lmc22 <- readRDS(here("data","lmc22.rds"))
 
 #theme_set(theme_bw())

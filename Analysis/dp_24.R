@@ -1,36 +1,7 @@
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, conflicted, knitr,grateful)
 conflict_prefer_all("dplyr", quiet = TRUE)
 source(here::here("R/read_24.R"))
-
-#https://fonts.google.com/specimen/Manrope
-# ~/Library/Fonts
-theme_nice <- function() {
-  theme_minimal(base_family = "Manrope") +
-    theme(
-      panel.grid.minor = element_blank(),
-      plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.35)),
-      plot.subtitle = element_text(family = "Manrope Medium", face = "plain", size = rel(1.2)),
-      axis.title = element_text(family = "Manrope SemiBold", face = "plain", size = rel(1)),
-      axis.title.x = element_text(hjust = .5),
-      axis.title.y = element_text(hjust = .5),
-      axis.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.8)),
-      strip.text = element_text(
-        family = "Manrope", face = "bold",
-        size = rel(.75), hjust = 0
-      ),
-      strip.background = element_rect(fill = "grey90", color = NA)
-    )
-}
-
-theme_nice_dist <- function() {
-  theme_nice() +
-    theme(
-      panel.grid = element_blank(),
-      panel.spacing.x = unit(10, units = "pt"),
-      axis.ticks.x = element_line(linewidth = 0.25),
-      axis.text.y = element_blank()
-    )
-}
+source(here::here("R/fun_plot.R"))
 
 theme_set(theme_nice())
 
