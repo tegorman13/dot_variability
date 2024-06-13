@@ -19,8 +19,53 @@ execute:
   eval: true
 ---
 
+
 <br><br>
 
+
+## Paper Figures
+
+Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabilityTrainingDoes2024] 
+
+*click on image to enlarge*
+
+::: {.panel-tabset}
+
+
+### 2022 Paper
+
+::: {layout-nrow=2}
+![2022 Learning Curves](/assets/2022_learning_curves.png)
+
+![2022 Test Accuracy](/assets/2022_testAvg.png)
+
+
+![2022 Model Predictions](/assets/2022_testModel.png)
+
+:::
+
+### 2024 Paper
+::: {layout-nrow=2}
+![2024 Learning Curves](/assets/2024_learning_curves.png)
+
+![2024 Test Accuracy](/assets/2024_testAvg.png)
+
+![2024 Test Accuracy - Quartile](/assets/2024_testQ.png)
+
+![2024 Model Predictions](/assets/2024_testModel.png)
+:::
+
+### Fixed Prototype Pilot
+
+::: {layout-nrow=2}
+![Pilot Learning Curves](/assets/fp_pilot_train.png)
+
+![Pilot Test Accuracy](/assets/fp_pilot_test.png)
+
+:::
+:::
+
+<br><br>
 
 ::: {.column-page-inset-right .smaller}
 ## Comparison of Dot-Pattern Classification Studies
@@ -28,6 +73,7 @@ execute:
 | Study                 | **Hu & Nosofsky (2022)** | **Hu & Nosofsky (2024)** | **Fixed Prototype Pilot Study** |
 |-------------------------|---------------------------|---------------------------|----------------------------------|
 | **Publication**         | *JEP: Learning, Memory, and Cognition*   | *Memory & Cognition*        | *(unpublished pilot study)*      |
+| **Abbreviation**         | *lmc22*   | *mc24*        | *fixed_proto*      |
 | **Participants**        | - 89 Indiana University undergraduates<br>- Course credit participation<br>- Random assignment to conditions (REP or NREP)<br>- Normal or corrected vision  | - 304 Indiana University students<br>- Random assignment to conditions (low, medium, high, or mixed distortion) | Not specified                    |
 | **Training Stage**       | **Training Stage**        | **Training Stage**         | **Training Stage**                |
 | • **Procedure**         | - **REP Condition:** 15 unique patterns (5 per category), repeated across 15 blocks (**225 trials total**)<br>- **NREP Condition:** 75 unique patterns (5 per category per block), no repetitions (**225 trials total**) | - 10 blocks, 27 trials each (**270 trials total**)<br>- Different set of training patterns in each block<br>- Corrective feedback for 2 seconds after each response | - Training patterns repeated across 10 blocks with randomized presentation order within each block<br>- Four between-subject conditions: low, medium, high, and mixed distortion levels |
@@ -92,61 +138,21 @@ eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
 
 ## Comparison
 
-```{r}
-#| fig-width: 11
-#| fig-height: 13
-#| layout-ncol: 2 
-#| fig-cap: 
-#|   - "Line Plot 1"
-#|   - "Line Plot 2"
-#|   - "Line Plot 4"
-#|   - "Line Plot 5"
 
-all_data |> filter(Phase==2) |>
-  group_by(sbjCode, condit, Pattern_Token) |>
-  summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x=condit, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=mean, position=position_dodge())+
-  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
-all_data |> filter(Phase==2) |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
-  summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x=condit, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=mean, position=position_dodge())+
-  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
-  facet_wrap(~exp,scales="free_x") +
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
-all_data |> filter(Phase==2) |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
-  summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x=exp, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
-  stat_summary(geom="bar",fun=mean, position=position_dodge())+
-  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
-  facet_wrap(~condit,scales="free_x") +
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
-all_data |> filter(Phase==2) |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
-  summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x=condit, y=Corr, fill=exp, group=exp)) +  
-  stat_summary(geom="bar",fun=mean, position=position_dodge())+
-  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
-  facet_wrap(~Pattern_Token,scales="free_x") +
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
-```
 
 
 ## Compare Experiments
 
+::: {.panel-tabset}
+
+### Facet by experiment
 ```{r}
 #| fig-width: 13
 #| fig-height: 11
-#| layout-ncol: 2 
-
 
 theme_set(theme_nice_b())
 
@@ -167,6 +173,10 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
   facet_wrap(~exp)
 
 
+```
+
+### alt
+```{r}
 
 all_data |> filter(Phase==2) |>
   group_by(sbjCode, condit, Pattern_Token,exp) |>
@@ -186,18 +196,20 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
   stat_summary(geom="errorbar", fun.data=mean_se) +
   facet_wrap(~exp,scales="free_x") +
   labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
-
-
 ```
+
+:::
 
 
 ## Training Comparison
 
+::: {.panel-tabset}
 
+### Training Comparison
 ```{r}
 #| fig-width: 12
 #| fig-height: 10
-#| layout-ncol: 2 
+###| layout-ncol: 2 
 all_data |> filter(Phase==1) |>
   group_by(sbjCode, condit, Pattern_Token,Block,exp) |>
   summarize(Corr=mean(Corr),.groups="keep") |>
@@ -209,6 +221,13 @@ all_data |> filter(Phase==1) |>
   theme(legend.position = "top") + list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
            scale_y_continuous(breaks=yt,limits=c(0,1)),
            scale_x_continuous(breaks=seq(1:15)))
+
+
+```
+
+
+### Alt
+```{r}
 
 all_data |> filter(Phase==1) |>
   group_by(sbjCode, condit, Pattern_Token,Block,exp) |>
@@ -224,6 +243,7 @@ all_data |> filter(Phase==1) |>
            scale_x_continuous(breaks=seq(1:15)))
 ```
 
+::: 
 
 ## Separated by Experiment
 
@@ -272,6 +292,56 @@ lmc22 |> filter(Phase==2) |>
   ggplot(aes(x=condit, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+
+```
+
+
+
+
+```{r}
+#| fig-width: 11
+#| fig-height: 13
+#| layout-ncol: 2 
+#| fig-cap: 
+#|   - "Line Plot 1"
+#|   - "Line Plot 2"
+#|   - "Line Plot 4"
+#|   - "Line Plot 5"
+
+all_data |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=condit, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+
+all_data |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=condit, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  facet_wrap(~exp,scales="free_x") +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+
+all_data |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=exp, y=Corr, fill=Pattern_Token, group=Pattern_Token)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  facet_wrap(~condit,scales="free_x") +
+  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+
+all_data |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  summarize(Corr=mean(Corr)) |>
+  ggplot(aes(x=condit, y=Corr, fill=exp, group=exp)) +  
+  stat_summary(geom="bar",fun=mean, position=position_dodge())+
+  stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
+  facet_wrap(~Pattern_Token,scales="free_x") +
   labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
 ```
