@@ -31,14 +31,12 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 
 ::: {.panel-tabset}
 
-
 ### 2022 Paper
 
 ::: {layout-nrow=2}
 ![2022 Learning Curves](/assets/2022_learning_curves.png)
 
 ![2022 Test Accuracy](/assets/2022_testAvg.png)
-
 
 ![2022 Model Predictions](/assets/2022_testModel.png)
 
@@ -61,7 +59,6 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 ![Pilot Learning Curves](/assets/fp_pilot_train.png)
 
 ![Pilot Test Accuracy](/assets/fp_pilot_test.png)
-
 :::
 :::
 
@@ -122,8 +119,6 @@ all_data <- fp24 |> select(-pool_index) |> rbind(mc24) |> rbind(lmc22)
 all_data$Pattern_Token = factor(all_data$Pattern_Token,levels=c("old","prototype","new_low","new_med","new_high","special")) 
 all_data$condit = factor(all_data$condit,levels=c("low","medium","mixed","high","nrep","rep"))
 
-
-
 theme_set(theme_nice())
 
 yt <- round(seq(0,1,length.out=7), 2)
@@ -131,18 +126,11 @@ xt <- seq(1,10,1)
 eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
            scale_y_continuous(breaks=yt,limits=c(0,1)),
            scale_x_continuous(breaks=xt))
-
 ```
 
 
 
 ## Comparison
-
-
-
-
-
-
 
 
 ## Compare Experiments
@@ -245,9 +233,13 @@ all_data |> filter(Phase==1) |>
 
 ::: 
 
+
 ## Separated by Experiment
 
+::: {.panel-tabset}
 
+
+### p1
 ```{r}
 #| layout-ncol: 2 
 
@@ -260,8 +252,6 @@ fp24 |> filter(Phase==2) |>
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
-
-
 fp24 |> filter(Phase==2) |>
   group_by(sbjCode, condit, Pattern_Token) |>
   summarize(Corr=mean(Corr)) |>
@@ -269,9 +259,6 @@ fp24 |> filter(Phase==2) |>
   stat_summary(geom="bar",fun=mean, position=position_dodge())+
   stat_summary(geom="errorbar", fun.data=mean_se, position=position_dodge()) +
   labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
-
-
-
 
 
 fp24 |> filter(Phase==1) |>
@@ -297,7 +284,7 @@ lmc22 |> filter(Phase==2) |>
 ```
 
 
-
+### p2
 
 ```{r}
 #| fig-width: 11
@@ -345,3 +332,5 @@ all_data |> filter(Phase==2) |>
   labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
 
 ```
+
+:::
