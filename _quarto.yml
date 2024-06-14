@@ -35,7 +35,7 @@ website:
     contents:
       - href: index.qmd
         text: Home
-      - section: "Learning Analysis"
+      - section: "Empirical Analysis"
         contents:
           - href: Analysis/dp_22.qmd
             text: Hu & Nosofsky 2022
@@ -44,13 +44,13 @@ website:
           - href: Analysis/fixed_proto_pilot.qmd
             text: Fixed Prototype Pilot
           - href: Analysis/all_exp.qmd
-            text: Combo
-      - section: "Dot Patterns"
+            text: Combined Studies
+      - section: "Similarity Ratings"
         contents:
           - href: Analysis/dotSim_Analysis.qmd
-            text: Rating Data Check
+            text: Rating Data Checks
           - href: Analysis/dotSim_compare.qmd
-            text: Similarity Comparisons
+            text: Rating Analysis
       - section: "Dot Patterns"
         contents:
           - href: Stimulii/plotDots.qmd
@@ -62,7 +62,7 @@ website:
       - section: "Task"
         contents:
           - href: Task/Task.qmd
-            text: Task
+            text: Rating Task
   page-footer:
     left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
     center: "site created with [R](https://cran.r-project.org/) and [quarto](https://quarto.org)"

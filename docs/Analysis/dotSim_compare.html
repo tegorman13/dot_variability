@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.5.43">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="dcterms.date" content="2024-06-07">
+<meta name="dcterms.date" content="2024-06-14">
 <title>Dot Pattern Variability – Dot Pattern Similarity Analysis</title>
 <style>
 code{white-space: pre-wrap;}
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Analysis/dotSim_Analysis.html">Dot Patterns</a></li><li class="breadcrumb-item"><a href="../Analysis/dotSim_compare.html">Group Comparison</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Analysis/dotSim_Analysis.html">Dot Patterns</a></li><li class="breadcrumb-item"><a href="../Analysis/dotSim_compare.html">Similarity Comparisons</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -126,6 +126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Dot Pattern Variability</a> 
         <div class="sidebar-tools-main">
+    <a href="https://github.com/tegorman13/dot_variability" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -170,6 +171,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../Analysis/fixed_proto_pilot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fixed Prototype Pilot</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../Analysis/all_exp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Combo</span></a>
   </div>
@@ -188,13 +195,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../Analysis/dotSim_Analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Similarity Ratings</span></a>
+ <span class="menu-text">Rating Data Check</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../Analysis/dotSim_compare.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Group Comparison</span></a>
+ <span class="menu-text">Similarity Comparisons</span></a>
   </div>
 </li>
       </ul>
@@ -260,10 +267,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#correlations-between-similarity-ratings-and-catlearn-accuracy" id="toc-correlations-between-similarity-ratings-and-catlearn-accuracy" class="nav-link" data-scroll-target="#correlations-between-similarity-ratings-and-catlearn-accuracy">Correlations between similarity ratings and CatLearn accuracy</a></li>
   </ul>
 </li>
-  </ul><div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Analysis/dotSim_compare.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/Analysis/dotSim_compare.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Analysis/dotSim_compare.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Analysis/dotSim_Analysis.html">Dot Patterns</a></li><li class="breadcrumb-item"><a href="../Analysis/dotSim_compare.html">Group Comparison</a></li></ol></nav><div class="quarto-title">
+<main class="content column-body" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Analysis/dotSim_Analysis.html">Dot Patterns</a></li><li class="breadcrumb-item"><a href="../Analysis/dotSim_compare.html">Similarity Comparisons</a></li></ol></nav><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Dot Pattern Similarity Analysis</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
@@ -275,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 7, 2024</p>
+      <p class="date">June 14, 2024</p>
     </div>
   </div>
   
@@ -285,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">ggplot2</span>, <span class="va">here</span>, <span class="va">patchwork</span>, </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">ggplot2</span>, <span class="va">here</span>, <span class="va">patchwork</span>, </span>
 <span>  <span class="va">conflicted</span>, <span class="va">jsonlite</span>,<span class="va">stringr</span>, <span class="va">gt</span>, <span class="va">knitr</span>, <span class="va">kableExtra</span>, </span>
 <span>  <span class="va">lubridate</span>,<span class="va">ggh4x</span>, <span class="va">lmerTest</span><span class="op">)</span></span>
 <span><span class="fu">walk</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dplyr"</span>, <span class="st">"lmerTest"</span><span class="op">)</span>, <span class="va">conflict_prefer_all</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -346,7 +353,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># cat_sim_test |&gt; </span></span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># cat_sim_test |&gt; </span></span>
 <span><span class="co">#   group_by(condit,quartile) |&gt; </span></span>
 <span><span class="co">#   summarize(mean_resp=mean(resp),mean_corr=mean(Corr),n=n_distinct(file), .groups="drop") </span></span>
 <span></span>
@@ -376,7 +383,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span>,<span class="va">ms</span>,<span class="va">sim_group</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarize</span><span class="op">(</span>resp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span>,corr<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Corr</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>ms<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">ms</span>,levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -394,7 +401,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="correlations-with-accuracy-in-hu-nosofsky-2024" class="level2"><h2 class="anchored" data-anchor-id="correlations-with-accuracy-in-hu-nosofsky-2024">Correlations with Accuracy in Hu &amp; Nosofsky 2024</h2>
 <section id="assess-of-patterns-in-various-binnings---e.g.-quartile-decile" class="level4"><h4 class="anchored" data-anchor-id="assess-of-patterns-in-various-binnings---e.g.-quartile-decile">Assess # of patterns in various binnings - e.g.&nbsp;quartile, decile</h4>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># bin data by rating (resp) into quartiles</span></span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># bin data by rating (resp) into quartiles</span></span>
 <span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="va">cat_sim</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Quartile <span class="op">=</span> <span class="fu">ntile</span><span class="op">(</span><span class="va">resp</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">|&gt;</span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">Quartile</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -448,7 +455,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t2</span> <span class="op">|&gt;</span> <span class="fu">kbl</span><span class="op">(</span>caption<span class="op">=</span><span class="st">"Deciles"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t2</span> <span class="op">|&gt;</span> <span class="fu">kbl</span><span class="op">(</span>caption<span class="op">=</span><span class="st">"Deciles"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Deciles</caption>
@@ -522,7 +529,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t3</span> <span class="op">|&gt;</span> <span class="fu">kbl</span><span class="op">(</span>caption<span class="op">=</span><span class="st">"Extreme Groups"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">t3</span> <span class="op">|&gt;</span> <span class="fu">kbl</span><span class="op">(</span>caption<span class="op">=</span><span class="st">"Extreme Groups"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Extreme Groups</caption>
@@ -556,7 +563,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sbjCode</span>,<span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarize</span><span class="op">(</span>resp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">condit</span>,y<span class="op">=</span><span class="va">resp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -601,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <section id="quartiles-and-deciles" class="level4"><h4 class="anchored" data-anchor-id="quartiles-and-deciles">Quartiles and Deciles</h4>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Quartile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu">ntile</span><span class="op">(</span><span class="va">resp</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">Quartile</span>,y<span class="op">=</span><span class="va">Corr</span>,fill<span class="op">=</span><span class="va">Quartile</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="va">stat_bar</span> <span class="op">+</span> </span>
@@ -672,7 +679,7 @@ Figure&nbsp;3: 2024 CatLearn accuracy by different similarity rating groups
 </div>
 </section><section id="extreme-similarity-rating-groups" class="level4"><h4 class="anchored" data-anchor-id="extreme-similarity-rating-groups">Extreme similarity rating groups</h4>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p9</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p9</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y<span class="op">=</span><span class="va">Corr</span>,x<span class="op">=</span><span class="va">Pattern.Type</span>, fill<span class="op">=</span><span class="va">sim_group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="va">stat_bar</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>title<span class="op">=</span><span class="st">"Group by Pattern Type"</span>,y<span class="op">=</span><span class="st">"CatLearn Accuracy"</span>, fill<span class="op">=</span><span class="st">"Similarity Rating Group"</span><span class="op">)</span></span>
 <span></span>
@@ -709,7 +716,7 @@ Figure&nbsp;4: 2024 CatLearn accuracy by different similarity rating groups
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># trSim1 &lt;- cat_sim |&gt; filter(Phase==1) |&gt; </span></span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># trSim1 &lt;- cat_sim |&gt; filter(Phase==1) |&gt; </span></span>
 <span><span class="co">#   group_by(condit,Block) |&gt; </span></span>
 <span><span class="co">#   mutate(Quartile = as.factor(ntile(resp, 4))) |&gt; </span></span>
 <span><span class="co">#   ggplot(aes(x=Block,y=Corr, fill=Quartile)) + stat_bar+  facet_wrap(~condit)  +</span></span>
@@ -759,7 +766,7 @@ Figure&nbsp;5: Training accuracy by block and similarity rating
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">trIndv</span> <span class="op">&lt;-</span> <span class="va">cat_sim</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">1</span>, <span class="op">!</span><span class="op">(</span><span class="va">sim_group</span><span class="op">==</span><span class="st">"Medium"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">trIndv</span> <span class="op">&lt;-</span> <span class="va">cat_sim</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Phase</span><span class="op">==</span><span class="fl">1</span>, <span class="op">!</span><span class="op">(</span><span class="va">sim_group</span><span class="op">==</span><span class="st">"Medium"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span>,<span class="va">Block</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Quartile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu">ntile</span><span class="op">(</span><span class="va">resp</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">Block</span>,y<span class="op">=</span><span class="va">Corr</span>, col<span class="op">=</span><span class="va">sim_group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -793,7 +800,7 @@ Figure&nbsp;6: Training accuracy by block and similarity rating
 </div>
 </section></section><section id="correlations-between-similarity-ratings-and-catlearn-accuracy" class="level3"><h3 class="anchored" data-anchor-id="correlations-between-similarity-ratings-and-catlearn-accuracy">Correlations between similarity ratings and CatLearn accuracy</h3>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">resp</span>,y<span class="op">=</span><span class="va">Corr</span>,col<span class="op">=</span><span class="va">Pattern.Type</span>,fill<span class="op">=</span><span class="va">Pattern.Type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">cat_sim_test</span> <span class="op">|&gt;</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">resp</span>,y<span class="op">=</span><span class="va">Corr</span>,col<span class="op">=</span><span class="va">Pattern.Type</span>,fill<span class="op">=</span><span class="va">Pattern.Type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span> <span class="fu">labs</span><span class="op">(</span>y<span class="op">=</span><span class="st">"CatLearn Accuracy"</span>, x<span class="op">=</span><span class="st">"Similarity Rating"</span><span class="op">)</span></span>
@@ -833,7 +840,7 @@ Figure&nbsp;7: Correlations between similarity ratings and CatLearn accuracy
 </div>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#cor(cat_sim$resp,cat_sim$Corr)</span></span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#cor(cat_sim$resp,cat_sim$Corr)</span></span>
 <span></span>
 <span> <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">Corr</span> <span class="op">~</span> <span class="va">resp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">sbjCode</span><span class="op">)</span>, data<span class="op">=</span><span class="va">cat_sim</span><span class="op">)</span></span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -866,7 +873,7 @@ Correlation of Fixed Effects:
      (Intr)
 resp -0.888</code></pre>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">Corr</span> <span class="op">~</span> <span class="va">resp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">+</span>  <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">sbjCode</span><span class="op">)</span>, data<span class="op">=</span><span class="va">cat_sim</span><span class="op">)</span></span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">Corr</span> <span class="op">~</span> <span class="va">resp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">+</span>  <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">sbjCode</span><span class="op">)</span>, data<span class="op">=</span><span class="va">cat_sim</span><span class="op">)</span></span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>Linear mixed model fit by REML. t-tests use Satterthwaite's method [
@@ -901,7 +908,7 @@ Correlation of Fixed Effects:
      (Intr)
 resp -0.461</code></pre>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">Corr</span> <span class="op">~</span> <span class="va">resp</span><span class="op">*</span><span class="va">condit</span> <span class="op">+</span>  <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">sbjCode</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">condit</span><span class="op">|</span><span class="va">Pattern.Type</span><span class="op">)</span>, data<span class="op">=</span><span class="va">cat_sim</span><span class="op">)</span></span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span> <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">Corr</span> <span class="op">~</span> <span class="va">resp</span><span class="op">*</span><span class="va">condit</span> <span class="op">+</span>  <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">sbjCode</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">condit</span><span class="op">|</span><span class="va">Pattern.Type</span><span class="op">)</span>, data<span class="op">=</span><span class="va">cat_sim</span><span class="op">)</span></span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>Linear mixed model fit by REML. t-tests use Satterthwaite's method [
@@ -950,7 +957,7 @@ rsp:cndthgh  0.391 -0.680 -0.391 -0.396 -0.757  0.486      0.469
 optimizer (nloptwrap) convergence code: 0 (OK)
 boundary (singular) fit: see help('isSingular')</code></pre>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># m1 &lt;- lmer(Corr ~ sim_group +  (1|sbjCode), data=cat_sim)</span></span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># m1 &lt;- lmer(Corr ~ sim_group +  (1|sbjCode), data=cat_sim)</span></span>
 <span><span class="co"># summary(m1)</span></span>
 <span></span>
 <span><span class="co"># m1 &lt;- lmer(Corr ~ sim_group*condit +  (1|sbjCode), data=cat_sim)</span></span>
@@ -961,7 +968,7 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Quartile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu">ntile</span><span class="op">(</span><span class="va">resp</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">summarise</span><span class="op">(</span>mean_rating<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span>,mean_acc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Corr</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 3
@@ -972,7 +979,7 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 3 mixed         4.81    0.710
 4 high          4.86    0.581</code></pre>
 </div>
-<details class="code-fold"><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
+<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cat_sim_test</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Quartile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu">ntile</span><span class="op">(</span><span class="va">resp</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">condit</span>,<span class="va">Pattern.Type</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">summarise</span><span class="op">(</span>mean_rating<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span>,mean_acc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Corr</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 4
@@ -1481,8 +1488,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation column-body"><div class="nav-page nav-page-previous">
-      <a href="../Analysis/dotSim_Analysis.html" class="pagination-link" aria-label="Similarity Ratings">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Similarity Ratings</span>
+      <a href="../Analysis/dotSim_Analysis.html" class="pagination-link" aria-label="Rating Data Check">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Rating Data Check</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -1952,7 +1959,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>site created with <a href="https://cran.r-project.org/">R</a> and <a href="https://quarto.org">quarto</a></p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Analysis/dotSim_compare.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/edit/main/Analysis/dotSim_compare.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/dot_variability/blob/main/Analysis/dotSim_compare.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tegorman13/dot_variability/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
 <li class="nav-item">
@@ -1963,7 +1970,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </ul>
 </div>
   </div>
-</footer><script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","selector":".lightbox","loop":false,"closeEffect":"zoom"});
+</footer><script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","loop":false,"closeEffect":"zoom","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
