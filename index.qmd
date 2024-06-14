@@ -1,13 +1,27 @@
 ---
 title: "Dot Pattern Similarity Project"
+page-layout: full
 listing:
+  id: sample-listings
+  type: grid #default
+  sort: "date"
+  image-height: 250px
   contents:
     - Analysis/dotSim_compare.qmd
     - Analysis/dotSim_Analysis.qmd
     - Stimulii/plotDots.qmd
     - Analysis/dp_24.qmd
     - Analysis/dp_22.qmd
+    - Analysis/fixed_proto_pilot.qmd
+    - Analysis/all_exp.qmd
     - Task/Task.qmd
     # - "reports/*.qmd"
     # - "lab-notes/*reports.qmd"
 ---
+
+
+
+<br><br>
+
+::: {#sample-listings}
+:::

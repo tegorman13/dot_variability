@@ -1,11 +1,18 @@
 ---
-title: Dot Pattern Similarity Analysis
+title: Dot Pattern Similarity Rating Analysis
 date: last-modified
 lightbox: true
 aliases: 
   - /dotSim_compare.html
 toc: true
 page-layout: full
+format:
+  html: 
+    grid:
+      sidebar-width: 200px
+      body-width: 1250px
+      margin-width: 140px
+      gutter-width: 1.0rem
 toc-depth: 3
 code-fold: true
 code-tools: true
@@ -24,6 +31,10 @@ options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("R/", .x, ".R"))))
 mc24_proto <- read.csv(here("Stimulii","mc24_prototypes.csv")) |> mutate(set=paste0(sbjCode,"_",condit)) 
 sbj_cat <- read.csv(here("data","mc24_sbj_cat.csv")) |> mutate(condit=factor(condit,levels=c("low","medium","mixed","high") ))
+
+
+theme_set(theme_nice_b())
+
 
 dfiles <- list(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
 
@@ -82,7 +93,8 @@ cat_sim_test <- cat_sim |>
 
 
 ```{r}
-
+#| fig-width: 11
+#| fig-height: 9
 
 # cat_sim_test |> 
 #   group_by(condit,quartile) |> 
@@ -130,7 +142,8 @@ cat_sim_test |>
 
 #### Assess # of patterns in various binnings - e.g. quartile, decile
 ```{r}
-
+#| fig-width: 11
+#| fig-height: 9
 # bin data by rating (resp) into quartiles
 t1 <- cat_sim |> 
   mutate(Quartile = ntile(resp, 4))|>

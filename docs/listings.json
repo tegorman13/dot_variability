@@ -2,12 +2,14 @@
   {
     "listing": "/index.html",
     "items": [
-      "/Stimulii/plotDots.html",
       "/Analysis/dotSim_Analysis.html",
-      "/Analysis/dotSim_compare.html",
-      "/Analysis/dp_22.html",
+      "/Stimulii/plotDots.html",
       "/Analysis/dp_24.html",
-      "/Task/Task.html"
+      "/Analysis/dp_22.html",
+      "/Task/Task.html",
+      "/Analysis/fixed_proto_pilot.html",
+      "/Analysis/dotSim_compare.html",
+      "/Analysis/all_exp.html"
     ]
   }
 ]

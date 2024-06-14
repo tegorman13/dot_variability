@@ -23,7 +23,7 @@ website:
   title: "Dot Pattern Variability"
   repo-url: https://github.com/tegorman13/dot_variability
   site-url: "https://tegorman13.github.io/dot_variability"
-  repo-actions: [source, issue]
+  repo-actions: [source]
   reader-mode: true
   page-navigation: true
   sidebar:
@@ -35,7 +35,7 @@ website:
     contents:
       - href: index.qmd
         text: Home
-      - section: "Empirical Analysis"
+      - section: "Analysis"
         contents:
           - href: Analysis/dp_22.qmd
             text: Hu & Nosofsky 2022

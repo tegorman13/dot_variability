@@ -21,15 +21,7 @@ execute:
 ---
 
 
-<details>
 
-<summary><b> Mingjia's Report {{< fa file-lines >}} </b></summary>
-
-```{=html}
-<embed src="/reports/technical_report_v1.pdf" width="1000px" height="900px" />
-```
-
-</details>
 
 
 | Stage             | Detail                                                 |
@@ -54,7 +46,15 @@ execute:
 
 
 
+<details>
 
+<summary><b> Mingjia's Report {{< fa file-lines >}} </b></summary>
+
+```{=html}
+<embed src="/reports/technical_report_v1.pdf" width="1000px" height="900px" />
+```
+
+</details>
 
 
 

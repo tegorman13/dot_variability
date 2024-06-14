@@ -84,8 +84,8 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 - **REP:** Repeating Protocol
 - **NREP:** Nonrepeating Protocol
 - **Hu & Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training patterns on category learning and generalization.
-- **Hu & Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization.
-- The **Fixed Prototype Pilot Study** aimed to understand how training pattern variability influences classification learning and generalization using fixed prototypes. 
+- **Hu & Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization. Each subject has unique prototype set. 
+- **Fixed Prototype Pilot Study** examined the impact of different training distortion levels on category learning and generalization. Fixed set of prototypes across all subjects. 
 - All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.
 - Dot pattern distortions were created using a modified Posner-Keele (1968) procedure. Low, medium and high distortions displaced the dots by an average of 4, 6, and 7.7 Posner-levels respectively.
 
@@ -101,25 +101,42 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 
 ```{r}
 
-pacman::p_load(dplyr,purrr,tidyr,ggplot2,readr,here, patchwork, conflicted)
+pacman::p_load(dplyr,purrr,tidyr,ggplot2,readr,here, patchwork, conflicted,ggh4x)
 conflict_prefer_all("dplyr", quiet = TRUE)
 source(here::here("R/fun_plot.R"))
 
 lmc22 <- readRDS(here("data","lmc22.rds")) |> mutate(Pattern_Token = case_when(
-      Pattern.Type2 == "Trained.Med" ~ "old",
+      Pattern.Type == "Trained.Med" ~ "old",
       Pattern.Type2 == "Prototype"~ "prototype",
       Pattern.Type2 == "New.Low"  ~ "new_low",
       Pattern.Type2 == "New.Med" ~ "new_med",
       Pattern.Type2 == "New.High" ~ "new_high"
-    )) #rename("Pattern_Token"=Pattern.Type2)
+    )) |> # set phase="Training" when Phase==1, and phase="Test" when Phase==2
+  mutate(phase = case_when(
+    Phase==1 ~ "Training",
+    Phase==2 ~ "Test"
+  ), 
+  Stage = case_when(
+  Stage=="Med" ~ "Middle",
+  TRUE ~ Stage
+)) 
+  
+  
+
 mc24 <- readRDS(here("data","mc24.rds"))
-fp24 <- readRDS(here("data","fixed_proto24.rds"))
+fp24 <- readRDS(here("data","fixed_proto24.rds")) |>
+  mutate(Stage = case_when(
+    phase=="Test" ~ "Test",
+    TRUE ~ Stage
+  )) 
 
 all_data <- fp24 |> select(-pool_index) |> rbind(mc24) |> rbind(lmc22)
 all_data$Pattern_Token = factor(all_data$Pattern_Token,levels=c("old","prototype","new_low","new_med","new_high","special")) 
 all_data$condit = factor(all_data$condit,levels=c("low","medium","mixed","high","nrep","rep"))
 all_data$exp = factor(all_data$exp,levels=c("lmc22","mc24","fixed_proto"))
-
+all_data$exp2 = factor(all_data$exp,labels=c("Hu & Nosofsky 2022","Hu & Nosofsky 2024","Fixed Prototype Pilot"))
+all_data$Stage = factor(all_data$Stage,levels=c("Start","Middle","End","Test"))
+all_data$phase = factor(all_data$phase,levels=c("Training","Test"))
 
 theme_set(theme_nice())
 
@@ -128,6 +145,22 @@ xt <- seq(1,10,1)
 eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
            scale_y_continuous(breaks=yt,limits=c(0,1)),
            scale_x_continuous(breaks=xt))
+
+
+
+dtf <- all_data |> filter(Stage=="End") |> 
+  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase) |>
+  summarize(propCor=mean(Corr)) |>
+  arrange(-propCor) |>
+  group_by(exp2,condit) |> # bin into quartile by propCor
+  mutate(quartile = ntile(propCor, 4), finalTrain=propCor) 
+
+
+all_data <- all_data |> 
+  select(-quartile) |> # remove original quartile var
+  left_join(dtf |> 
+              select(sbjCode,condit,quartile,exp2), by=c("sbjCode","condit","exp2"))
+
 
 # Check trial totals
 # all_data |> filter(Phase==1) |> group_by(sbjCode,condit,exp) |> summarise(n=max(trial)) |> 
@@ -158,13 +191,16 @@ eg <- list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
 ```{r}
 #| fig-width: 13
 #| fig-height: 11
+##| fig-cap: "lmc22: Hu & Nosofsky 2022; mc24: Hu & Nosofsky 2024; fixed_proto: Fixed Prototype Pilot Study"
 
+
+  
 theme_set(theme_nice_b())
 
 all_data |> filter(Phase==2, Pattern_Token != "special") |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  group_by(sbjCode, condit, Pattern_Token,exp2) |>
   summarize(Corr=mean(Corr)) |>
-  group_by(condit,Pattern_Token,exp) |> 
+  group_by(condit,Pattern_Token,exp2) |> 
   summarise(empirical_stat = mean(Corr), 
             sem = sd(Corr)/sqrt(length(Corr)),
             ci_lower = mean(Corr) - sem,
@@ -174,8 +210,11 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
   geom_point() +
   geom_line(aes(group = condit)) +
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper)) +
-  labs(x="Item Type",y="Accuracy",col="Training Condition") +
-  facet_wrap(~exp)
+  labs(x="Item Type",y="Accuracy",col="Training Condition",title="Testing Performance") +
+  facet_wrap(~exp2)
+
+
+
 
 
 
@@ -187,37 +226,23 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
 #| fig-height: 11
 
 all_data |> filter(Phase==2, Pattern_Token != "special") |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  group_by(sbjCode, condit, Pattern_Token,exp2) |>
   summarize(Corr=mean(Corr)) |>
-  group_by(condit,Pattern_Token,exp) |> 
+  group_by(condit,Pattern_Token,exp2) |> 
   summarise(empirical_stat = mean(Corr), 
             sem = sd(Corr)/sqrt(length(Corr)),
             ci_lower = mean(Corr) - sem,
             ci_upper = mean(Corr) + sem) |>
   mutate(method = "standard error") |> 
-  ggplot(aes(x=condit, y=empirical_stat, col=exp, group=exp)) +  
+  ggplot(aes(x=condit, y=empirical_stat, col=exp2, group=exp2)) +  
   geom_point() +
-  geom_line(aes(group = exp)) +
+  geom_line(aes(group = exp2)) +
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper)) +
   facet_wrap(~Pattern_Token) + 
-    labs(x="Training Condition",y="Accuracy",col="Study") 
+    labs(x="Training Condition",y="Accuracy",col="Study",title="Testing Performance") 
 
 
-all_data |> filter(Phase==2, Pattern_Token != "special") |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
-  summarize(Corr=mean(Corr)) |>
-  group_by(condit,Pattern_Token,exp) |> 
-  summarise(empirical_stat = mean(Corr), 
-            sem = sd(Corr)/sqrt(length(Corr)),
-            ci_lower = mean(Corr) - sem,
-            ci_upper = mean(Corr) + sem) |>
-  mutate(method = "standard error") |> 
-  ggplot(aes(x=condit, y=empirical_stat, col=Pattern_Token, group=Pattern_Token)) +  
-  geom_point() +
-  geom_line(aes(group = Pattern_Token)) +
-  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper)) +
-  facet_wrap(~exp,scale="free_x") + 
-  labs(x="Training Condition",y="Accuracy",col="Study") 
+
 
 
 ```
@@ -230,47 +255,90 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
 #| fig-height: 11
 
 all_data |> filter(Phase==2, Pattern_Token != "special") |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
-  summarize(Corr=mean(Corr)) |>
-  group_by(condit,Pattern_Token,exp) |> 
+  group_by(sbjCode, condit, Pattern_Token,exp2) |>
+  summarize(Corr=mean(Corr)) |> 
+  group_by(condit,Pattern_Token,exp2) |> 
   summarise(empirical_stat = mean(Corr), 
             sem = sd(Corr)/sqrt(length(Corr)),
             ci_lower = mean(Corr) - sem,
             ci_upper = mean(Corr) + sem) |>
   mutate(method = "standard error") |> 
-  ggplot(aes(x=Pattern_Token, y=empirical_stat, col=exp, group=exp)) +  
+  ggplot(aes(x=Pattern_Token, y=empirical_stat, col=exp2, group=exp2)) +  
   geom_point() +
-  geom_line(aes(group = exp)) +
+  geom_line(aes(group = exp2)) +
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper)) +
   facet_wrap(~condit) + 
-  labs(x="Item Type",y="Accuracy",col="Study") 
+  labs(x="Item Type",y="Accuracy",col="Study",title="Testing Performance") 
+
+
+```
+
+
+:::
+
+
+
+## Training & Testing shown together
+::: {.column-page-right}
+```{r}
+#| fig-width: 16
+#| fig-height: 10
+
+theme_set(theme_nice())
+
+all_data |> 
+  filter(Pattern_Token != "special") |> 
+  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase) |>
+  summarize(Corr=mean(Corr)) |>
+  group_by(condit,Pattern_Token,exp2,Stage,Phase,phase) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr)/sqrt(length(Corr)),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem) |>
+  mutate(method = "standard error") |> 
+  ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
+  geom_point(aes(shape=phase),color="black",size=3.5) +
+  geom_line(aes(group = condit)) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
+  geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
+  facet_wrap(~exp2,scale="free_x") + 
+  labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance", 
+       subtitle="Training binned into 3 stages, and Testing Performance for each Item Type") +
+  theme(ggh4x.axis.nestline  = element_line(colour = "black")) + 
+  scale_x_discrete(guide = "axis_nested")
+
 
 
 ```
 
 
 
-### alt
+
 ```{r}
+#| fig-width: 15
+#| fig-height: 12
 
-all_data |> filter(Phase==2) |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
+all_data |> 
+  filter(Pattern_Token != "special") |> 
+  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase,quartile) |>
   summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x=condit, y=Corr, col=exp, group=exp)) +  
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar", fun.data=mean_se) +
-  facet_wrap(~Pattern_Token,scales="free_x") +
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
-
-
-all_data |> filter(Phase==2, Pattern_Token != "special") |>
-  group_by(sbjCode, condit, Pattern_Token,exp) |>
-  summarize(Corr=mean(Corr)) |>
-  ggplot(aes(x=Pattern_Token, y=Corr, col=condit, group=condit)) +  
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar", fun.data=mean_se) +
-  facet_wrap(~exp,scales="free_x") +
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") 
+  group_by(condit,Pattern_Token,exp2,Stage,Phase,phase,quartile) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr)/sqrt(length(Corr)),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem) |>
+  mutate(method = "standard error",quartile=factor(quartile,levels=c("1","2","3","4"))) |> 
+  ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
+  geom_point(aes(shape=phase),color="black",size=3.5) +
+  geom_line(aes(group = condit)) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
+  geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
+  facet_wrap(exp2~quartile,scale="free_x") + 
+  labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance - Quartiles", 
+       subtitle="Training binned into 3 stages, and Testing Performance for each Item Type\nSplit into 4 quartiles based on end of training performance (1=worst; 4=best)") +
+  theme(ggh4x.axis.nestline  = element_line(colour = "black"),
+        axis.text.x = element_text(family = "Manrope Light", face = "plain", size = rel(0.8))) + 
+  scale_x_discrete(guide = "axis_nested")
 ```
 
 :::
@@ -280,7 +348,41 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
 
 ::: {.panel-tabset}
 
-### Training Comparison
+
+### Facet by Exp
+
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+nbins=10
+all_data |> filter(Phase==1) |>
+  group_by(sbjCode, condit,exp2) |> 
+  mutate(nTrain=max(trial),
+         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
+  group_by(sbjCode,train_bin, condit,exp2) |> 
+  summarize(Corr=mean(Corr),.groups="keep") |>
+  ggplot(aes(x=train_bin,y=Corr,fill=condit,col=condit)) +
+  stat_summary(geom="line",fun=mean)+
+  stat_summary(geom="errorbar",fun.data=mean_se) +
+  facet_wrap(~exp2,scales="free_x") +
+   labs(title="Training Performance - All Sbjs.", y="Accuracy",col="Training Condition", x="Trial Bin",
+        subtitle="Training accuracy - 10 bins") +
+  scale_x_continuous(breaks=seq(1,nbins)) +
+  scale_y_continuous(breaks=round(seq(0,1,length.out=7), 2)) +
+  geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5)
+
+
+```
+
+
+
+
+
+
+### Original Blocks
+
+- Hu & Nosofsky 2022 had 15 blocks of 15 trials each - 225 trials total
+- Hu & Nosofsky 2024 & Fixed Prototype pilot each had 10 blocks of 27 trials each - 270 trials total
 
 ```{r}
 #| fig-width: 12
@@ -288,24 +390,15 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
 ###| layout-ncol: 2 
 
 all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit, Pattern_Token,Block,exp) |>
+  group_by(sbjCode, condit, Pattern_Token,Block,exp2) |>
   summarize(Corr=mean(Corr),.groups="keep") |>
-  ggplot(aes(x=Block, y=Corr, color=interaction(exp,condit))) +  
+  ggplot(aes(x=Block, y=Corr, color=interaction(exp2,condit))) +  
   stat_summary(geom="line",fun=mean)+
   stat_summary(geom="errorbar", fun.data=mean_se,width=.1) +
   labs(title="Training Performance - All Sbjs.", y="Accuracy") +   #eg +  
   theme(legend.position = "top") + list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
            scale_y_continuous(breaks=yt,limits=c(0,1)),
            scale_x_continuous(breaks=seq(1:15)))
-
-
-
-
-
-
-
-
-
 
 ```
 
@@ -314,30 +407,11 @@ all_data |> filter(Phase==1) |>
 #| fig-width: 12
 #| fig-height: 10
 ###| layout-ncol: 2 
-
 nbins=10
 all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit,exp) |> 
+  group_by(sbjCode, condit,exp2) |> 
   mutate(nTrain=max(trial),
-         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
-  group_by(sbjCode,train_bin, condit,exp) |> 
-  summarize(Corr=mean(Corr),.groups="keep") |>
-  ggplot(aes(x=train_bin,y=Corr,fill=condit,col=condit)) +
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar",fun.data=mean_se) +
-  facet_wrap(~exp,scales="free_x") 
-```
-
-
-
-### Facet by Exp
-
-```{r}
-
-all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit,exp) |> 
-  mutate(nTrain=max(trial),
-         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
+        train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
   group_by(sbjCode,train_bin, condit,exp) |> 
   summarize(Corr=mean(Corr),.groups="keep") |>
   ggplot(aes(x=train_bin, y=Corr, color=interaction(exp,condit))) +  
@@ -345,88 +419,92 @@ all_data |> filter(Phase==1) |>
   stat_summary(geom="errorbar", fun.data=mean_se,width=.1) +
   labs(title="Training Performance - All Sbjs.", y="Accuracy") +   #eg +  
   theme(legend.position = "top") + list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
-           scale_y_continuous(breaks=yt,limits=c(0,1)),
-           scale_x_continuous(breaks=seq(1:15)))
-```
+          scale_y_continuous(breaks=yt,limits=c(0,1)),
+          scale_x_continuous(breaks=seq(1:15)))
 
 
 
-### alt
-```{r}
-#| fig-width: 12
-#| fig-height: 10
-
-
-all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit, Pattern_Token,Block,exp) |>
-  summarize(Corr=mean(Corr),.groups="keep") |>
-  ggplot(aes(x=Block, y=Corr, color=exp)) +  
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar", fun.data=mean_se,width=.1) +
-  facet_wrap(~condit,scales="free_x") + 
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") +
-  theme(legend.position = "top") + list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
-           scale_y_continuous(breaks=yt,limits=c(0,1)),
-           scale_x_continuous(breaks=seq(1:15)))
-
-
-all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit,Block,exp) |>
-  summarize(Corr=mean(Corr),.groups="keep") |>
-  ggplot(aes(x=interaction(condit,Block), y=Corr, col=as.factor(Block))) +  
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar", fun.data=mean_se,width=.1) +
-  facet_wrap(~exp,scales="free_x") + 
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") +
-  theme(legend.position = "top",  ggh4x.axis.nestline  = element_line(colour = "black")) + 
-  list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
-   scale_y_continuous(breaks=yt,limits=c(0,1)))
-
-
-
-
-all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit, Pattern_Token,Block,exp) |>
-  summarize(Corr=mean(Corr),.groups="keep") |>
-  ggplot(aes(x=Block, y=Corr, color=interaction(condit,exp))) +  
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar", fun.data=mean_se,width=.1) +
-  labs(title="Training Performance - All Sbjs.", y="Accuracy") +   #eg +  
-  theme(legend.position = "top") + list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
-           scale_y_continuous(breaks=yt,limits=c(0,1)),
-           scale_x_continuous(breaks=seq(1:15)))
-
-```
-
-
-### Alt
-```{r}
-
-all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit, Pattern_Token,Block,exp) |>
-  summarize(Corr=mean(Corr),.groups="keep") |>
-  ggplot(aes(x=Block, y=Corr, color=condit)) +  
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar", fun.data=mean_se,width=.1) +
-  facet_wrap(~exp,scales="free_x") + 
-  labs(title="Testing Performance - All Sbjs.", y="Accuracy") +
-  #eg +  
-  theme(legend.position = "top") + list(geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5),
-           scale_y_continuous(breaks=yt,limits=c(0,1)),
-           scale_x_continuous(breaks=seq(1:15)))
 ```
 
 ::: 
 
+*click on plots to enlarge*
 
-## Separated by Experiment
-
-::: {.panel-tabset}
-
-
-### p1
 ```{r}
-#| layout-ncol: 2 
+#| fig-width: 12
+#| fig-height: 11
+#| 
+nbins=10
+
+grp_avg <- all_data |> filter(Phase==1) |>
+  group_by(sbjCode, condit,exp2) |> 
+  mutate(nTrain=max(trial),
+         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
+  group_by(sbjCode,train_bin, condit,exp2) |> 
+  summarize(Corr=mean(Corr),.groups="keep") 
+
+## Version of plot above, with additional black line that represents each group average learning curve
+all_data |> filter(Phase==1) |>
+  group_by(sbjCode, condit,exp2) |> 
+  mutate(nTrain=max(trial),
+         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
+  group_by(sbjCode,train_bin, condit,exp2) |> 
+  summarize(Corr=mean(Corr),.groups="keep") |>
+  ggplot(aes(x=train_bin,y=Corr,group=sbjCode,fill=condit,col=condit)) +
+  stat_summary(geom="line",fun=mean)+
+  stat_summary(geom="errorbar",fun.data=mean_se) +
+ # geom_line(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),color="black") +
+  stat_summary(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),geom="line",fun=mean,color="black",size=1.2)+
+  stat_summary(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),geom="errorbar",fun.data=mean_se,color="black",width=.4)+
+  facet_wrap(exp2~condit,scales="free_x") +
+   labs(title="Training Performance - individual learning curves.", y="Accuracy",col="Training Condition", x="Trial Bin",
+        subtitle="Training accuracy - each line is an individual sbj.\n Black lines are group averages") +
+  scale_x_continuous(breaks=seq(1,nbins)) +
+  scale_y_continuous(breaks=round(seq(0,1,length.out=7), 2)) +
+  geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5)
+
+
+```
+
+
+<!-- ::: {.panel-tabset} -->
+
+<!-- ### p1 -->
+
+```{r}
+#| eval: false
+##| layout-ncol: 2 
+
+
+
+all_data |> filter(Phase==2, Pattern_Token != "special") |>
+  group_by(sbjCode, condit, Pattern_Token,exp) |>
+  summarize(Corr=mean(Corr)) |>
+  group_by(sbjCode,condit,Pattern_Token,exp) |> 
+  mutate(method = "standard error") |> 
+  ggplot(aes(x=Pattern_Token, y=Corr, col=condit, group=sbjCode)) +  
+  geom_point() +
+  geom_line(aes(group = sbjCode)) +
+  labs(x="Item Type",y="Accuracy",col="Training Condition") +
+  facet_wrap(condit~exp)
+
+
+all_data |> 
+  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase) |>
+  summarize(Corr=mean(Corr)) |>
+  group_by(condit,Pattern_Token,exp2,Stage,Phase) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr)/sqrt(length(Corr)),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem) |>
+  mutate(method = "standard error") |> 
+  ggplot(aes(x=Stage, y=empirical_stat, col=Pattern_Token, group=Pattern_Token)) +  
+  geom_point() +
+  geom_line(aes(group = Pattern_Token)) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
+  facet_wrap(exp2~condit,scale="free_x") + 
+  labs(x="Training Condition",y="Accuracy",col="Item Type",title="Testing Performance") 
+
 
 
 fp24 |> filter(Phase==2) |>
@@ -469,9 +547,10 @@ lmc22 |> filter(Phase==2) |>
 ```
 
 
-### p2
+<!-- ### p2 -->
 
 ```{r}
+#| eval: false
 #| fig-width: 11
 #| fig-height: 13
 #| layout-ncol: 2 
@@ -480,6 +559,27 @@ lmc22 |> filter(Phase==2) |>
 #|   - "Line Plot 2"
 #|   - "Line Plot 4"
 #|   - "Line Plot 5"
+
+
+
+all_data |> filter(Phase==2) |>
+  group_by(sbjCode, condit, Pattern_Token,exp2) |>
+  summarize(Corr=mean(Corr)) |>
+  group_by(condit,Pattern_Token,exp2) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr)/sqrt(length(Corr)),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem) |>
+  mutate(method = "standard error") |> 
+  ggplot(aes(x=condit, y=empirical_stat, col=Pattern_Token, group=Pattern_Token)) +  
+  geom_point() +
+  geom_line(aes(group = Pattern_Token)) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
+  facet_wrap(~exp2,scale="free_x") + 
+  labs(x="Training Condition",y="Accuracy",col="Item Type",title="Testing Performance") 
+
+
+
 
 all_data |> filter(Phase==2) |>
   group_by(sbjCode, condit, Pattern_Token) |>
@@ -518,4 +618,4 @@ all_data |> filter(Phase==2) |>
 
 ```
 
-:::
+<!-- ::: -->

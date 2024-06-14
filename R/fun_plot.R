@@ -7,7 +7,6 @@ theme_blank <- theme(
 )
 
 
-
 stat_bar <- list(stat_summary(fun=mean, geom="bar", position=position_dodge()),
                  stat_summary(fun.data=mean_se, geom="errorbar", color="black", position=position_dodge(), linewidth=.5))
 
@@ -103,19 +102,15 @@ plot_dotsAll_old2 <- function(df) {
 
 
 
-
-
-
-
 plot_dotsAll_orig <- function(df) {
   # Transform the dataframe to a long format for plotting
   df_long <- df %>%
     pivot_longer(cols = starts_with("x") | starts_with("y"),
-                 names_pattern = "([xy])(\\d)",
-                 names_to = c(".value", "dot")) %>%
+                names_pattern = "([xy])(\\d)",
+                names_to = c(".value", "dot")) %>%
     group_by(id) %>%
     mutate(dot = as.numeric(dot)) %>%
-     mutate(y=-y) |>
+    mutate(y=-y) |>
     arrange(dot)
   
   plots <- list()
@@ -218,6 +213,7 @@ theme_nice_dist <- function() {
       axis.text.y = element_blank()
     )
 }
+
 
 # theme_set(theme_nice())
 
