@@ -11,6 +11,14 @@ format:
       body-width: 1250px
       margin-width: 140px
       gutter-width: 1.0rem
+  pdf: 
+    echo: false
+    mainfontoptions:
+      - "Numbers=Proportional"
+      - "Numbers=OldStyle"
+  docx:
+    echo: false
+    prefer-html: true
 toc-depth: 3
 code-fold: true
 code-tools: true
@@ -162,6 +170,9 @@ all_data <- all_data |>
               select(sbjCode,condit,quartile,exp2), by=c("sbjCode","condit","exp2"))
 
 
+html <- ifelse(knitr::pandoc_to() %in% c("html"), TRUE, FALSE)
+
+
 # Check trial totals
 # all_data |> filter(Phase==1) |> group_by(sbjCode,condit,exp) |> summarise(n=max(trial)) |> 
 #   group_by(condit,exp) |>
@@ -182,7 +193,6 @@ all_data <- all_data |>
 
 
 
-
 ## Test Stage Comparisons
 
 ::: {.panel-tabset}
@@ -193,9 +203,11 @@ all_data <- all_data |>
 #| fig-height: 11
 ##| fig-cap: "lmc22: Hu & Nosofsky 2022; mc24: Hu & Nosofsky 2024; fixed_proto: Fixed Prototype Pilot Study"
 
+if(html) theme_set(theme_nice_b()) else theme_set(theme_minimal())
 
-  
-theme_set(theme_nice_b())
+
+
+#theme_set(theme_minimal())
 
 all_data |> filter(Phase==2, Pattern_Token != "special") |>
   group_by(sbjCode, condit, Pattern_Token,exp2) |>
@@ -212,11 +224,6 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper)) +
   labs(x="Item Type",y="Accuracy",col="Training Condition",title="Testing Performance") +
   facet_wrap(~exp2)
-
-
-
-
-
 
 ```
 
@@ -240,10 +247,6 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper)) +
   facet_wrap(~Pattern_Token) + 
     labs(x="Training Condition",y="Accuracy",col="Study",title="Testing Performance") 
-
-
-
-
 
 ```
 
@@ -277,14 +280,18 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
 :::
 
 
-
 ## Training & Testing shown together
-::: {.column-page-right}
-```{r}
-#| fig-width: 16
-#| fig-height: 10
 
-theme_set(theme_nice())
+These plots show mean performance at the start, middle and end of training (first 3 points), and the testing performance for each item type (final 5 points). 
+
+*click on plots to enlarge*
+
+::: {.column-screen-right}
+```{r}
+#| fig-width: 17
+#| fig-height: 12
+
+if(html) theme_set(theme_nice())  else theme_set(theme_minimal())
 
 all_data |> 
   filter(Pattern_Token != "special") |> 
@@ -304,7 +311,8 @@ all_data |>
   facet_wrap(~exp2,scale="free_x") + 
   labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance", 
        subtitle="Training binned into 3 stages, and Testing Performance for each Item Type") +
-  theme(ggh4x.axis.nestline  = element_line(colour = "black")) + 
+  theme(ggh4x.axis.nestline  = element_line(colour = "black"), 
+  axis.text.x = element_text(face = "plain", size = rel(1.1))) + 
   scale_x_discrete(guide = "axis_nested")
 
 
@@ -337,7 +345,7 @@ all_data |>
   labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance - Quartiles", 
        subtitle="Training binned into 3 stages, and Testing Performance for each Item Type\nSplit into 4 quartiles based on end of training performance (1=worst; 4=best)") +
   theme(ggh4x.axis.nestline  = element_line(colour = "black"),
-        axis.text.x = element_text(family = "Manrope Light", face = "plain", size = rel(0.8))) + 
+        axis.text.x = element_text(face = "plain", size = rel(0.8))) + 
   scale_x_discrete(guide = "axis_nested")
 ```
 
@@ -430,8 +438,9 @@ all_data |> filter(Phase==1) |>
 
 *click on plots to enlarge*
 
+::: {.column-page-right}
 ```{r}
-#| fig-width: 12
+#| fig-width: 13
 #| fig-height: 11
 #| 
 nbins=10
@@ -465,7 +474,7 @@ all_data |> filter(Phase==1) |>
 
 
 ```
-
+:::
 
 <!-- ::: {.panel-tabset} -->
 
