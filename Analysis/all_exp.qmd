@@ -1,5 +1,9 @@
 ---
 title: Combined Experiments
+author:
+- name: Thomas Gorman
+  url: https://tegorman13.github.io/
+  orcid: 0000-0001-5366-5442
 date: last-modified
 lightbox: true
 toc: true
@@ -11,11 +15,29 @@ format:
       body-width: 1250px
       margin-width: 140px
       gutter-width: 1.0rem
-  pdf: 
+  # hikmah-manuscript-pdf:
+  #   echo: false
+  #   #output-file: "all_exp.pdf"
+  #   mainfont: "Linux Libertine O"
+  #   mainfontoptions:
+  #     - "Numbers=Proportional"
+  #     - "Numbers=OldStyle"
+  #   mathfont: "Libertinus Math"
+  pdf:
+    toc: false
     echo: false
-    mainfontoptions:
-      - "Numbers=Proportional"
-      - "Numbers=OldStyle"
+    #fig-pos: 'H'
+    mathfont: "Libertinus Math"
+    #documentclass: article
+   # papersize: letter
+    fontsize: 9.5pt
+    linestretch: 1.0
+    geometry:
+      - top=.5in     
+      - bottom=.1in  
+      - left=.25in    
+      - right=.1in  
+      - heightrounded
   docx:
     echo: false
     prefer-html: true
@@ -37,7 +59,7 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 
 *click on image to enlarge*
 
-::: {.panel-tabset}
+:::: {.panel-tabset}
 
 ### 2022 Paper
 
@@ -51,6 +73,7 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 :::
 
 ### 2024 Paper
+
 ::: {layout-nrow=2}
 ![2024 Learning Curves](/assets/2024_learning_curves.png)
 
@@ -63,22 +86,26 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 
 ### Fixed Prototype Pilot
 
-::: {layout-nrow=2}
+::: {layout-nrow=1}
 ![Pilot Learning Curves](/assets/fp_pilot_train.png)
 
 ![Pilot Test Accuracy](/assets/fp_pilot_test.png)
 :::
-:::
+::::
 
 <br><br>
 
-::: {.column-page-inset-right .smaller}
-## Comparison of Dot-Pattern Classification Studies
+
+
+
+### Comparison of Dot-Pattern Classification Studies
+
+:::: column-page-inset-right
+::: {#tbl-designs}
 
 | Study                 | **Hu & Nosofsky (2022)** | **Hu & Nosofsky (2024)** | **Fixed Prototype Pilot Study** |
 |-------------------------|---------------------------|---------------------------|----------------------------------|
 | **Publication**         | *JEP: Learning, Memory, and Cognition*   | *Memory & Cognition*        | *(unpublished pilot study)*      |
-| **Abbreviation**         | *lmc22*   | *mc24*        | *fixed_proto*      |
 | **Participants**        | - 89 Indiana University undergraduates<br>- Course credit participation<br>- Random assignment to conditions (REP or NREP)<br>- Normal or corrected vision  | - 304 Indiana University students<br>- Random assignment to conditions (low, medium, high, or mixed distortion) | Not specified                    |
 | **Training Stage**       | **Training Stage**        | **Training Stage**         | **Training Stage**                |
 | • **Procedure**         | - **REP Condition:** 15 unique patterns (5 per category), repeated across 15 blocks (**225 trials total**)<br>- **NREP Condition:** 75 unique patterns (5 per category per block), no repetitions (**225 trials total**) | - 10 blocks, 27 trials each (**270 trials total**)<br>- Different set of training patterns in each block<br>- Corrective feedback for 2 seconds after each response | - Training patterns repeated across 10 blocks with randomized presentation order within each block<br>- Four between-subject conditions: low, medium, high, and mixed distortion levels |
@@ -91,20 +118,23 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 
 - **REP:** Repeating Protocol
 - **NREP:** Nonrepeating Protocol
-- **Hu & Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training patterns on category learning and generalization.
-- **Hu & Nosofsky (2024)** examined the impact of different training distortion levels on category learning and generalization. Each subject has unique prototype set. 
-- **Fixed Prototype Pilot Study** examined the impact of different training distortion levels on category learning and generalization. Fixed set of prototypes across all subjects. 
-- All studies used a dot pattern categorization paradigm where participants learned to classify patterns into categories based on visual similarity.
-- Dot pattern distortions were created using a modified Posner-Keele (1968) procedure. Low, medium and high distortions displaced the dots by an average of 4, 6, and 7.7 Posner-levels respectively.
-
+- **Hu & Nosofsky (2022)** investigated the effects of repeating vs. nonrepeating training 
+    patterns on category learning and generalization.
+- **Hu & Nosofsky (2024)** examined the impact of different training distortion levels on category 
+    learning and generalization. Each subject has unique prototype set. 
+- **Fixed Prototype Pilot Study** examined the impact of different training distortion levels on category 
+    learning and generalization. Fixed set of prototypes across all subjects. 
+- All studies used a dot pattern categorization paradigm where participants learned to classify patterns
+  into categories based on visual similarity.
+- Dot pattern distortions were created using a modified Posner-Keele (1968) procedure. 
+  Low, medium and high distortions displaced the dots by an average of 4, 6, and 7.7 Posner-levels respectively.
 
 :::
-
--------
-
-<br><br><br><br><br><br>
+::::
 
 
+
+\pagebreak
 
 
 ```{r}
@@ -171,7 +201,11 @@ all_data <- all_data |>
 
 
 html <- ifelse(knitr::pandoc_to() %in% c("html"), TRUE, FALSE)
+out_type <- knitr::opts_knit$get("rmarkdown.pandoc.to")
 
+if (html) {fw=11;rel_size=.7;} else {fw=8;rel_size=.5}
+
+print(fw)
 
 # Check trial totals
 # all_data |> filter(Phase==1) |> group_by(sbjCode,condit,exp) |> summarise(n=max(trial)) |> 
@@ -193,6 +227,86 @@ html <- ifelse(knitr::pandoc_to() %in% c("html"), TRUE, FALSE)
 
 
 
+
+## Training & Testing shown together
+
+These plots show mean performance at the start, middle and end of training (first 3 points), and the testing performance for each item type (final 5 points). 
+
+*click on plots to enlarge*
+
+:::: .smaller
+::: {.column-screen-inset-right}
+```{r}
+#| fig-width: !expr fw
+#| fig-height:  !expr fw-2
+
+if(html) theme_set(theme_nice())  else theme_set(theme_nice_pdf())
+
+all_data |> 
+  filter(Pattern_Token != "special") |> 
+  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase) |>
+  summarize(Corr=mean(Corr)) |>
+  group_by(condit,Pattern_Token,exp2,Stage,Phase,phase) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr)/sqrt(length(Corr)),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem) |>
+  mutate(method = "standard error") |> 
+  ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
+  geom_point(aes(shape=phase),color="black",size=3.5) +
+  geom_line(aes(group = condit)) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
+  geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
+  facet_wrap(~exp2,scale="free_x") + 
+  labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance", 
+       subtitle="Training binned into 3 stages, and Testing Performance for each Item Type") +
+  theme(ggh4x.axis.nestline  = element_line(colour = "black"), 
+  axis.text.x = element_text(face = "plain", size = rel(rel_size))) + 
+  scale_x_discrete(guide = "axis_nested")
+
+
+
+```
+:::
+
+
+
+
+::: {.column-screen-inset-right}
+```{r}
+#| fig-width: !expr fw
+#| fig-height: !expr fw+1
+
+all_data |> 
+  filter(Pattern_Token != "special") |> 
+  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase,quartile) |>
+  summarize(Corr=mean(Corr)) |>
+  group_by(condit,Pattern_Token,exp2,Stage,Phase,phase,quartile) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr)/sqrt(length(Corr)),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem) |>
+  mutate(method = "standard error",quartile=factor(quartile,levels=c("1","2","3","4"))) |> 
+  ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
+  geom_point(aes(shape=phase),color="black",size=3.5) +
+  geom_line(aes(group = condit)) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
+  geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
+  facet_wrap(exp2~quartile,scale="free_x") + 
+  labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance - Quartiles", 
+       subtitle="Training binned into 3 stages, and Testing Performance for each Item Type\nSplit into 4 quartiles based on end of training performance (1=worst; 4=best)") +
+  theme(ggh4x.axis.nestline  = element_line(colour = "black"),
+        axis.text.x = element_text(face = "plain", size = rel(rel_size-.2))) + 
+  scale_x_discrete(guide = "axis_nested")
+```
+:::
+
+::::
+
+
+
+
+
 ## Test Stage Comparisons
 
 ::: {.panel-tabset}
@@ -203,7 +317,7 @@ html <- ifelse(knitr::pandoc_to() %in% c("html"), TRUE, FALSE)
 #| fig-height: 11
 ##| fig-cap: "lmc22: Hu & Nosofsky 2022; mc24: Hu & Nosofsky 2024; fixed_proto: Fixed Prototype Pilot Study"
 
-if(html) theme_set(theme_nice_b()) else theme_set(theme_minimal())
+#if(html) theme_set(theme_nice_b()) else theme_set(theme_minimal())
 
 
 
@@ -280,76 +394,6 @@ all_data |> filter(Phase==2, Pattern_Token != "special") |>
 :::
 
 
-## Training & Testing shown together
-
-These plots show mean performance at the start, middle and end of training (first 3 points), and the testing performance for each item type (final 5 points). 
-
-*click on plots to enlarge*
-
-::: {.column-screen-right}
-```{r}
-#| fig-width: 17
-#| fig-height: 12
-
-if(html) theme_set(theme_nice())  else theme_set(theme_minimal())
-
-all_data |> 
-  filter(Pattern_Token != "special") |> 
-  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase) |>
-  summarize(Corr=mean(Corr)) |>
-  group_by(condit,Pattern_Token,exp2,Stage,Phase,phase) |> 
-  summarise(empirical_stat = mean(Corr), 
-            sem = sd(Corr)/sqrt(length(Corr)),
-            ci_lower = mean(Corr) - sem,
-            ci_upper = mean(Corr) + sem) |>
-  mutate(method = "standard error") |> 
-  ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
-  geom_point(aes(shape=phase),color="black",size=3.5) +
-  geom_line(aes(group = condit)) +
-  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
-  geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
-  facet_wrap(~exp2,scale="free_x") + 
-  labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance", 
-       subtitle="Training binned into 3 stages, and Testing Performance for each Item Type") +
-  theme(ggh4x.axis.nestline  = element_line(colour = "black"), 
-  axis.text.x = element_text(face = "plain", size = rel(1.1))) + 
-  scale_x_discrete(guide = "axis_nested")
-
-
-
-```
-
-
-
-
-```{r}
-#| fig-width: 15
-#| fig-height: 12
-
-all_data |> 
-  filter(Pattern_Token != "special") |> 
-  group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase,quartile) |>
-  summarize(Corr=mean(Corr)) |>
-  group_by(condit,Pattern_Token,exp2,Stage,Phase,phase,quartile) |> 
-  summarise(empirical_stat = mean(Corr), 
-            sem = sd(Corr)/sqrt(length(Corr)),
-            ci_lower = mean(Corr) - sem,
-            ci_upper = mean(Corr) + sem) |>
-  mutate(method = "standard error",quartile=factor(quartile,levels=c("1","2","3","4"))) |> 
-  ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
-  geom_point(aes(shape=phase),color="black",size=3.5) +
-  geom_line(aes(group = condit)) +
-  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
-  geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
-  facet_wrap(exp2~quartile,scale="free_x") + 
-  labs(x="Item Type and Experiment Stage",y="Accuracy",col="Training Condition",title="Training & Testing Performance - Quartiles", 
-       subtitle="Training binned into 3 stages, and Testing Performance for each Item Type\nSplit into 4 quartiles based on end of training performance (1=worst; 4=best)") +
-  theme(ggh4x.axis.nestline  = element_line(colour = "black"),
-        axis.text.x = element_text(face = "plain", size = rel(0.8))) + 
-  scale_x_discrete(guide = "axis_nested")
-```
-
-:::
 
 
 ## Training Stage Comparisons
@@ -373,7 +417,7 @@ all_data |> filter(Phase==1) |>
   stat_summary(geom="line",fun=mean)+
   stat_summary(geom="errorbar",fun.data=mean_se) +
   facet_wrap(~exp2,scales="free_x") +
-   labs(title="Training Performance - All Sbjs.", y="Accuracy",col="Training Condition", x="Trial Bin",
+   labs(title="Training  - All Sbjs.", y="Accuracy",col="Training Condition", x="Trial Bin",
         subtitle="Training accuracy - 10 bins") +
   scale_x_continuous(breaks=seq(1,nbins)) +
   scale_y_continuous(breaks=round(seq(0,1,length.out=7), 2)) +
@@ -382,8 +426,56 @@ all_data |> filter(Phase==1) |>
 
 ```
 
+*click on plots to enlarge*
+
+::: {.column-page-right}
+```{r}
+#| fig-width: !expr fw
+#| fig-height: !expr fw-1
+#| 
+nbins=10
+
+grp_avg <- all_data |> filter(Phase==1) |>
+  group_by(sbjCode, condit,exp2) |> 
+  mutate(nTrain=max(trial),
+         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
+  group_by(sbjCode,train_bin, condit,exp2) |> 
+  summarize(Corr=mean(Corr),.groups="keep") 
+
+design <- "
+  AB##
+  CDEF
+  HIJK
+"
 
 
+all_data |> filter(Phase==1) |>
+  group_by(sbjCode, condit,exp2) |> 
+  mutate(nTrain=max(trial),
+         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
+  group_by(sbjCode,train_bin, condit,exp2) |> 
+  summarize(Corr=mean(Corr),.groups="keep") |>
+  ggplot(aes(x=train_bin,y=Corr,group=sbjCode,fill=condit,col=condit)) +
+  stat_summary(geom="line",fun=mean)+
+  stat_summary(geom="errorbar",fun.data=mean_se) +
+ # geom_line(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),color="black") +
+  stat_summary(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),geom="line",fun=mean,color="black",size=1.2)+
+  stat_summary(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),geom="errorbar",fun.data=mean_se,color="black",width=.4)+
+  #facet_grid2(vars(exp2), vars(condit), render_empty = FALSE)+
+  #facet_nested(~exp2+condit,scales="free_x") +
+  # facet_nested_wrap(~exp2+condit,scales="free_x") +
+  facet_manual(~exp2+condit, design = design) + 
+  #facet_wrap(exp2~condit,scales="free_x") +
+   labs(title="Training - individual learning curves.", y="Accuracy",col="Training Condition", x="Trial Bin",
+        subtitle="Training accuracy - each line is an individual sbj.\n Black lines are group averages") +
+  scale_x_continuous(breaks=seq(1,nbins)) +
+  scale_y_continuous(breaks=round(seq(0,1,length.out=7), 2)) +
+  geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5)
+
+
+```
+
+:::
 
 
 
@@ -436,45 +528,6 @@ all_data |> filter(Phase==1) |>
 
 ::: 
 
-*click on plots to enlarge*
-
-::: {.column-page-right}
-```{r}
-#| fig-width: 13
-#| fig-height: 11
-#| 
-nbins=10
-
-grp_avg <- all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit,exp2) |> 
-  mutate(nTrain=max(trial),
-         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
-  group_by(sbjCode,train_bin, condit,exp2) |> 
-  summarize(Corr=mean(Corr),.groups="keep") 
-
-## Version of plot above, with additional black line that represents each group average learning curve
-all_data |> filter(Phase==1) |>
-  group_by(sbjCode, condit,exp2) |> 
-  mutate(nTrain=max(trial),
-         train_bin = cut(trial,breaks=seq(1,max(trial),length.out=nbins+1),include.lowest=TRUE,labels=FALSE)) |> 
-  group_by(sbjCode,train_bin, condit,exp2) |> 
-  summarize(Corr=mean(Corr),.groups="keep") |>
-  ggplot(aes(x=train_bin,y=Corr,group=sbjCode,fill=condit,col=condit)) +
-  stat_summary(geom="line",fun=mean)+
-  stat_summary(geom="errorbar",fun.data=mean_se) +
- # geom_line(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),color="black") +
-  stat_summary(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),geom="line",fun=mean,color="black",size=1.2)+
-  stat_summary(data=grp_avg,aes(x=train_bin,y=Corr,group=condit),geom="errorbar",fun.data=mean_se,color="black",width=.4)+
-  facet_wrap(exp2~condit,scales="free_x") +
-   labs(title="Training Performance - individual learning curves.", y="Accuracy",col="Training Condition", x="Trial Bin",
-        subtitle="Training accuracy - each line is an individual sbj.\n Black lines are group averages") +
-  scale_x_continuous(breaks=seq(1,nbins)) +
-  scale_y_continuous(breaks=round(seq(0,1,length.out=7), 2)) +
-  geom_hline(yintercept = c(.33, .66),linetype="dashed", alpha=.5)
-
-
-```
-:::
 
 <!-- ::: {.panel-tabset} -->
 
@@ -628,3 +681,10 @@ all_data |> filter(Phase==2) |>
 ```
 
 <!-- ::: -->
+
+\normalsize
+
+## References
+
+::: {#refs}
+:::
