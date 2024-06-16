@@ -233,7 +233,9 @@ print(fw)
 
 ## Training & Testing shown together
 
-These plots show mean performance at the start, middle and end of training (first 3 points), and the testing performance for each item type (final 5 points). 
+- These plots show mean performance at the start, middle and end of training (first 3 points), and the testing performance for each item type (final 5 points). 
+- The pilot study included "special" patterns, that were predicted to be more difficult. 
+
 
 *click on plots to enlarge*
 
@@ -294,7 +296,7 @@ all_data |>
             ci_upper = mean(Corr) + sem) |>
   mutate(method = "standard error",quartile=factor(quartile,levels=c("1","2","3","4"))) |> 
   ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
-  geom_point(aes(shape=phase),color="black",size=3.5) +
+  geom_point(aes(shape=phase),size=2.0) +
   geom_line(aes(group = condit)) +
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
   geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
