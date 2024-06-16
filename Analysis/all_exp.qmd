@@ -139,7 +139,7 @@ Relevant figures from [@huExemplarmodelAccountCategorization2022; @huHighvariabi
 
 ```{r}
 
-pacman::p_load(dplyr,purrr,tidyr,ggplot2,readr,here, patchwork, conflicted,ggh4x)
+pacman::p_load(dplyr,purrr,tidyr,ggplot2,readr,here, patchwork, conflicted,ggh4x,gt)
 conflict_prefer_all("dplyr", quiet = TRUE)
 source(here::here("R/fun_plot.R"))
 
@@ -228,6 +228,9 @@ print(fw)
 
 
 
+
+
+
 ## Training & Testing shown together
 
 These plots show mean performance at the start, middle and end of training (first 3 points), and the testing performance for each item type (final 5 points). 
@@ -268,6 +271,16 @@ all_data |>
 
 ```
 :::
+
+
+```{r}
+
+
+
+
+
+
+```
 
 
 
@@ -681,6 +694,108 @@ all_data |> filter(Phase==2) |>
 ```
 
 <!-- ::: -->
+
+
+
+
+```{r}
+
+library(stringr)
+
+final_data <- all_data |> 
+  filter(Pattern_Token != "special", Phase == 2) |> 
+  group_by(sbjCode, condit, Pattern_Token, exp2, Stage, Phase, phase) |>
+  summarize(Corr = mean(Corr), .groups = "drop") |> 
+  group_by(condit, Pattern_Token, exp2, Stage, Phase, phase) |> 
+  summarise(empirical_stat = mean(Corr), 
+            sem = sd(Corr) / sqrt(n()),
+            ci_lower = mean(Corr) - sem,
+            ci_upper = mean(Corr) + sem,
+            .groups = "drop") |> 
+  mutate(mean_sem = paste0(round(empirical_stat, 2), " (", round(sem, 3), ")"),
+         method = "standard error") |> 
+  select(condit, Pattern_Token, exp2, phase, mean_sem)
+
+# Reshape data to wide format for gt table
+final_data_wide <- final_data |> 
+  pivot_wider(names_from = Pattern_Token, values_from = mean_sem) |> arrange(exp2) 
+
+
+# Identify the row indices with the maximum value in each Pattern_Token column within each level of Experiment
+max_indices <- final_data_wide |> 
+  group_by(exp2) |> 
+  summarise(across(starts_with("old") | starts_with("prototype") | starts_with("new_low") | starts_with("new_med") | starts_with("new_high"), 
+                   ~which.max(as.numeric(str_extract(., "^\\d+\\.\\d+"))))) |> 
+  pivot_longer(-exp2, names_to = "column", values_to = "row")
+
+# Create the gt table
+gt_table <- final_data_wide |> 
+  gt() |> 
+  tab_header(
+    title = "Testing Phase Performance Summary",
+    subtitle = "Mean (SE) for Each Item Type and Condition"
+  ) |> 
+  cols_label(
+    condit = "Condition",
+    exp2 = "Experiment",
+    phase = "Phase",
+    old = "Old",
+    prototype = "Prototype",
+    new_low = "New Low",
+    new_med = "New Medium",
+    new_high = "New High"
+  ) |> 
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) |>
+  tab_footnote(
+    footnote = "For each experiment, the row with the highest value for each item type is bolded"
+  )
+
+# Convert exp2 to character for comparison
+final_data_wide <- final_data_wide |> mutate(exp2 = as.character(exp2))
+max_indices <- max_indices |> mutate(exp2 = as.character(exp2))
+
+# Apply bolding to cells with the maximum values
+for (i in seq_len(nrow(max_indices))) {
+  gt_table <- gt_table |> 
+    tab_style(
+      style = cell_text(weight = "bold"),
+      locations = cells_body(
+        columns = all_of(max_indices$column[i]),
+        rows = which(final_data_wide$exp2 == max_indices$exp2[i])[max_indices$row[i]]
+      )
+    )
+}
+
+# Add darker row borders dividing the experiments
+experiment_levels <- unique(final_data_wide$exp2)
+row_indices <- which(final_data_wide$exp2 != dplyr::lag(final_data_wide$exp2, default = first(final_data_wide$exp2)))
+
+for (row_index in row_indices) {
+  gt_table <- gt_table |>
+    tab_style(
+      style = cell_borders(
+        sides = "top",
+        color = "black",
+        weight = px(2)
+      ),
+      locations = cells_body(
+        rows = row_index
+      )
+    )
+}
+
+# Print the table
+gt_table
+
+```
+
+
+
+
+
 
 \normalsize
 
