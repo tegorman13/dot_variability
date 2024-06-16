@@ -246,7 +246,7 @@ These plots show mean performance at the start, middle and end of training (firs
 if(html) theme_set(theme_nice())  else theme_set(theme_nice_pdf())
 
 all_data |> 
-  filter(Pattern_Token != "special") |> 
+ # filter(Pattern_Token != "special") |> 
   group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase) |>
   summarize(Corr=mean(Corr)) |>
   group_by(condit,Pattern_Token,exp2,Stage,Phase,phase) |> 
@@ -256,7 +256,7 @@ all_data |>
             ci_upper = mean(Corr) + sem) |>
   mutate(method = "standard error") |> 
   ggplot(aes(x=interaction(Pattern_Token,Stage,phase), y=empirical_stat, col=condit, group=condit)) +  
-  geom_point(aes(shape=phase),color="black",size=3.5) +
+  geom_point(aes(shape=phase),size=2.5) +
   geom_line(aes(group = condit)) +
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),width=.3) +
   geom_vline(xintercept=c(3.5),linetype="dashed", alpha=.5) +
@@ -273,14 +273,7 @@ all_data |>
 :::
 
 
-```{r}
 
-
-
-
-
-
-```
 
 
 
@@ -291,7 +284,7 @@ all_data |>
 #| fig-height: !expr fw+1
 
 all_data |> 
-  filter(Pattern_Token != "special") |> 
+  #filter(Pattern_Token != "special") |> 
   group_by(sbjCode, condit, Pattern_Token,exp2,Stage,Phase,phase,quartile) |>
   summarize(Corr=mean(Corr)) |>
   group_by(condit,Pattern_Token,exp2,Stage,Phase,phase,quartile) |> 
@@ -694,7 +687,6 @@ all_data |> filter(Phase==2) |>
 ```
 
 <!-- ::: -->
-
 
 
 

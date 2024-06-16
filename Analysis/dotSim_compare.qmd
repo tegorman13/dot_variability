@@ -60,14 +60,48 @@ setCounts2 <- mc24_proto |> group_by(set) |>
   mutate(n = ifelse(is.na(n), 0, n), .groups="drop") |> 
   arrange(n) |> ungroup()
 
-pairCounts <- d |> 
-  group_by(pair_label,set) |> 
-  summarise(n=n(),mean_resp=mean(response),sd=sd(response)) |> arrange(desc(n)) |> ungroup()
 
+
+
+gpt_rate <- readRDS(here("llm/first_full_run.rds")) |> select(pair_label,set,gpt4o_rating) 
+
+d <- d |> left_join(gpt_rate,by=c("set","pair_label"))
+
+
+
+
+### By Pair Max/Min
+pairCounts <- d |> 
+  pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
+  group_by(set,item, file,pair_label) |> 
+  summarise(n_rating=n(),mean_resp=mean(response)) |> 
+  group_by(item,file,set) |> 
+  summarise(n_rating=first(n_rating),max_sim=max(mean_resp), min_sim=min(mean_resp)) |> 
+  arrange(desc(n_rating),item) |> ungroup() 
+
+max_sim <- sbj_cat |> 
+  mutate(item=item_label) |> 
+  left_join(pairCounts,by=c("file","item")) |>
+  mutate(sim_group = ifelse(max_sim>5.5,"Very Similar",ifelse(max_sim<3.9,"Very Dissimilar","Medium"))) |> 
+  mutate(sim_group=factor(sim_group,levels=c("Very Dissimilar","Medium","Very Similar"))) 
+
+cat_sim_test2 <- max_sim |> 
+  filter(Phase==2) |> 
+  mutate(rate_quartile = as.factor(ntile(max_sim, 4))) |>
+  group_by(id,condit) |>
+  mutate(agg_corr=mean(Corr)) |>
+  group_by(condit) |> 
+  mutate(quartile=ntile(agg_corr,4),ms=ntile(agg_corr,2))
+
+
+
+
+
+### By Pattern Average
 patternAvg <- d |> 
   pivot_longer(cols=c(item_label_1, item_label_2), names_to="item_label", values_to="item") |> 
   group_by(item,file) |> 
-  summarise(n_rating=n(),resp=mean(response),sd=sd(response)) |> 
+  summarise(n_rating=n(),resp=mean(response),sd=sd(response),gpt_sim=mean(gpt4o_rating)) |> 
   arrange(desc(n_rating))
 
 cat_sim <- sbj_cat |> 
@@ -131,6 +165,37 @@ cat_sim_test |>
   facet_wrap(~ms) +
   labs(y="CatLearn Accuracy",x="Training Condition")
 
+
+
+```
+
+
+### Using Maximum rather than mean similarity
+
+```{r}
+#| fig-width: 11
+#| fig-height: 9
+
+
+cat_sim_test2 |> 
+  group_by(sbjCode,condit,quartile,rate_quartile) |>
+  summarize(resp=mean(max_sim),corr=mean(Corr)) |> 
+  mutate(quartile=factor(quartile,levels=c(1,2,3,4))) |> 
+  ggplot(aes(x=condit,y=corr,fill=rate_quartile)) + 
+  stat_bar +
+ # geom_boxplot() +
+#   facet_wrap(~condit) +
+  labs(y="CatLearn Accuracy",x="Training Condition")
+
+
+cat_sim_test2 |> 
+  group_by(sbjCode,condit,ms,sim_group) |>
+  summarize(resp=mean(max_sim),corr=mean(Corr)) |> 
+  mutate(ms=factor(ms,levels=c(1,2))) |> 
+  ggplot(aes(x=condit,y=corr,fill=sim_group)) + 
+  stat_bar +
+  facet_wrap(~ms) +
+  labs(y="CatLearn Accuracy",x="Training Condition")
 ```
 
 
@@ -164,6 +229,7 @@ t1 |> kbl(caption="Quartiles")
 t2 |> kbl(caption="Deciles")
 t3 |> kbl(caption="Extreme Groups")
 ```
+
 
 
 
@@ -268,8 +334,168 @@ p5 + p6
 p7
 
 
+###
 
 ```
+### gpt-4o predicted similarities
+
+```{r}
+#| label: fig-sim-acc-test-gpt
+#| fig-cap: "2024 CatLearn accuracy by different gpt4-o similarity rating groups"
+#| fig-width: 12
+#| fig-height: 10
+
+cat_sim_gpt <- sbj_cat |> 
+  mutate(item=item_label) |> 
+  left_join(patternAvg,by=c("file","item"))  |> arrange(desc(n_rating)) |>
+  filter(!is.na(n_rating),n_rating>=12) |> 
+  mutate(sim_group = ifelse(gpt_sim>5.5,"Very Similar",ifelse(gpt_sim<3.9,"Very Dissimilar","Medium"))) |> 
+  mutate(sim_group=factor(sim_group,levels=c("Very Dissimilar","Medium","Very Similar"))) |> 
+  filter(!is.na(gpt_sim))
+ 
+cat_sim_test_gpt <- cat_sim_gpt |> 
+  filter(Phase==2) |> 
+  mutate(rate_quartile = as.factor(ntile(gpt_sim, 4))) |>
+  group_by(id,condit) |>
+  mutate(agg_corr=mean(Corr)) |>
+  group_by(condit) |> 
+  mutate(quartile=ntile(agg_corr,4),ms=ntile(agg_corr,2))
+
+
+
+p3 <- cat_sim_test_gpt |> 
+  mutate(Quartile = as.factor(ntile(gpt_sim, 4))) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_wrap(~Pattern.Type) + 
+  labs(y="CatLearn Accuracy", x="gpt-4o Similarity Rating Quartile", title="Effect by Pattern Type",fill="Similarity Rating Quartile")
+
+
+p4 <- cat_sim_test_gpt |> 
+  mutate(Decile = as.factor(ntile(gpt_sim, 10))) |> 
+  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
+  stat_bar + 
+  facet_wrap(~Pattern.Type) + 
+  labs(y="CatLearn Accuracy", x="gpt-4o Similarity Rating Decile", title="Effect by Pattern Type", fill="Similarity Rating Decile")
+
+
+
+
+
+p5 <- cat_sim_test_gpt |> 
+  mutate(Quartile = as.factor(ntile(gpt_sim, 4))) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="gpt-4o Similarity Rating Quartile", title="Effect by Training Condition", fill="Similarity Rating Quartile")
+
+
+p6 <- cat_sim_test_gpt |> 
+  mutate(Decile = as.factor(ntile(gpt_sim, 10))) |> 
+  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
+  stat_bar + 
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="gpt-4o Similarity Rating Decile", title="Effect by Training Condition", fill="Similarity Rating Decile")
+
+p7 <- cat_sim_test_gpt |> 
+  mutate(Quartile = as.factor(ntile(gpt_sim, 4))) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_nested_wrap(~condit+Pattern.Type) + labs(y="CatLearn Accuracy", x="gpt-4o Similarity Rating Quintile", title="Effect by Training Condition and Pattern Type")
+
+
+
+p3 + p4
+p5 + p6
+p7
+
+
+# cat_sim_test_gpt |> 
+#   group_by(sbjCode,condit,quartile,rate_quartile) |>
+#   summarize(resp=mean(gpt_sim),corr=mean(Corr)) |> 
+#   mutate(quartile=factor(quartile,levels=c(1,2,3,4))) |> 
+#   ggplot(aes(x=rate_quartile,y=corr,fill=rate_quartile)) + 
+#   stat_bar +
+#   labs(y="CatLearn Accuracy",x="Training Condition")
+
+
+p8 <- cat_sim_test_gpt |> 
+  group_by(sbjCode,condit,quartile,rate_quartile) |>
+  summarize(resp=mean(gpt_sim),corr=mean(Corr)) |> 
+  mutate(quartile=factor(quartile,levels=c(1,2,3,4))) |> 
+  ggplot(aes(x=condit,y=corr,fill=rate_quartile)) + 
+  stat_bar +
+ # geom_boxplot() +
+#   facet_wrap(~condit) +
+  labs(y="CatLearn Accuracy",x="Training Condition")
+
+
+p9 <- cat_sim_test_gpt |> 
+  group_by(sbjCode,condit,ms,sim_group) |>
+  summarize(resp=mean(gpt_sim),corr=mean(Corr)) |> 
+  mutate(ms=factor(ms,levels=c(1,2))) |> 
+  ggplot(aes(x=condit,y=corr,fill=sim_group)) + 
+  stat_bar +
+  facet_wrap(~ms) +
+  labs(y="CatLearn Accuracy",x="Training Condition")
+
+p8 + p9
+```
+
+
+<br><br>
+
+#### Quartiles and Deciles - using maximum similarity
+```{r}
+#| label: fig-sim-acc-test-max
+#| fig-cap: "2024 CatLearn accuracy by different similarity rating groups"
+#| fig-width: 12
+#| fig-height: 10
+
+p3 <- cat_sim_test2 |> 
+  mutate(Quartile = as.factor(ntile(max_sim, 4))) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_wrap(~Pattern.Type) + 
+  labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Pattern Type",fill="Similarity Rating Quartile")
+
+
+p4 <- cat_sim_test2 |> 
+  mutate(Decile = as.factor(ntile(max_sim, 10))) |> 
+  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
+  stat_bar + 
+  facet_wrap(~Pattern.Type) + 
+  labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Pattern Type", fill="Similarity Rating Decile")
+
+p5 <- cat_sim_test2 |> 
+  mutate(Quartile = as.factor(ntile(max_sim, 4))) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Quartile", title="Effect by Training Condition", fill="Similarity Rating Quartile")
+
+
+p6 <- cat_sim_test2 |> 
+  mutate(Decile = as.factor(ntile(max_sim, 10))) |> 
+  ggplot(aes(x=Decile,y=Corr,fill=Decile)) + 
+  stat_bar + 
+  facet_wrap(~condit) + labs(y="CatLearn Accuracy", x="Similarity Rating Decile", title="Effect by Training Condition", fill="Similarity Rating Decile")
+
+
+p7 <- cat_sim_test2 |> 
+  mutate(Quartile = as.factor(ntile(max_sim, 4))) |> 
+  ggplot(aes(x=Quartile,y=Corr,fill=Quartile)) + 
+  stat_bar + 
+  facet_nested_wrap(~condit+Pattern.Type) + labs(y="CatLearn Accuracy", x="Similarity Rating Quintile", title="Effect by Training Condition and Pattern Type")
+
+p3 + p4
+p5 + p6
+p7
+
+
+
+```
+
+
+
+
 
 
 #### Extreme similarity rating groups
@@ -432,16 +658,57 @@ ggplot(aes(x=Decile,y=Corr, col=condit,fill=condit)) +
 
  m1 <- lmer(Corr ~ resp + (1|sbjCode), data=cat_sim)
  summary(m1)
+ 
+  m1 <- lmer(Corr ~ resp + (1|sbjCode), data=cat_sim_test)
+ summary(m1)
 
  m1 <- lmer(Corr ~ resp + (1|Pattern.Type) +  (1|sbjCode), data=cat_sim)
+ summary(m1)
+ 
+  m1 <- lmer(Corr ~ resp + (1|Pattern.Type) +  (1|sbjCode), data=cat_sim_test)
  summary(m1)
 
  m1 <- lmer(Corr ~ resp*condit +  (1|sbjCode) + (1+condit|Pattern.Type), data=cat_sim)
  summary(m1)
  
+#### 
+ 
+ 
+ 
+ 
+m1 <- lmer(Corr ~ gpt_sim + (1|sbjCode), data=cat_sim)
+ summary(m1)
+ 
+m1 <- lmer(Corr ~ gpt_sim + (1|sbjCode), data=cat_sim_test)
+ summary(m1)
 
+m1 <- lmer(Corr ~ gpt_sim + (1|Pattern.Type) +  (1|sbjCode), data=cat_sim_test)
+ summary(m1)
+ 
+ 
+m1 <- lmer(Corr ~ gpt_sim+resp + (1|sbjCode), data=cat_sim)
+ summary(m1)
+ 
+m1 <- lmer(Corr ~ gpt_sim + resp + (1|Pattern.Type) +  (1|sbjCode), data=cat_sim_test)
+ summary(m1) 
+ 
+#### 
+m1 <- lmer(Corr ~ max_sim + (1|sbjCode), data=max_sim)
+ summary(m1)
+ 
+m1 <- lmer(Corr ~ min_sim + (1|sbjCode), data=max_sim)
+ summary(m1)
 
-
+m1 <- lmer(Corr ~ min_sim*max_sim + (1|sbjCode), data=max_sim)
+ summary(m1) 
+ 
+ 
+m1 <- lmer(Corr ~ max_sim + (1|Pattern.Type) +  (1|sbjCode), data=max_sim)
+ summary(m1)
+ 
+m1 <- lmer(Corr ~ max_sim*condit +  (1|sbjCode) + (1+condit|Pattern.Type), data=max_sim)
+ summary(m1)
+ 
 # m1 <- lmer(Corr ~ sim_group +  (1|sbjCode), data=cat_sim)
 # summary(m1)
 
@@ -463,9 +730,6 @@ cat_sim_test |>
 
 cat_sim_test |> 
   mutate(Quartile = as.factor(ntile(resp, 4))) |> group_by(condit,Pattern.Type) |> summarise(mean_rating=mean(resp),mean_acc=mean(Corr))
-
-
-
 
 ```
 
