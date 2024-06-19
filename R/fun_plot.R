@@ -186,24 +186,6 @@ plot_dots2 <- function(df) {
 
 
 
-theme_nice <- function() {
- # theme_minimal(base_family = "Manrope") +
-    theme(
-      panel.grid.minor = element_blank(),
-      plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.35)),
-      plot.subtitle = element_text(family = "Manrope Medium", face = "plain", size = rel(1.2)),
-      axis.title = element_text(family = "Manrope SemiBold", face = "plain", size = rel(1)),
-      axis.title.x = element_text(hjust = .5),
-      axis.title.y = element_text(hjust = .5),
-      axis.text = element_text(family = "Manrope Light", face = "plain", size = rel(0.8)),
-      strip.text = element_text(
-        family = "Manrope", face = "bold",
-        size = rel(.75), hjust = 0
-      ),
-      strip.background = element_rect(fill = "grey90", color = NA)
-    )
-}
-
 theme_nice_dist <- function() {
   theme_nice() +
     theme(
@@ -259,7 +241,7 @@ theme_nice_pdf <- function() {
 }
 
 theme_nice_b <- function() {
-  #theme_minimal(base_family = "Manrope") +
+  theme_minimal(base_family = "Manrope") +
     theme(
       panel.grid.minor = element_blank(),
       plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.55)),

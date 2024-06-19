@@ -55,11 +55,80 @@ pairCounts <- d |>
   arrange(mean_resp) |> # arrange(desc(n)) |> 
   ungroup()
 
+
+
 # saveRDS(pairCounts,here::here("data","pairCounts.rds"))
 #pairCounts <- readRDS(here("data/pairCounts.rds")) |> arrange(mean_resp)
 
 ```
 
+
+
+
+```{r}
+
+# Function to create a single dot pattern grid
+create_grid <- function(row) {
+  grid <- matrix(".", nrow = 33, ncol = 33)
+  
+  for (i in 1:9) {
+    x <- row[[paste0("x", i)]] + 16
+    y <- row[[paste0("y", i)]] + 16
+    grid[y, x] <- "O"
+  }
+  
+  return(grid)
+}
+
+# Function to print the grid
+print_grid <- function(grid) {
+  for (i in nrow(grid):1) {
+    cat(paste(grid[i, ], collapse = ""), "\n")
+  }
+  cat("\n")
+}
+
+# Group the data by set and item_label
+grouped_data <- mc24_proto %>%
+  group_by(set, item_label) %>%
+  group_split()
+
+# Print the dot pattern grids for each group
+for (group in grouped_data) {
+  cat("Set:", unique(group$set), "\n")
+  cat("Item Label:", unique(group$item_label), "\n\n")
+  
+  grid <- create_grid(group)
+  print_grid(grid)
+}
+
+mc24_proto |> select(x1:y9) |> head(1)
+
+
+mc24_proto |> select(x1:y9) |> 
+  slice(1:2) 
+  
+  
+mc24_proto |> filter(item_label=="376_high_1_326" | item_label=="376_high_3_324") |> select(x1:y9) 
+
+
+# These are the coordinates of 2 dot patterns. Act like a human research participant, and rate the similarity of the 2 patterns with a value between 1 (very dissimilar) to 9 (very similar) 
+# 
+#  x1 y1 x2 y2 x3 y3  x4  y4 x5 y5 x6  y6  x7  y7 x8 y8 x9  y9
+# 1  -9  9 13  3  2  3 -13  -4 10 14  3 -15  -4  -5 -2 12 12 -13
+# 2 -10 15  6 15  4  3  10 -15 -7  4 16  -8 -14 -10 10 14 -5 -14
+
+# 	304_high_2_277_304_high_3_315
+
+
+mc24_proto |> filter(item_label=="304_high_2_277" | item_label=="304_high_3_315") |> select(x1:y9) 
+
+#  These are the coordinates of 2 dot patterns. Act like a human research participant, and rate the similarity of the 2 patterns with a value between 1 (very dissimilar) to 9 (very similar) 
+#   x1 y1 x2  y2 x3 y3 x4 y4  x5 y5 x6 y6 x7 y7 x8  y8 x9 y9
+# 1 12 -4 -8 -15 15  1  7 -8 -13 -4  1 -8  0 -2 -2  -7 11  3
+# 2  3 12 -4   6  4  4  0 15  -3 14  5 13 -2  3  0 -13  6 -8
+
+```
 
 
 ```{r}
@@ -634,7 +703,7 @@ combined_df2 <- p_ratings %>%
 
 
 
-saveRDS(combined_df2, here("llm/first_full_run.rds"))
+#saveRDS(combined_df2, here("llm/first_full_run.rds"))
 
 
 sl <- tibble::lst(combined_df2,gpt_fun=get_gpt4_rating,encode_image=encode_image, 
@@ -646,11 +715,13 @@ image_def='pairCounts |>
   })
 
 pAll <- pairCounts |> mutate(path = paste0(here("llm/all_pairs/"),pair_label,"_sm.png"))')
-saveRDS(sl, here("llm/first_full_run_script_list.rds"))
+#saveRDS(sl, here("llm/first_full_run_script_list.rds"))
 
 
 
 
+
+combined_df2 <- readRDS(here("llm/first_full_run.rds"))
 
 ```
 
@@ -775,9 +846,9 @@ combined_df2 %>% filter(sd<2.3) |>
   ggplot(aes(mean_resp_bin, gpt4o_rating)) +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Boxplot of GPT-4 Ratings by Human Ratings",
-       x = "Human Ratings Bin", y = "GPT-4 Ratings") +
-  scale_x_discrete(name = "Human Ratings", labels = 1:9)
+  labs(title = "Boxplot of GPT-4V Ratings vs. Human Ratings of Dot Pattern Pairs",
+       x = "Human Ratings Bin", y = "GPT-4V Ratings") +
+  scale_x_discrete(name = "Human Ratings (from dissimilar to similar)", labels = 1:9)
 
 
 

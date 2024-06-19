@@ -1,12 +1,29 @@
 ---
 title: "Dot Pattern Similarity Project"
-page-layout: full
+author:
+- name: Thomas Gorman
+  url: https://tegorman13.github.io/
+  orcid: 0000-0001-5366-5442
+- name: Rob Nosofsky
+  url: https://nosofsky.cogs.indiana.edu/
+  orcid: 0000-0002-2494-2719
+format:
+  html: 
+    grid:
+      sidebar-width: 200px
+      body-width: 1200px
+      margin-width: 150px
+      gutter-width: 1.0rem
 listing:
   id: sample-listings
   type: grid #default
-  sort: "date"
-  image-height: 250px
+  grid-columns: 2
+  sort:
+    - "date desc"
+    - "title desc"
+  image-height: 500px
   contents:
+    - Stimulii/pair_plots.qmd
     - Analysis/dotSim_compare.qmd
     - Analysis/dotSim_Analysis.qmd
     - Stimulii/plotDots.qmd

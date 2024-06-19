@@ -21,7 +21,6 @@ execute:
   eval: true
 ---
 
-
 ```{r}
 pacman::p_load(dplyr,purrr,tidyr,ggplot2, here, patchwork, 
   conflicted, jsonlite,stringr, gt, knitr, kableExtra, 
@@ -34,7 +33,6 @@ sbj_cat <- read.csv(here("data","mc24_sbj_cat.csv")) |> mutate(condit=factor(con
 
 
 theme_set(theme_nice_b())
-
 
 dfiles <- list(path=list.files(here::here("data/dotSim_data"),full.names=TRUE))
 

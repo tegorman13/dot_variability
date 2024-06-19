@@ -55,6 +55,8 @@ website:
         contents:
           - href: Stimulii/plotDots.qmd
             text: Dot Patterns
+          - href: Stimulii/pair_plots.qmd
+            text: Pair Plots
           - href: Stimulii/instruction_examples.qmd
             text: Instructions
           - href: Stimulii/check_dots.qmd
