@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/Analysis/dotSim_Analysis.html",
       "/Analysis/dotSim_compare.html",
       "/Stimulii/pair_plots.html",
       "/Analysis/all_exp.html",
@@ -9,7 +10,6 @@
       "/Task/Task.html",
       "/Analysis/dp_24.html",
       "/Analysis/dp_22.html",
-      "/Analysis/dotSim_Analysis.html",
       "/Stimulii/plotDots.html"
     ]
   }
